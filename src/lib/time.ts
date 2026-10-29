@@ -42,13 +42,23 @@ export function programSlot(start: string): ProgramTime & { time: string } {
   return { day: start.slice(0, 10), minutes: toMinutes(time), time };
 }
 
+function osloParts(at: Date): Record<string, string> {
+  return Object.fromEntries(clockFormat.formatToParts(at).map((p) => [p.type, p.value]));
+}
+
 /** The current point in the program, in Oslo time whatever the viewer's or server's zone. */
 export function programNow(at: Date = new Date()): ProgramTime {
-  const parts = Object.fromEntries(clockFormat.formatToParts(at).map((p) => [p.type, p.value]));
+  const parts = osloParts(at);
   return {
     day: `${parts.year}-${parts.month}-${parts.day}`,
     minutes: Number(parts.hour) * 60 + Number(parts.minute),
   };
+}
+
+/** An instant as Oslo local time in Filmweb's format: "2026-10-29T18:00:00". */
+export function osloDateTime(at: Date): string {
+  const p = osloParts(at);
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:00`;
 }
 
 export function isPast(slot: ProgramTime, now: ProgramTime, graceMinutes = PAST_GRACE_MINUTES): boolean {

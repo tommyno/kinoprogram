@@ -10,9 +10,9 @@ export function cx(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-/** Booking page when Filmweb has one, otherwise the film's Filmweb page. */
+/** The booking page when there is one, otherwise the film's page (where Cinemateket sells tickets). */
 export function bookingHref(showing: Showing, film: Film): string {
-  return showing.bookingUrl ?? film.filmwebUrl;
+  return showing.bookingUrl ?? film.pageUrl;
 }
 
 export function showingLabel(showing: ShowingView, film: Film): string {

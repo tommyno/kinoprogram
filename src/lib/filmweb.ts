@@ -1,8 +1,8 @@
 import { z } from 'zod';
+import { USER_AGENT } from './http.ts';
 
 // Filmweb's public site backend (undocumented). One call returns every show in a city.
 const ENDPOINT = 'https://movieinfoqs.filmweb.no/graphql';
-const USER_AGENT = 'oslokinoprogram/0.1';
 export const LOCATION = 'Oslo';
 
 const SHOWS_QUERY = `query Shows($location: String) {

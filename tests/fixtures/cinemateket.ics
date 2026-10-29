@@ -1,0 +1,1008 @@
+BEGIN:VCALENDAR
+METHOD:PUBLISH
+VERSION:2.0
+PRODID:-//Cinemateket//WebcalKalender
+CALSCALE:GREGORIAN
+X-WR-CALNAME:Cinemateket Forestillinger
+PREFERRED_LANGUAGE:NO
+BEGIN:VEVENT
+UID:the-arbor---lillebil---29-10-2026-1800@cinemateket.no
+DTSTAMP:20260924T135300Z
+DTSTART:20261029T170000Z
+DTEND:20261029T183400Z
+SUMMARY:The Arbor
+DESCRIPTION:Clio Barnards toneangivende hybrid om dramatikeren Andrea Dunbar.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-arbor
+END:VEVENT
+BEGIN:VEVENT
+UID:herman---tancred---29-10-2026-1800@cinemateket.no
+DTSTAMP:20261006T103100Z
+DTSTART:20261029T170000Z
+DTEND:20261029T182800Z
+SUMMARY:Herman
+DESCRIPTION:Basert på Lars Saabye Christensens roman, og Anders Danielsen Lies debut som filmskuespiller.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/herman
+END:VEVENT
+BEGIN:VEVENT
+UID:high-and-low---tancred---29-10-2026-2000@cinemateket.no
+DTSTAMP:20260918T162000Z
+DTSTART:20261029T190000Z
+DTEND:20261029T212200Z
+SUMMARY:High and Low
+DESCRIPTION:Denne intense thrilleren er nok et høydepunkt i Akira Kurosawas karriere. 
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/high-and-low
+END:VEVENT
+BEGIN:VEVENT
+UID:the-devils---lillebil---29-10-2026-2030@cinemateket.no
+DTSTAMP:20260917T171000Z
+DTSTART:20261029T193000Z
+DTEND:20261029T212400Z
+SUMMARY:The Devils
+DESCRIPTION:Den restaurerte utgaven av Ken Russells berømte psykologiske skrekkfilmdrama.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-devils
+END:VEVENT
+BEGIN:VEVENT
+UID:uten-tittel-xviii---lillebil---30-10-2026-1800@cinemateket.no
+DTSTAMP:20260925T111300Z
+DTSTART:20261030T170000Z
+DTEND:20261030T190000Z
+SUMMARY:Uten tittel XVIII
+DESCRIPTION:En gang i hver programperiode vil vi invitere til en overraskelsesvisning, der vi setter opp en eldre filmtittel, håndplukket fra et filmarkiv.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/uten-tittel-xviii
+END:VEVENT
+BEGIN:VEVENT
+UID:i-know-what-you-did-last-summer---tancred---30-10-2026-1830@cinemateket.no
+DTSTAMP:20260924T135300Z
+DTSTART:20261030T173000Z
+DTEND:20261030T191100Z
+SUMMARY:Fryktens sommer
+DESCRIPTION:En skrekkelig actionfylt helaften!
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/fryktens-sommer
+END:VEVENT
+BEGIN:VEVENT
+UID:skrik---tancred---30-10-2026-2030@cinemateket.no
+DTSTAMP:20260924T135000Z
+DTSTART:20261030T193000Z
+DTEND:20261030T212100Z
+SUMMARY:Skrik
+DESCRIPTION:Enda mer skrekkelig action!
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/skrik
+END:VEVENT
+BEGIN:VEVENT
+UID:cafe-paradis---lillebil---30-10-2026-2045@cinemateket.no
+DTSTAMP:20260924T134000Z
+DTSTART:20261030T194500Z
+DTEND:20261030T212500Z
+SUMMARY:Café Paradis
+DESCRIPTION:Gripende skildring av alkoholens makt. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/cafe-paradis
+END:VEVENT
+BEGIN:VEVENT
+UID:the-long-kiss-goodnight---tancred---31-10-2026-1030@cinemateket.no
+DTSTAMP:20260921T141200Z
+DTSTART:20261031T093000Z
+DTEND:20261031T113100Z
+SUMMARY:The Long Kiss Goodnight
+DESCRIPTION:Film og foredrag ved Yvonne Tasker om actionfilmen som fenomen.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-long-kiss-goodnight
+END:VEVENT
+BEGIN:VEVENT
+UID:propp-berta---lillebil---31-10-2026-1300@cinemateket.no
+DTSTAMP:20260915T140200Z
+DTSTART:20261031T120000Z
+DTEND:20261031T131700Z
+SUMMARY:Propp & Berta
+DESCRIPTION:En underholdende og passe skummel dukkefilm for de minste, basert på Bent Solhofs fortellinger og tegninger.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/propp-berta
+END:VEVENT
+BEGIN:VEVENT
+UID:tai-chi-master---tancred---31-10-2026-1430@cinemateket.no
+DTSTAMP:20260921T142000Z
+DTSTART:20261031T133000Z
+DTEND:20261031T150600Z
+SUMMARY:Tai Chi Master
+DESCRIPTION:Film og foredrag ved Wayne Wong om østasiatisk actionfilm.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/tai-chi-master
+END:VEVENT
+BEGIN:VEVENT
+UID:tintin---solens-tempel---lillebil---31-10-2026-1500@cinemateket.no
+DTSTAMP:20260915T140000Z
+DTSTART:20261031T140000Z
+DTEND:20261031T151500Z
+SUMMARY:Tintin – Solens tempel
+DESCRIPTION:Tegnefilm basert på Tintin-tegneseriene De syv krystallkuler og Soltemplet.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/tintin---solens-tempel
+END:VEVENT
+BEGIN:VEVENT
+UID:nouvelle-vague---lillebil---31-10-2026-1700@cinemateket.no
+DTSTAMP:20260921T142200Z
+DTSTART:20261031T160000Z
+DTEND:20261031T174600Z
+SUMMARY:Nouvelle Vague
+DESCRIPTION:Morsom og energisk film om et av filmhistoriens viktigste kapitler. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/nouvelle-vague-2
+END:VEVENT
+BEGIN:VEVENT
+UID:the-odyssey---70mm---tancred---31-10-2026-1800@cinemateket.no
+DTSTAMP:20260921T142100Z
+DTSTART:20261031T170000Z
+DTEND:20261031T195200Z
+SUMMARY:The Odyssey – 70mm
+DESCRIPTION:Sommerens store begivenhet – spennende, episk og rørende – på 70mm. 
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-odyssey-70mm
+END:VEVENT
+BEGIN:VEVENT
+UID:john-wick---tancred---01-11-2026-1030@cinemateket.no
+DTSTAMP:20260921T142000Z
+DTSTART:20261101T093000Z
+DTEND:20261101T111100Z
+SUMMARY:John Wick
+DESCRIPTION:Film og foredrag ved Lindsay Steenberg om voldsestetikk.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/john-wick
+END:VEVENT
+BEGIN:VEVENT
+UID:sirocco-og-vindens-rike---lillebil---01-11-2026-1400@cinemateket.no
+DTSTAMP:20260915T140100Z
+DTSTART:20261101T130000Z
+DTEND:20261101T141400Z
+SUMMARY:Sirocco og Vindens rike
+DESCRIPTION:Vakker animasjonsfilm om en fantasifull verden som garantert vil gi en uforglemmelig kinoopplevelse for både barn og voksne.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/sirocco-og-vindens-rike
+END:VEVENT
+BEGIN:VEVENT
+UID:lop-lola-lop---tancred---01-11-2026-1415@cinemateket.no
+DTSTAMP:20260921T142000Z
+DTSTART:20261101T131500Z
+DTEND:20261101T143600Z
+SUMMARY:Løp, Lola, løp
+DESCRIPTION:Film og foredrag ved Yvonne Tasker om kvinnelige actionhelter.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/lop-lola-lop
+END:VEVENT
+BEGIN:VEVENT
+UID:funny-face---lillebil---01-11-2026-1600@cinemateket.no
+DTSTAMP:20260925T110300Z
+DTSTART:20261101T150000Z
+DTEND:20261101T164300Z
+SUMMARY:Funny Face
+DESCRIPTION:Stanley Donens klassiker er en studie av motemediene og motebransjen på andre siden av Atlanterhavet.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/funny-face
+END:VEVENT
+BEGIN:VEVENT
+UID:high-and-low---tancred---01-11-2026-1800@cinemateket.no
+DTSTAMP:20260918T162000Z
+DTSTART:20261101T170000Z
+DTEND:20261101T192200Z
+SUMMARY:High and Low
+DESCRIPTION:Denne intense thrilleren er nok et høydepunkt i Akira Kurosawas karriere. 
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/high-and-low
+END:VEVENT
+BEGIN:VEVENT
+UID:det-sande-ansigt---lillebil---01-11-2026-1815@cinemateket.no
+DTSTAMP:20260925T111000Z
+DTSTART:20261101T171500Z
+DTEND:20261101T185000Z
+SUMMARY:Det sande ansigt
+DESCRIPTION:Psykologisk drama med noir-elementer. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/det-sande-ansigt
+END:VEVENT
+BEGIN:VEVENT
+UID:pilotens-kvinne---lillebil---01-11-2026-2015@cinemateket.no
+DTSTAMP:20260925T111000Z
+DTSTART:20261101T191500Z
+DTEND:20261101T205600Z
+SUMMARY:Pilotens kvinne
+DESCRIPTION:
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/pilotens-kone
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-troll-i-eske-november---tancred---01-11-2026-2100@cinemateket.no
+DTSTAMP:20261015T101000Z
+DTSTART:20261101T200000Z
+DTEND:20261101T220000Z
+SUMMARY:2026: Troll i eske november
+DESCRIPTION:Suksessen fortsetter: Nok en gang inviterer vi til et møte med det ukjente en gang i måneden.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/2026-troll-i-eske-november
+END:VEVENT
+BEGIN:VEVENT
+UID:filmhistoriekurs-filmaret-1981---lillebil---03-11-2026-1700@cinemateket.no
+DTSTAMP:20260925T155300Z
+DTSTART:20261103T160000Z
+DTEND:20261103T164500Z
+SUMMARY:Filmhistorie: Filmåret 1981
+DESCRIPTION:Gratis forelesning om norsk filmhistorie i regi av Universitetet i Oslo.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/filmaret-1981
+END:VEVENT
+BEGIN:VEVENT
+UID:liten-ida---lillebil---03-11-2026-1800@cinemateket.no
+DTSTAMP:20260925T111200Z
+DTSTART:20261103T170000Z
+DTEND:20261103T181800Z
+SUMMARY:Liten Ida
+DESCRIPTION:Velspilt og bitende drama om krigens konsekvenser. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/liten-ida
+END:VEVENT
+BEGIN:VEVENT
+UID:en-konsert-i-omsluttende-lyd-2---tancred---03-11-2026-1830@cinemateket.no
+DTSTAMP:20260928T144000Z
+DTSTART:20261103T173000Z
+DTEND:20261103T183000Z
+SUMMARY:En konsert i omsluttende lyd #2
+DESCRIPTION:Bli med på en unik konsertopplevelse i et mørklagt kinorom, der du får oppleve tre verk som utforsker forholdet mellom rom og musikk. 
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/en-konsert-i-omsluttende-lyd-2
+END:VEVENT
+BEGIN:VEVENT
+UID:water---lillebil---03-11-2026-1945@cinemateket.no
+DTSTAMP:20260925T112000Z
+DTSTART:20261103T184500Z
+DTEND:20261103T204200Z
+SUMMARY:Water
+DESCRIPTION:Deepa Mehtas praktfulle film om frigjøring. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/water
+END:VEVENT
+BEGIN:VEVENT
+UID:napoleon-dynamite---tancred---03-11-2026-2000@cinemateket.no
+DTSTAMP:20261006T105000Z
+DTSTART:20261103T190000Z
+DTEND:20261103T203600Z
+SUMMARY:Napoleon Dynamite
+DESCRIPTION:Kultfilm med 80-tallsfølelse!
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/napoleon-dynamite
+END:VEVENT
+BEGIN:VEVENT
+UID:kunsten-a-tenke-negativt---tancred---04-11-2026-1800@cinemateket.no
+DTSTAMP:20260925T111200Z
+DTSTART:20261104T170000Z
+DTEND:20261104T183300Z
+SUMMARY:Kunsten å tenke negativt
+DESCRIPTION:Jubileumsvisning av en norsk kultklassiker.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/kunsten-a-tenke-negativt
+END:VEVENT
+BEGIN:VEVENT
+UID:mordets-melodi---lillebil---04-11-2026-1830@cinemateket.no
+DTSTAMP:20260925T111200Z
+DTSTART:20261104T173000Z
+DTEND:20261104T191000Z
+SUMMARY:Mordets melodi
+DESCRIPTION:Hypnotisk noir fra et skyggefullt København.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/mordets-melodi
+END:VEVENT
+BEGIN:VEVENT
+UID:high-and-low---tancred---04-11-2026-2000@cinemateket.no
+DTSTAMP:20260918T162000Z
+DTSTART:20261104T190000Z
+DTEND:20261104T212200Z
+SUMMARY:High and Low
+DESCRIPTION:Denne intense thrilleren er nok et høydepunkt i Akira Kurosawas karriere. 
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/high-and-low
+END:VEVENT
+BEGIN:VEVENT
+UID:pilotens-kvinne---lillebil---04-11-2026-2015@cinemateket.no
+DTSTAMP:20260925T111000Z
+DTSTART:20261104T191500Z
+DTEND:20261104T205600Z
+SUMMARY:Pilotens kvinne
+DESCRIPTION:
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/pilotens-kone
+END:VEVENT
+BEGIN:VEVENT
+UID:maria-marusjka---lillebil---05-11-2026-1800@cinemateket.no
+DTSTAMP:20260925T111300Z
+DTSTART:20261105T170000Z
+DTEND:20261105T183100Z
+SUMMARY:Maria Marusjka
+DESCRIPTION:Det blåser opp til indre storm.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/maria-marusjka
+END:VEVENT
+BEGIN:VEVENT
+UID:water---lillebil---05-11-2026-2000@cinemateket.no
+DTSTAMP:20260925T112000Z
+DTSTART:20261105T190000Z
+DTEND:20261105T205700Z
+SUMMARY:Water
+DESCRIPTION:Deepa Mehtas praktfulle film om frigjøring. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/water
+END:VEVENT
+BEGIN:VEVENT
+UID:lidenskapens-vinger---tancred---05-11-2026-2030@cinemateket.no
+DTSTAMP:20261006T104100Z
+DTSTART:20261105T193000Z
+DTEND:20261105T213800Z
+SUMMARY:Lidenskapens vinger
+DESCRIPTION:Storslagent og sammensatt om livet, døden, byer, riker, fortid og evighet. 
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/lidenskapens-vinger
+END:VEVENT
+BEGIN:VEVENT
+UID:paradise---lillebil---06-11-2026-1615@cinemateket.no
+DTSTAMP:20261021T165000Z
+DTSTART:20261106T151500Z
+DTEND:20261106T164500Z
+SUMMARY:Paradise
+DESCRIPTION:Oppvekstskildring om ungdommer i jakten på meningen med tilværelsen og nytt fra fraværende fedre.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/paradise
+END:VEVENT
+BEGIN:VEVENT
+UID:no-good-men---tancred---06-11-2026-1730@cinemateket.no
+DTSTAMP:20261021T165200Z
+DTSTART:20261106T163000Z
+DTEND:20261106T181300Z
+SUMMARY:No Good Men
+DESCRIPTION:En varm, modig og tilgjengelig film om kjærlighet, mot og håp under ekstreme omstendigheter.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/no-good-men
+END:VEVENT
+BEGIN:VEVENT
+UID:angels-egg---lillebil---06-11-2026-1830@cinemateket.no
+DTSTAMP:20261021T165000Z
+DTSTART:20261106T173000Z
+DTEND:20261106T184100Z
+SUMMARY:Angel's Egg
+DESCRIPTION:En trollbindende og filosofisk animeperle i nylig restaurert utgave.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/angels-egg
+END:VEVENT
+BEGIN:VEVENT
+UID:sad-girlz---lillebil---06-11-2026-2030@cinemateket.no
+DTSTAMP:20261021T165000Z
+DTSTART:20261106T193000Z
+DTEND:20261106T210000Z
+SUMMARY:Sad girlz
+DESCRIPTION:To tenåringssvømmere i Mexico forbereder seg til en stor konkurranse, samtidig som de håndterer traumer som forandrer vennskapet deres.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/sad-girlz
+END:VEVENT
+BEGIN:VEVENT
+UID:the-furious---tancred---06-11-2026-2045@cinemateket.no
+DTSTAMP:20261021T165000Z
+DTSTART:20261106T194500Z
+DTEND:20261106T213800Z
+SUMMARY:The Furious
+DESCRIPTION:En far drar på hevntokt mot en gruppe kidnappere som har bortført datteren hans.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-furious
+END:VEVENT
+BEGIN:VEVENT
+UID:lyd-i-film-med-celio-de-carvalho---flaklypa---barnas-filmrom---07-11-2026-1215@cinemateket.no
+DTSTAMP:20261027T134400Z
+DTSTART:20261107T111500Z
+DTEND:20261107T111500Z
+SUMMARY:Lyd i film med Celio de Carvalho
+DESCRIPTION:Bli med på familieverksted om lyd i film og utforsk hvordan lyd kan endre hvordan vi opplever en film.
+LOCATION:Flåklypa – Barnas filmrom - Cinemateket 
+URL:https://www.cinemateket.no/filmer/lyd-i-film-med-celio-de-carvalho
+END:VEVENT
+BEGIN:VEVENT
+UID:papaya---lillebil---07-11-2026-1300@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261107T120000Z
+DTEND:20261107T131400Z
+SUMMARY:Papaya
+DESCRIPTION:Visuelt slående eventyr om et lite papayafrø sin reise ut i den store verden.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/papaya
+END:VEVENT
+BEGIN:VEVENT
+UID:chimney-town-frozen-in-time---tancred---07-11-2026-1300@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261107T120000Z
+DTEND:20261107T133800Z
+SUMMARY:Chimney Town: Frozen in Time
+DESCRIPTION:I oppfølgeren til Poupelle of Chimney Town reiser Lubicchi til en mystisk verden der tiden står stille.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/chimney-town-frozen-in-time
+END:VEVENT
+BEGIN:VEVENT
+UID:the-secret-reading-club-of-kabul---lillebil---07-11-2026-1500@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261107T140000Z
+DTEND:20261107T153500Z
+SUMMARY:The Secret Reading Club of Kabul
+DESCRIPTION:En sterk dokumentar om en lesesirkel for kvinner i et samfunn som har tatt fra dem alt.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-secret-reading-club-of-kabul
+END:VEVENT
+BEGIN:VEVENT
+UID:lady---tancred---07-11-2026-1515@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261107T141500Z
+DTEND:20261107T154800Z
+SUMMARY:Lady
+DESCRIPTION:En kvinnelig taxisjåfør blir privatsjåfør for en gruppe sexarbeidere i Nigerias metropol, Lagos.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/lady
+END:VEVENT
+BEGIN:VEVENT
+UID:tango---tancred---07-11-2026-1730@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261107T163000Z
+DTEND:20261107T182600Z
+SUMMARY:Tango
+DESCRIPTION:Sjalusi, begjær og brutalitet er ingredienser i denne pulserende tangofilmen fra 90-tallet.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/tango
+END:VEVENT
+BEGIN:VEVENT
+UID:marie-madeleine---lillebil---07-11-2026-1745@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261107T164500Z
+DTEND:20261107T182900Z
+SUMMARY:Marie Madeleine
+DESCRIPTION:Hva skjer når kirken og bordellet plutselig blir nærmeste naboer?
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/marie-madeleine
+END:VEVENT
+BEGIN:VEVENT
+UID:milonga-buenos-aires-style---lemongrass@cinemateket.no
+DTSTAMP:20261029T084900Z
+DTSTART:20261107T190000Z
+DTEND:20261107T203000Z
+SUMMARY:Milonga Buenos Aires Style
+DESCRIPTION:Milonga er dansefesten for tango. Etter visningen av Tango arrangeres det milonga, Buenos Aires style, i Lemongrass på Cinemateket.
+LOCATION:Lemongrass - Cinemateket 
+URL:https://www.cinemateket.no/filmer/milonga-buenos-aires-style
+END:VEVENT
+BEGIN:VEVENT
+UID:the-match---tancred---07-11-2026-2015@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261107T191500Z
+DTEND:20261107T204600Z
+SUMMARY:The Match
+DESCRIPTION:En dokumentar om den historiske fotballkampen mellom Argentina og England i 1986.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-match
+END:VEVENT
+BEGIN:VEVENT
+UID:atlantic-rhapsody---lillebil---07-11-2026-2030@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261107T193000Z
+DTEND:20261107T211200Z
+SUMMARY:Atlantic Rhapsody
+DESCRIPTION:Når butikkansatte Ding Mao ved et uhell koker butikkens pyntehai levende, spinner livet hans ut av kontroll.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/atlantic-rhapsody
+END:VEVENT
+BEGIN:VEVENT
+UID:origamiverksted---flaklypa---barnas-filmrom---08-11-2026-1200@cinemateket.no
+DTSTAMP:20261027T143800Z
+DTSTART:20261108T110000Z
+DTEND:20261108T110000Z
+SUMMARY:Origamiverksted
+DESCRIPTION:I forbindelse med visningene av Kikis budservice kan du bli med på origamiverksted.
+LOCATION:Flåklypa – Barnas filmrom - Cinemateket 
+URL:https://www.cinemateket.no/filmer/origamiverksted
+END:VEVENT
+BEGIN:VEVENT
+UID:kikis-budservice---lillebil---08-11-2026-1300@cinemateket.no
+DTSTAMP:20261021T163200Z
+DTSTART:20261108T120000Z
+DTEND:20261108T134300Z
+SUMMARY:Kikis budservice
+DESCRIPTION:Møt den lille heksa Kiki i en strålende vakker og rørende animasjonsfortelling om oppvekst, vennskap og lykkemøter.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/kikis-budservice
+END:VEVENT
+BEGIN:VEVENT
+UID:enjoy-your-stay---tancred---08-11-2026-1330@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261108T123000Z
+DTEND:20261108T140900Z
+SUMMARY:Enjoy Your Stay
+DESCRIPTION:Bak luksusen i Verbier skildrer filmen en mors desperate kamp for å bevare båndet til datteren sin.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/enjoy-your-stay
+END:VEVENT
+BEGIN:VEVENT
+UID:isabel---lillebil---08-11-2026-1530@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261108T143000Z
+DTEND:20261108T155500Z
+SUMMARY:Isabel
+DESCRIPTION:Et kjærlighetsbrev til São Paulo og vinens gleder, sanselig fanget på kornete 16mm-film.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/isabel
+END:VEVENT
+BEGIN:VEVENT
+UID:all-of-a-sudden---tancred---08-11-2026-1600@cinemateket.no
+DTSTAMP:20261021T164200Z
+DTSTART:20261108T150000Z
+DTEND:20261108T181600Z
+SUMMARY:All of a Sudden
+DESCRIPTION:Drive My Car-regissøren er tilbake med et vakkert drama som sikret begge hovedrollene skuespillerpriser i Cannes.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/all-of-a-sudden
+END:VEVENT
+BEGIN:VEVENT
+UID:duften-av-gronn-papaya-om-morgenen---lillebil---08-11-2026-1745@cinemateket.no
+DTSTAMP:20261021T163200Z
+DTSTART:20261108T164500Z
+DTEND:20261108T182900Z
+SUMMARY:Duften av grønn papaya om morgenen
+DESCRIPTION:En nesten smertefullt vakker film.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/duften-av-gronn-papaya-om-morgenen
+END:VEVENT
+BEGIN:VEVENT
+UID:the-shadows-edge---lillebil---08-11-2026-2015@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261108T191500Z
+DTEND:20261108T213600Z
+SUMMARY:The Shadow's Edge
+DESCRIPTION:En gruppe tyver herjer Macaus gater og den eneste som kan stoppe dem er en pensjonert politimann – spilt av Jackie Chan.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-shadows-edge
+END:VEVENT
+BEGIN:VEVENT
+UID:all-the-lovers-in-the-night---tancred---08-11-2026-2030@cinemateket.no
+DTSTAMP:20261021T164200Z
+DTSTART:20261108T193000Z
+DTEND:20261108T214900Z
+SUMMARY:All the Lovers in the Night
+DESCRIPTION:To forsiktige sjeler i den ensomme metropolen Tokyo møtes og former et skjørt bånd.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/all-the-lovers-in-the-night
+END:VEVENT
+BEGIN:VEVENT
+UID:knife-the-attempted-murder-of-salman-rushdie---tancred---09-11-2026-1730@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261109T163000Z
+DTEND:20261109T181700Z
+SUMMARY:Knife: The Attempted Murder of Salman Rushdie
+DESCRIPTION:En film om en av verdens største forfattere og hans kamp for å overleve og beholde håpet.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/knife-the-attempted-murder-of-salman-rushdie
+END:VEVENT
+BEGIN:VEVENT
+UID:asako-i-ii---lillebil---09-11-2026-1800@cinemateket.no
+DTSTAMP:20261021T164200Z
+DTSTART:20261109T170000Z
+DTEND:20261109T185900Z
+SUMMARY:Asako I & II
+DESCRIPTION:Asako forelsker seg i Baku. To år senere møter hun Ryohei, som er prikk lik Baku, men med en helt annen personlighet.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/asako-i-ii
+END:VEVENT
+BEGIN:VEVENT
+UID:divine-comedy---tancred---09-11-2026-2030@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261109T193000Z
+DTEND:20261109T210600Z
+SUMMARY:Divine Comedy
+DESCRIPTION:En sensurert filmregissør reiser Iran rundt for å vise filmen sin i skjul.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/divine-comedy
+END:VEVENT
+BEGIN:VEVENT
+UID:pans-labyrint---lillebil---09-11-2026-2045@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261109T194500Z
+DTEND:20261109T214300Z
+SUMMARY:Pans Labyrint
+DESCRIPTION:Et mørkt og vakkert eventyr satt til Francos Spania.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/pans-labyrint
+END:VEVENT
+BEGIN:VEVENT
+UID:lady-nazca---lillebil---10-11-2026-1730@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261110T163000Z
+DTEND:20261110T180900Z
+SUMMARY:Lady Nazca
+DESCRIPTION:Maria oppdaget noe i den peruanske ørkenen som ingen andre så, og viet livet sitt til å forstå det.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/lady-nazca
+END:VEVENT
+BEGIN:VEVENT
+UID:filipinana---tancred---10-11-2026-1800@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261110T170000Z
+DTEND:20261110T184100Z
+SUMMARY:Filipiñana
+DESCRIPTION:Ikke alt er som det ser ut på golfklubben.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/filipinana
+END:VEVENT
+BEGIN:VEVENT
+UID:ky-nam-inn---tancred---10-11-2026-2015@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261110T191500Z
+DTEND:20261110T215500Z
+SUMMARY:Ky Nam Inn
+DESCRIPTION:Denne stemningsmettede periodefilmen slekter utvilsomt på Wong Kar-wais In the Mood for Love. 
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/ky-nam-inn
+END:VEVENT
+BEGIN:VEVENT
+UID:var-sommer-host-vinter-...-og-var---lillebil---10-11-2026-2030@cinemateket.no
+DTSTAMP:20261022T132300Z
+DTSTART:20261110T193000Z
+DTEND:20261110T211300Z
+SUMMARY:Vår, sommer, høst, vinter … og vår
+DESCRIPTION:Sør-koreanske Kim Ki-duks filmer spenner fra det mystisk kontemplative til det grotesk voldelige. I denne enestående vakre filmen skildres årstidenes syklus i fem tablåer.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/var-sommer-host-vinter-og-var
+END:VEVENT
+BEGIN:VEVENT
+UID:guria---tancred---11-11-2026-1745@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261111T164500Z
+DTEND:20261111T184300Z
+SUMMARY:Guria
+DESCRIPTION:Et portrett av en alenefar som forsøker å få endene til å møtes på landsbygda i Georgia etter Sovjetunionens fall.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/guria
+END:VEVENT
+BEGIN:VEVENT
+UID:the-orphanage---lillebil---11-11-2026-1800@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261111T170000Z
+DTEND:20261111T183000Z
+SUMMARY:The Orphanage
+DESCRIPTION:Kabul på slutten av 1980-tallet. Barna på et sovjetdrevet barnehjem drømmer seg bort i Bollywoodfilmene de elsker.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-orphanage
+END:VEVENT
+BEGIN:VEVENT
+UID:zi---lillebil---11-11-2026-2015@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261111T191500Z
+DTEND:20261111T205400Z
+SUMMARY:Zi
+DESCRIPTION:Et tilfeldig møte blir starten på en helt spesiell natt i Hongkong.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/zi
+END:VEVENT
+BEGIN:VEVENT
+UID:the-meltdown---tancred---11-11-2026-2030@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261111T193000Z
+DTEND:20261111T211800Z
+SUMMARY:The Meltdown
+DESCRIPTION:Et nervepirrende drama satt til et vinterhotell i Chile, i kjølvannet av Pinochets fall.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-meltdown
+END:VEVENT
+BEGIN:VEVENT
+UID:the-woman-who-poked-the-leopard---lillebil---12-11-2026-1715@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261112T161500Z
+DTEND:20261112T180200Z
+SUMMARY:The woman who poked the leopard
+DESCRIPTION:Stella Nyanzi har aldri vært redd for å si makten imot.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-woman-who-poked-the-leopard
+END:VEVENT
+BEGIN:VEVENT
+UID:flies---tancred---12-11-2026-1800@cinemateket.no
+DTSTAMP:20261021T164200Z
+DTSTART:20261112T170000Z
+DTEND:20261112T184200Z
+SUMMARY:Flies
+DESCRIPTION:Tre liv flettes sammen i en massiv boligblokk i Mexico.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/flies
+END:VEVENT
+BEGIN:VEVENT
+UID:the-samurai-and-the-prisoner---lillebil---12-11-2026-2015@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261112T191500Z
+DTEND:20261112T214200Z
+SUMMARY:The Samurai and the Prisoner
+DESCRIPTION:Et elegant og sylskarpt kammerspill satt i det føydale Japan, av Kiyoshi Kurosawa
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-samurai-and-the-prisoner
+END:VEVENT
+BEGIN:VEVENT
+UID:a-girl-unknown---tancred---12-11-2026-2030@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261112T193000Z
+DTEND:20261112T213800Z
+SUMMARY:A Girl Unknown
+DESCRIPTION:En sår fortelling om å vokse opp mellom familier, navn og identiteter, med ettbarnspolitikken i Kina som bakteppe.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/a-girl-unknown
+END:VEVENT
+BEGIN:VEVENT
+UID:drive-my-car---lillebil---13-11-2026-1700@cinemateket.no
+DTSTAMP:20261021T163200Z
+DTSTART:20261113T160000Z
+DTEND:20261113T185900Z
+SUMMARY:Drive My Car
+DESCRIPTION:Få med deg et gjensyn på kino av Hamaguchis vakre Murakami-adaptasjon.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/drive-my-car
+END:VEVENT
+BEGIN:VEVENT
+UID:cronos---tancred---13-11-2026-1815@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261113T171500Z
+DTEND:20261113T184900Z
+SUMMARY:Cronos
+DESCRIPTION:Hva ville du gitt for å leve for alltid?
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/cronos
+END:VEVENT
+BEGIN:VEVENT
+UID:frihetens-pris-yellow-letters---tancred---13-11-2026-2030@cinemateket.no
+DTSTAMP:20261021T164200Z
+DTSTART:20261113T193000Z
+DTEND:20261113T213700Z
+SUMMARY:Frihetens Pris (Yellow Letters)
+DESCRIPTION:Dette sterke familiedramaet tegner et skarpt bilde av sensurens og autoritære regimers konsekvenser.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/frihetens-pris-yellow-letters
+END:VEVENT
+BEGIN:VEVENT
+UID:never-after-dark---lillebil---13-11-2026-2045@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261113T194500Z
+DTEND:20261113T213000Z
+SUMMARY:Never After Dark
+DESCRIPTION:En japansk spøkelsesfilm av beste sort!
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/never-after-dark
+END:VEVENT
+BEGIN:VEVENT
+UID:origamiverksted---flaklypa---barnas-filmrom---14-11-2026-1200@cinemateket.no
+DTSTAMP:20261027T144000Z
+DTSTART:20261114T110000Z
+DTEND:20261114T110000Z
+SUMMARY:Origamiverksted
+DESCRIPTION:I forbindelse med visningene av Kikis budservice kan du bli med på origamiverksted.
+LOCATION:Flåklypa – Barnas filmrom - Cinemateket 
+URL:https://www.cinemateket.no/filmer/origamiverksted
+END:VEVENT
+BEGIN:VEVENT
+UID:the-best-mother-in-the-world---tancred---14-11-2026-1300@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261114T120000Z
+DTEND:20261114T134500Z
+SUMMARY:The best mother in the world
+DESCRIPTION:Et svært gripende drama med en fantastisk rolleprestasjon av Shirley Cruz.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-best-mother-in-the-world
+END:VEVENT
+BEGIN:VEVENT
+UID:kikis-budservice---lillebil---14-11-2026-1300@cinemateket.no
+DTSTAMP:20261021T163200Z
+DTSTART:20261114T120000Z
+DTEND:20261114T134300Z
+SUMMARY:Kikis budservice
+DESCRIPTION:Møt den lille heksa Kiki i en strålende vakker og rørende animasjonsfortelling om oppvekst, vennskap og lykkemøter.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/kikis-budservice
+END:VEVENT
+BEGIN:VEVENT
+UID:filipinana---tancred---14-11-2026-1515@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261114T141500Z
+DTEND:20261114T155600Z
+SUMMARY:Filipiñana
+DESCRIPTION:Ikke alt er som det ser ut på golfklubben.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/filipinana
+END:VEVENT
+BEGIN:VEVENT
+UID:wolf-and-sheep---lillebil---14-11-2026-1530@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261114T143000Z
+DTEND:20261114T155600Z
+SUMMARY:Wolf and Sheep
+DESCRIPTION:Shahrbanoo Sadats debutfilm er en vakker oppvekstskildring satt til den afghanske landsbygda.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/wolf-and-sheep
+END:VEVENT
+BEGIN:VEVENT
+UID:ha-chan-shake-your-booty---tancred---14-11-2026-1730@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261114T163000Z
+DTEND:20261114T183200Z
+SUMMARY:Ha-Chan Shake your Booty!
+DESCRIPTION:En herlig dramakomedie, og en av årets vakreste skildringer av sorg.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/ha-chan-shake-your-booty
+END:VEVENT
+BEGIN:VEVENT
+UID:9-temples-to-heaven---lillebil---14-11-2026-1745@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261114T164500Z
+DTEND:20261114T190500Z
+SUMMARY:9 Temples to Heaven
+DESCRIPTION:En familie drar på biltur fra tempel til tempel i denne vakre og meditative filmen.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/9-temples-to-heaven
+END:VEVENT
+BEGIN:VEVENT
+UID:hope---tancred---14-11-2026-2000@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261114T190000Z
+DTEND:20261114T214000Z
+SUMMARY:Hope
+DESCRIPTION:Regissøren av The Wailing er tilbake med en massiv sci-fi-monsterfilm!
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/hope
+END:VEVENT
+BEGIN:VEVENT
+UID:the-difficult-bride---lillebil---14-11-2026-2045@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261114T194500Z
+DTEND:20261114T212200Z
+SUMMARY:The Difficult Bride
+DESCRIPTION:Hvor langt er du villig til å gå for det perfekte bryllupet? En body horror om skjønnhetsidealer på sitt mørkeste.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-difficult-bride
+END:VEVENT
+BEGIN:VEVENT
+UID:lyd-i-film-med-celio-de-carvalho---15-11-2026-1215@cinemateket.no
+DTSTAMP:20261027T134600Z
+DTSTART:20261115T111500Z
+DTEND:20261115T111500Z
+SUMMARY:Lyd i film med Celio de Carvalho
+DESCRIPTION:Bli med på familieverksted om lyd i film og utforsk hvordan lyd kan endre hvordan vi opplever en film.
+LOCATION:Flåklypa – Barnas filmrom - Cinemateket 
+URL:https://www.cinemateket.no/filmer/lyd-i-film-med-celio-de-carvalho
+END:VEVENT
+BEGIN:VEVENT
+UID:papaya---lillebil---15-11-2026-1300@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261115T120000Z
+DTEND:20261115T131400Z
+SUMMARY:Papaya
+DESCRIPTION:Visuelt slående eventyr om et lite papayafrø sin reise ut i den store verden.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/papaya
+END:VEVENT
+BEGIN:VEVENT
+UID:the-world-of-love---tancred---15-11-2026-1315@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261115T121500Z
+DTEND:20261115T141400Z
+SUMMARY:The World of Love
+DESCRIPTION:En 17 år gammel jente håndterer et traume fra fortiden.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-world-of-love
+END:VEVENT
+BEGIN:VEVENT
+UID:whispers-in-may---lillebil---15-11-2026-1500@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261115T140000Z
+DTEND:20261115T153500Z
+SUMMARY:Whispers in May
+DESCRIPTION:En visuelt slående, nær, øm, humoristisk og alvorlig hybrid-dokumentar.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/whispers-in-may
+END:VEVENT
+BEGIN:VEVENT
+UID:nagi-notes---tancred---15-11-2026-1545@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261115T144500Z
+DTEND:20261115T163500Z
+SUMMARY:Nagi Notes
+DESCRIPTION:Nagi Notes er et sømløst fortalt drama om å gjenfinne identiteten sin, fra en av Japans fremste filmskapere.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/nagi-notes
+END:VEVENT
+BEGIN:VEVENT
+UID:hearing---lillebil---15-11-2026-1715@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261115T161500Z
+DTEND:20261115T182300Z
+SUMMARY:Hearing
+DESCRIPTION:Om stillhet, støy og det vi (ikke) sier til hverandre.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/hearing
+END:VEVENT
+BEGIN:VEVENT
+UID:benimana---tancred---15-11-2026-1815@cinemateket.no
+DTSTAMP:20261021T164200Z
+DTSTART:20261115T171500Z
+DTEND:20261115T185600Z
+SUMMARY:Ben'imana
+DESCRIPTION:Et gripende drama om oppgjøret etter folkemordet i Rwanda.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/benimana
+END:VEVENT
+BEGIN:VEVENT
+UID:colony---lillebil---15-11-2026-2030@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261115T193000Z
+DTEND:20261115T213300Z
+SUMMARY:Colony
+DESCRIPTION:Likte du Train to Busan? Da kommer du garantert til å like Colony!
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/colony
+END:VEVENT
+BEGIN:VEVENT
+UID:elephants-in-the-fog---tancred---15-11-2026-2045@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261115T194500Z
+DTEND:20261115T212800Z
+SUMMARY:Elephants in the Fog
+DESCRIPTION:Denne sterke fortellingen fra Nepal vant juryprisen i Un Certain Regard i Cannes i år.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/elephants-in-the-fog
+END:VEVENT
+BEGIN:VEVENT
+UID:filmhistorie-samisk-film---lillebil---17-11-2026-1700@cinemateket.no
+DTSTAMP:20260928T144000Z
+DTSTART:20261117T160000Z
+DTEND:20261117T164500Z
+SUMMARY:Filmhistorie: Samisk film
+DESCRIPTION:Gratis forelesning om norsk filmhistorie i regi av Universitetet i Oslo.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/samisk-film
+END:VEVENT
+BEGIN:VEVENT
+UID:veiviseren---lillebil---17-11-2026-1800@cinemateket.no
+DTSTAMP:20260928T143300Z
+DTSTART:20261117T170000Z
+DTEND:20261117T182600Z
+SUMMARY:Veiviseren
+DESCRIPTION:Den actionfylte norske filmsensasjonen.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/veiviseren
+END:VEVENT
+BEGIN:VEVENT
+UID:11x14---tancred---17-11-2026-1815@cinemateket.no
+DTSTAMP:20260928T143300Z
+DTSTART:20261117T171500Z
+DTEND:20261117T185600Z
+SUMMARY:11x14
+DESCRIPTION:James Bennings epokegjørende avant-garde-film fra 1977.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/11-x14
+END:VEVENT
+BEGIN:VEVENT
+UID:det-gode-ekteskap---lillebil---17-11-2026-2000@cinemateket.no
+DTSTAMP:20260928T144000Z
+DTSTART:20261117T190000Z
+DTEND:20261117T203700Z
+SUMMARY:Det gode ekteskap
+DESCRIPTION:En liten, men stor, Eric Rohmer-film om en ung kvinne som en dag finner ut at hun vil gifte seg. Det eneste hun mangler, er noen å gifte seg med. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/det-gode-ekteskap
+END:VEVENT
+BEGIN:VEVENT
+UID:water---tancred---17-11-2026-2015@cinemateket.no
+DTSTAMP:20260928T143000Z
+DTSTART:20261117T191500Z
+DTEND:20261117T211200Z
+SUMMARY:Water
+DESCRIPTION:Deepa Mehtas praktfulle film om frigjøring. 
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/water
+END:VEVENT
+END:VCALENDAR

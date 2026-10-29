@@ -51,12 +51,12 @@ function FilmCard({ film, showings }: { film: Film; showings: ShowingView[] }) {
 
   return (
     <article className={styles.card}>
-      <a href={film.filmwebUrl} target="_blank" rel="noopener" tabIndex={-1} aria-hidden="true">
+      <a href={film.pageUrl} target="_blank" rel="noopener" tabIndex={-1} aria-hidden="true">
         <Poster film={film} />
       </a>
       <div className={styles.heading}>
         <h2 className={styles.title}>
-          <a href={film.filmwebUrl} target="_blank" rel="noopener">
+          <a href={film.pageUrl} target="_blank" rel="noopener">
             {film.title}
           </a>
         </h2>

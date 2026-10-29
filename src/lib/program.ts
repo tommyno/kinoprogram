@@ -7,7 +7,8 @@ export interface Film {
   minutes: number | null;
   ageRating: string | null;
   posterUrl: string | null;
-  filmwebUrl: string;
+  /** The film's page at the source: Filmweb, or Cinemateket for its own screenings. */
+  pageUrl: string;
 }
 
 export interface Showing {
@@ -94,7 +95,7 @@ export function normalize(snapshot: FilmwebSnapshot): Program {
       minutes: show.lengthInMinutes || movie?.lengthInMinutes || null,
       ageRating: ageRating(show.rating) ?? ageRating(movie?.rating ?? null),
       posterUrl: orNull(movie?.sanityImagePosterUrl),
-      filmwebUrl: FILMWEB_FILM_URL + filmId,
+      pageUrl: FILMWEB_FILM_URL + filmId,
     };
 
     const slot = programSlot(show.showStart);
@@ -112,20 +113,38 @@ export function normalize(snapshot: FilmwebSnapshot): Program {
     });
   }
 
-  const sortedDays: Record<string, Showing[]> = {};
-  for (const day of Object.keys(days).sort()) {
-    sortedDays[day] = days[day].sort(
+  return sortProgram({ fetchedAt: snapshot.fetchedAt, films, cinemas: [...cinemas], days });
+}
+
+/** Sorts cinemas by name, days ascending and each day's showings by start time. */
+export function sortProgram(program: Program): Program {
+  const { films } = program;
+  const days: Record<string, Showing[]> = {};
+  for (const day of Object.keys(program.days).sort()) {
+    days[day] = [...program.days[day]].sort(
       (a, b) =>
         a.minutes - b.minutes ||
         collator.compare(films[a.filmId].title, films[b.filmId].title) ||
         collator.compare(a.cinema, b.cinema),
     );
   }
+  return { ...program, cinemas: [...program.cinemas].sort(collator.compare), days };
+}
 
-  return {
-    fetchedAt: snapshot.fetchedAt,
-    films,
-    cinemas: [...cinemas].sort(collator.compare),
-    days: sortedDays,
+/** Combines programs from several sources into one. */
+export function mergePrograms(first: Program, ...rest: Program[]): Program {
+  const merged: Program = {
+    fetchedAt: first.fetchedAt,
+    films: { ...first.films },
+    cinemas: [...first.cinemas],
+    days: Object.fromEntries(Object.entries(first.days).map(([day, list]) => [day, [...list]])),
   };
+  for (const program of rest) {
+    Object.assign(merged.films, program.films);
+    merged.cinemas.push(...program.cinemas.filter((c) => !merged.cinemas.includes(c)));
+    for (const [day, list] of Object.entries(program.days)) {
+      (merged.days[day] ??= []).push(...list);
+    }
+  }
+  return sortProgram(merged);
 }

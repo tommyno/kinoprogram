@@ -93,7 +93,7 @@ describe('normalize', () => {
       minutes: 100,
       ageRating: '12 år',
       posterUrl: 'https://cdn.sanity.io/p.jpg',
-      filmwebUrl: 'https://www.filmweb.no/film/EDI1',
+      pageUrl: 'https://www.filmweb.no/film/EDI1',
     });
     expect(result.days['2026-10-30'][0].tags).toEqual(['IMAX']);
   });

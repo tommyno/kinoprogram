@@ -23,7 +23,7 @@ const films = Object.fromEntries(showings.map((s) => [s.filmId, program.films[s.
     <Header day={day} today={today} lastDay={lastDay} />
     <Program client:load films={films} showings={showings} />
     <footer class={styles.footer}>
-      Programdata fra <a href="https://www.filmweb.no">Filmweb</a>
+      Programdata fra <a href="https://www.filmweb.no">Filmweb</a> og <a href="https://www.cinemateket.no">Cinemateket</a>
     </footer>
   </main>
 </Base>

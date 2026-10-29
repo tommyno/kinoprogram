@@ -15,14 +15,15 @@ Kinoprogrammet for alle kinoene i Oslo på én side. Statisk Astro-side som bygg
 
 ## Data
 
-- Kilde: Filmwebs GraphQL-API (`movieinfoqs.filmweb.no/graphql`), to kall per bygg.
+- Kilder: Filmwebs GraphQL-API (`movieinfoqs.filmweb.no/graphql`, to kall per bygg) for ti kinoer, og Cinematekets kalenderfeed (`cinemateket.no/cinemateket-webcal.ics`, ett kall, ca. tre uker frem). Feiler Cinemateket, bygges siden uten.
 - `FILMWEB_SOURCE=live|fixture` styrer hvor dataene kommer fra. Standard er `live` på Vercel/CI og i `pnpm dev`, ellers `fixture` (tester og lokale bygg).
 - Lokale live-bygg cacher svaret i `.cache/` i én time.
 - Finnes det ingen visninger i dag, feiler bygget, og forrige versjon blir liggende.
 
 ```
 src/lib/filmweb.ts    GraphQL-klient og skjema for rådata
-src/lib/program.ts    normalisering: filmer, visninger per dag, salnavn
+src/lib/cinemateket.ts  iCal-parser for Cinemateket
+src/lib/program.ts    normalisering: filmer, visninger per dag, salnavn, fletting av kilder
 src/lib/time.ts       Oslo-tid, passerte visninger, datotekster
 src/lib/validate.ts   kontroller før bygget slipper gjennom
 src/lib/source.ts     velger live/fixture og laster programmet én gang per bygg
