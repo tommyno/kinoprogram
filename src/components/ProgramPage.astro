@@ -16,9 +16,12 @@ const today = programNow().day;
 const lastDay = Object.keys(program.days).at(-1) ?? today;
 const showings = program.days[day] ?? [];
 const films = Object.fromEntries(showings.map((s) => [s.filmId, program.films[s.filmId]]));
+const label = dayLabel(day, today);
+const cinemas = program.cinemas;
+const description = `Hva går på kino i Oslo ${label}? Alle filmene og tidene fra ${cinemas.slice(0, -1).join(', ')} og ${cinemas.at(-1)}.`;
 ---
 
-<Base title={`Kinoprogram for Oslo ${dayLabel(day, today)}`}>
+<Base title={`Kinoprogram for Oslo ${label}`} description={description}>
   <main class={styles.page}>
     <Header day={day} today={today} lastDay={lastDay} />
     <Program client:load films={films} showings={showings} />

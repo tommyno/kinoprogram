@@ -12,6 +12,7 @@ Kinoprogrammet for alle kinoene i Oslo på én side. Statisk Astro-side som bygg
 | `pnpm test` | Kjører testene (vitest) |
 | `pnpm check` | Typesjekk (astro check) |
 | `pnpm fixture` | Henter ferskt program fra Filmweb til `tests/fixtures/filmweb-oslo.json` |
+| `pnpm icons` | Lager `favicon.ico`, `apple-touch-icon.png` og delingsbildet `og.png` fra `public/favicon.svg` |
 
 ## Drift
 
