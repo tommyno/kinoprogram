@@ -9,9 +9,9 @@ import styles from './Program.module.css';
 type Sort = 'film' | 'tid' | 'kino';
 
 const SORTS: { key: Sort; label: string }[] = [
-  { key: 'film', label: 'Film (A–Å)' },
+  { key: 'film', label: 'Film' },
   { key: 'tid', label: 'Tidspunkt' },
-  { key: 'kino', label: 'Kino (A–Å)' },
+  { key: 'kino', label: 'Kino' },
 ];
 
 interface Props {
@@ -55,15 +55,9 @@ export default function Program({ films, showings }: Props) {
     () => showings.map((s) => ({ ...s, past: now ? isPast(s, now) : false })),
     [showings, now],
   );
-  const filmCount = new Set(showings.map((s) => s.filmId)).size;
-  const cinemaCount = new Set(showings.map((s) => s.cinema)).size;
-
   return (
     <>
       <div className={styles.toolbar}>
-        <p className={styles.summary}>
-          {filmCount} filmer · {showings.length} forestillinger · {cinemaCount} kinoer
-        </p>
         <div role="group" aria-label="Sorter" className={styles.sort}>
           <span className={styles.sortLabel}>Sorter</span>
           <div className={styles.segmented}>
