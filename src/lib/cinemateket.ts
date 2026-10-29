@@ -5,6 +5,8 @@ import { osloDateTime, programSlot } from './time.ts';
 // Cinemateket isn't in Filmweb. Its calendar feed holds the next 100 screenings (about three weeks).
 const FEED_URL = 'https://www.cinemateket.no/cinemateket-webcal.ics';
 export const CINEMA = 'Cinemateket';
+// The feed has no images, so every Cinemateket film gets the same logo poster
+const POSTER = '/posters/cinemateket.svg';
 
 export interface CinemateketEvent {
   uid: string;
@@ -84,7 +86,7 @@ export function cinemateketProgram(events: CinemateketEvent[], fetchedAt: string
       title: event.title,
       minutes: event.minutes,
       ageRating: null,
-      posterUrl: null,
+      posterUrl: POSTER,
       pageUrl: event.url,
     };
     const slot = programSlot(event.start);

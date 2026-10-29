@@ -67,7 +67,7 @@ describe('cinemateketProgram', () => {
         title: 'The Arbor',
         minutes: 94,
         ageRating: null,
-        posterUrl: null,
+        posterUrl: '/posters/cinemateket.svg',
         pageUrl: 'https://www.cinemateket.no/filmer/the-arbor',
       },
     ]);

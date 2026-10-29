@@ -27,12 +27,14 @@ function Poster({ film }: { film: Film }) {
       </div>
     );
   }
+  // Our own posters (Cinemateket's logo) are SVGs served as they are
+  const local = film.posterUrl.startsWith('/');
   return (
     <img
       className={styles.poster}
-      src={posterSrc(film.posterUrl, 320)}
-      srcSet={POSTER_WIDTHS.map((w) => `${posterSrc(film.posterUrl!, w)} ${w}w`).join(', ')}
-      sizes="(min-width: 1000px) 200px, 45vw"
+      src={local ? film.posterUrl : posterSrc(film.posterUrl, 320)}
+      srcSet={local ? undefined : POSTER_WIDTHS.map((w) => `${posterSrc(film.posterUrl!, w)} ${w}w`).join(', ')}
+      sizes={local ? undefined : '(min-width: 1000px) 200px, 45vw'}
       width={400}
       height={600}
       loading="lazy"
