@@ -1,8 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="14" fill="#111111"/>
+  <!-- The arms start inside the stem so no shared edge leaves an anti-aliasing seam -->
   <g fill="#ffffff">
     <rect x="16" y="14" width="9.5" height="36"/>
-    <polygon points="25.5,30 38.5,14 50,14 25.5,42"/>
-    <polygon points="30.5,30.5 50.5,50 39,50 24,36"/>
+    <polygon points="20,36.77 38.5,14 50,14 20,48.29"/>
+    <polygon points="30.5,30.5 50.5,50 39,50 22,38"/>
   </g>
 </svg>
