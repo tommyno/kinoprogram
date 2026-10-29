@@ -9,7 +9,7 @@ export interface ProgramTime {
   minutes: number;
 }
 
-const clockFormat = new Intl.DateTimeFormat('en-CA', {
+const clockFormat = new Intl.DateTimeFormat('nb-NO', {
   timeZone: TIME_ZONE,
   year: 'numeric',
   month: '2-digit',
