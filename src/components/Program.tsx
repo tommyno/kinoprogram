@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Film, Showing } from '../lib/program.ts';
 import { isPast, programNow, type ProgramTime } from '../lib/time.ts';
 import CinemaColumns from './CinemaColumns.tsx';
@@ -51,10 +51,8 @@ function useSort(): [Sort, (sort: Sort) => void] {
 export default function Program({ films, showings }: Props) {
   const now = useNow();
   const [sort, setSort] = useSort();
-  const views = useMemo(
-    () => showings.map((s) => ({ ...s, past: now ? isPast(s, now) : false })),
-    [showings, now],
-  );
+  const views = showings.map((s) => ({ ...s, past: now ? isPast(s, now) : false }));
+
   return (
     <>
       <div className={styles.toolbar}>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Film } from '../lib/program.ts';
-import { bookingHref, cx, groupBy, showingLabel, type ShowingView } from './showing.ts';
+import { groupBy, ShowingLink, type ShowingView } from './showing.tsx';
 import styles from './TimeList.module.css';
 
 interface Props {
@@ -24,25 +24,15 @@ export default function TimeList({ films, showings }: Props) {
         <section key={hour} className={styles.hour}>
           <h2 className={styles.hourLabel}>{hour}:00</h2>
           <div className={styles.rows}>
-            {list.map((s) => {
-              const film = films[s.filmId];
-              return (
-                <a
-                  key={s.key}
-                  href={bookingHref(s, film)}
-                  target="_blank"
-                  rel="noopener"
-                  aria-label={showingLabel(s, film)}
-                  className={cx(styles.row, s.past && styles.past)}
-                >
-                  <span className={styles.time}>{s.time}</span>
-                  <span className={styles.text}>
-                    <span className={styles.title}>{film.title}</span>
-                    <span className={styles.where}>{s.screen ? `${s.cinema} · ${s.screen}` : s.cinema}</span>
-                  </span>
-                </a>
-              );
-            })}
+            {list.map((s) => (
+              <ShowingLink key={s.key} showing={s} title={films[s.filmId].title} className={styles.row}>
+                <span className={styles.time}>{s.time}</span>
+                <span className={styles.text}>
+                  <span className={styles.title}>{films[s.filmId].title}</span>
+                  <span className={styles.where}>{s.screen ? `${s.cinema} · ${s.screen}` : s.cinema}</span>
+                </span>
+              </ShowingLink>
+            ))}
           </div>
         </section>
       ))}

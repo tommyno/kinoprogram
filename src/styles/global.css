@@ -53,8 +53,19 @@ img {
 }
 
 button {
+  appearance: none;
+  margin: 0;
+  border: 0;
+  background: none;
   font: inherit;
   color: inherit;
+  cursor: pointer;
+}
+
+/* Showings that have started (set by ShowingLink) */
+[data-past] {
+  color: var(--past-ink);
+  background: var(--past-bg);
 }
 
 :focus-visible {

@@ -1,5 +1,4 @@
 .pastToggle {
-  appearance: none;
   display: flex;
   align-items: center;
   width: 100%;
@@ -12,7 +11,6 @@
   font-size: 14px;
   font-weight: 600;
   text-align: left;
-  cursor: pointer;
 }
 
 .hour {
@@ -78,11 +76,6 @@
 .where {
   font-size: 12px;
   color: var(--muted);
-}
-
-.past {
-  color: var(--past-ink);
-  background: var(--past-bg);
 }
 
 @media (max-width: 480px) {

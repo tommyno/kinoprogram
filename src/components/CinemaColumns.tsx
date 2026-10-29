@@ -1,5 +1,5 @@
-import type { Film } from '../lib/program.ts';
-import { bookingHref, collator, cx, groupBy, showingLabel, type ShowingView } from './showing.ts';
+import { collator, type Film } from '../lib/program.ts';
+import { groupBy, ShowingLink, type ShowingView } from './showing.tsx';
 import styles from './CinemaColumns.module.css';
 
 interface Props {
@@ -18,23 +18,13 @@ export default function CinemaColumns({ films, showings }: Props) {
             {cinema}
             <span className={styles.count}>{list.length} visninger</span>
           </h2>
-          {list.map((s) => {
-            const film = films[s.filmId];
-            return (
-              <a
-                key={s.key}
-                href={bookingHref(s, film)}
-                target="_blank"
-                rel="noopener"
-                aria-label={showingLabel(s, film)}
-                className={cx(styles.row, s.past && styles.past)}
-              >
-                <span className={styles.time}>{s.time}</span>
-                <span className={styles.title}>{film.title}</span>
-                <span className={styles.screen}>{s.screen}</span>
-              </a>
-            );
-          })}
+          {list.map((s) => (
+            <ShowingLink key={s.key} showing={s} title={films[s.filmId].title} className={styles.row}>
+              <span className={styles.time}>{s.time}</span>
+              <span className={styles.title}>{films[s.filmId].title}</span>
+              <span className={styles.screen}>{s.screen}</span>
+            </ShowingLink>
+          ))}
         </section>
       ))}
     </div>

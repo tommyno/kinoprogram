@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { FilmwebSnapshot, type RawShow } from '../src/lib/filmweb.ts';
-import { normalize, shortScreen } from '../src/lib/program.ts';
-import { resolveSource } from '../src/lib/source.ts';
-import { assertPlausible } from '../src/lib/validate.ts';
+import { FilmwebSnapshot, filmwebProgram, shortScreen, type RawShow } from '../src/lib/filmweb.ts';
+import { mergePrograms } from '../src/lib/program.ts';
+import { assertPlausible, resolveSource } from '../src/lib/source.ts';
 import { programNow } from '../src/lib/time.ts';
 
 const fixture = FilmwebSnapshot.parse(JSON.parse(readFileSync('tests/fixtures/filmweb-oslo.json', 'utf8')));
-const program = normalize(fixture);
+const program = mergePrograms([filmwebProgram(fixture)]);
 const fixtureDay = programNow(new Date(fixture.fetchedAt)).day;
 const allShowings = Object.values(program.days).flat();
 
@@ -19,13 +18,15 @@ function show(overrides: Partial<RawShow>): RawShow {
     theaterName: 'Saga',
     screenName: 'Saga 1',
     showStart: '2026-10-30T18:00:00',
-    showType: '',
     ticketSaleUrl: 'https://example.test/1',
     lengthInMinutes: 100,
     rating: '12 år',
-    versionTags: [{ tag: '2D', type: 'version' }],
     ...overrides,
   };
+}
+
+function programOf(shows: RawShow[], movies: FilmwebSnapshot['movies'] = []) {
+  return filmwebProgram({ fetchedAt: '', movies, shows });
 }
 
 describe('shortScreen', () => {
@@ -43,59 +44,49 @@ describe('shortScreen', () => {
   });
 });
 
-describe('normalize', () => {
+describe('filmwebProgram', () => {
   it('drops theatre productions', () => {
-    const result = normalize({
-      fetchedAt: '',
-      movies: [],
-      shows: [show({}), show({ movieMainVersionId: 'KUL20232394', ticketSaleUrl: 'https://example.test/2' })],
-    });
+    const result = programOf([show({}), show({ movieMainVersionId: 'KUL20232394', ticketSaleUrl: 'https://example.test/2' })]);
     expect(Object.keys(result.films)).toEqual(['EDI1']);
   });
 
   it('drops duplicate showings', () => {
-    const result = normalize({ fetchedAt: '', movies: [], shows: [show({}), show({})] });
-    expect(result.days['2026-10-30']).toHaveLength(1);
+    expect(programOf([show({}), show({})]).days['2026-10-30']).toHaveLength(1);
   });
 
-  it('keys showings without a booking link by cinema, screen, start and version', () => {
-    const result = normalize({ fetchedAt: '', movies: [], shows: [show({ ticketSaleUrl: '' })] });
-    const [s] = result.days['2026-10-30'];
-    expect(s.bookingUrl).toBeNull();
+  it('links showings without a booking page to the film page', () => {
+    const [s] = programOf([show({ ticketSaleUrl: '' })]).days['2026-10-30'];
+    expect(s.bookingUrl).toBe('https://www.filmweb.no/film/EDI1');
     expect(s.key).toBe('Saga|Saga 1|2026-10-30T18:00:00|EDI1');
   });
 
-  it('groups showings by day, sorted by start', () => {
-    const result = normalize({
-      fetchedAt: '',
-      movies: [],
-      shows: [
-        show({ showStart: '2026-10-31T00:15:00', ticketSaleUrl: 'https://example.test/late' }),
-        show({ showStart: '2026-10-30T21:00:00', ticketSaleUrl: 'https://example.test/evening' }),
-        show({ showStart: '2026-10-30T12:00:00', ticketSaleUrl: 'https://example.test/noon' }),
-      ],
-    });
-    expect(Object.keys(result.days)).toEqual(['2026-10-30', '2026-10-31']);
-    expect(result.days['2026-10-30'].map((s) => s.time)).toEqual(['12:00', '21:00']);
-  });
-
-  it('builds films with Filmweb links and posters', () => {
-    const result = normalize({
-      fetchedAt: '',
-      movies: [
-        { mainVersionId: 'EDI1', title: 'Film', titleOriginal: null, lengthInMinutes: 100, rating: null, sanityImagePosterUrl: 'https://cdn.sanity.io/p.jpg' },
-      ],
-      shows: [show({ versionTags: [{ tag: '2D', type: 'version' }, { tag: 'IMAX', type: 'format' }] })],
-    });
-    expect(result.films.EDI1).toEqual({
-      id: 'EDI1',
+  it('builds films with Filmweb links and resized posters', () => {
+    const result = programOf(
+      [show({})],
+      [{ mainVersionId: 'EDI1', lengthInMinutes: 100, rating: null, sanityImagePosterUrl: 'https://cdn.sanity.io/p.jpg' }],
+    );
+    expect(result.films.EDI1).toMatchObject({
       title: 'Film',
       minutes: 100,
       ageRating: '12 år',
-      posterUrl: 'https://cdn.sanity.io/p.jpg',
+      posterUrl: 'https://cdn.sanity.io/p.jpg?w=320&auto=format',
       pageUrl: 'https://www.filmweb.no/film/EDI1',
     });
-    expect(result.days['2026-10-30'][0].tags).toEqual(['IMAX']);
+    expect(result.films.EDI1.posterSrcSet).toContain('https://cdn.sanity.io/p.jpg?w=640&auto=format 640w');
+  });
+});
+
+describe('mergePrograms', () => {
+  it('groups showings by day, sorted by start', () => {
+    const result = mergePrograms([
+      programOf([
+        show({ showStart: '2026-10-31T00:15:00', ticketSaleUrl: 'https://example.test/late' }),
+        show({ showStart: '2026-10-30T21:00:00', ticketSaleUrl: 'https://example.test/evening' }),
+        show({ showStart: '2026-10-30T12:00:00', ticketSaleUrl: 'https://example.test/noon' }),
+      ]),
+    ]);
+    expect(Object.keys(result.days)).toEqual(['2026-10-30', '2026-10-31']);
+    expect(result.days['2026-10-30'].map((s) => s.time)).toEqual(['12:00', '21:00']);
   });
 });
 
@@ -105,7 +96,7 @@ describe('the Filmweb fixture', () => {
   });
 
   it('covers all ten Oslo cinemas', () => {
-    expect(program.cinemas).toHaveLength(10);
+    expect(new Set(allShowings.map((s) => s.cinema)).size).toBe(10);
   });
 
   it('has a film for every showing and no theatre', () => {
@@ -123,9 +114,7 @@ describe('the Filmweb fixture', () => {
 
 describe('assertPlausible', () => {
   it('rejects an empty program', () => {
-    expect(() => assertPlausible({ fetchedAt: '', films: {}, cinemas: [], days: {} }, fixtureDay)).toThrow(
-      /ingen visninger/,
-    );
+    expect(() => assertPlausible({ films: {}, days: {} }, fixtureDay)).toThrow(/ingen visninger/);
   });
 });
 
@@ -134,6 +123,6 @@ describe('resolveSource', () => {
     expect(resolveSource({ VERCEL: '1' })).toBe('live');
     expect(resolveSource({ CI: 'true' })).toBe('live');
     expect(resolveSource({})).toBe('fixture');
-    expect(resolveSource({ VERCEL: '1', FILMWEB_SOURCE: 'fixture' })).toBe('fixture');
+    expect(resolveSource({ VERCEL: '1', PROGRAM_SOURCE: 'fixture' })).toBe('fixture');
   });
 });

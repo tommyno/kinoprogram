@@ -58,20 +58,24 @@ describe('parseFeed', () => {
 });
 
 describe('cinemateketProgram', () => {
-  const program = cinemateketProgram(parseFeed(FEED), '');
+  const program = cinemateketProgram(parseFeed(FEED));
 
   it('makes one film per film page, linking times to it', () => {
-    expect(Object.values(program.films)).toEqual([
-      {
-        id: 'CINEMATEKET:the-arbor',
+    expect(program.films).toEqual({
+      'CINEMATEKET:the-arbor': {
         title: 'The Arbor',
         minutes: 94,
         ageRating: null,
         posterUrl: '/posters/cinemateket.svg',
         pageUrl: 'https://www.cinemateket.no/filmer/the-arbor',
       },
-    ]);
-    expect(program.days['2026-10-29'][0]).toMatchObject({ cinema: CINEMA, screen: 'Lillebil', time: '18:00', bookingUrl: null });
+    });
+    expect(program.days['2026-10-29'][0]).toMatchObject({
+      cinema: CINEMA,
+      screen: 'Lillebil',
+      time: '18:00',
+      bookingUrl: 'https://www.cinemateket.no/filmer/the-arbor',
+    });
   });
 
   it('leaves out workshops, which have no length', () => {
@@ -80,20 +84,18 @@ describe('cinemateketProgram', () => {
 });
 
 describe('mergePrograms', () => {
-  it('combines films, cinemas and days, sorted by start', () => {
+  it('combines films and days from both sources, sorted by start', () => {
     const filmweb: Program = {
-      fetchedAt: 'x',
-      films: { EDI1: { id: 'EDI1', title: 'Annen film', minutes: 90, ageRating: null, posterUrl: null, pageUrl: '' } },
-      cinemas: ['Saga'],
+      films: { EDI1: { title: 'Annen film', minutes: 90, ageRating: null, posterUrl: null, pageUrl: '' } },
       days: {
         '2026-10-29': [
-          { key: 'a', filmId: 'EDI1', cinema: 'Saga', screen: 'Sal 1', day: '2026-10-29', time: '20:00', minutes: 1200, bookingUrl: null, tags: [] },
+          { key: 'a', filmId: 'EDI1', cinema: 'Saga', screen: 'Sal 1', day: '2026-10-29', time: '20:00', minutes: 1200, bookingUrl: '' },
         ],
       },
     };
-    const merged = mergePrograms(filmweb, cinemateketProgram(parseFeed(FEED), ''));
-    expect(merged.cinemas).toEqual(['Cinemateket', 'Saga']);
-    expect(merged.days['2026-10-29'].map((s) => s.time)).toEqual(['18:00', '20:00']);
+    const merged = mergePrograms([filmweb, cinemateketProgram(parseFeed(FEED))]);
+    expect(Object.keys(merged.films)).toEqual(['EDI1', 'CINEMATEKET:the-arbor']);
+    expect(merged.days['2026-10-29'].map((s) => s.cinema)).toEqual(['Cinemateket', 'Saga']);
     expect(Object.keys(merged.days)).toEqual(['2026-10-29', '2027-06-02']);
   });
 });

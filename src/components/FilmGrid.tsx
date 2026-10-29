@@ -1,40 +1,32 @@
-import { useMemo, useState } from 'react';
-import type { Film } from '../lib/program.ts';
+import { useState } from 'react';
+import { collator, type Film } from '../lib/program.ts';
 import { formatDuration } from '../lib/time.ts';
-import { bookingHref, collator, cx, groupBy, showingLabel, type ShowingView } from './showing.ts';
+import { groupBy, ShowingLink, type ShowingView } from './showing.tsx';
 import styles from './FilmGrid.module.css';
 
 const COLLAPSED_COUNT = 3;
-const POSTER_WIDTHS = [200, 320, 480, 640];
 
 interface Props {
   films: Record<string, Film>;
   showings: ShowingView[];
 }
 
-/** Filmweb posters live on Sanity's CDN, which resizes by query string. */
-function posterSrc(url: string, width: number): string {
-  return `${url}${url.includes('?') ? '&' : '?'}w=${width}&auto=format`;
-}
-
 function Poster({ film }: { film: Film }) {
   if (!film.posterUrl) {
     return (
-      <div className={cx(styles.poster, styles.placeholder)}>
+      <div className={`${styles.poster} ${styles.placeholder}`}>
         <svg viewBox="0 0 100 150" preserveAspectRatio="none" aria-hidden="true">
           <path d="M0 0L100 150M100 0L0 150" vectorEffect="non-scaling-stroke" />
         </svg>
       </div>
     );
   }
-  // Our own posters (Cinemateket's logo) are SVGs served as they are
-  const local = film.posterUrl.startsWith('/');
   return (
     <img
       className={styles.poster}
-      src={local ? film.posterUrl : posterSrc(film.posterUrl, 320)}
-      srcSet={local ? undefined : POSTER_WIDTHS.map((w) => `${posterSrc(film.posterUrl!, w)} ${w}w`).join(', ')}
-      sizes={local ? undefined : '(min-width: 1000px) 200px, 45vw'}
+      src={film.posterUrl}
+      srcSet={film.posterSrcSet}
+      sizes="(min-width: 1000px) 200px, 45vw"
       width={400}
       height={600}
       loading="lazy"
@@ -67,17 +59,10 @@ function FilmCard({ film, showings }: { film: Film; showings: ShowingView[] }) {
 
       <div className={styles.times}>
         {(open ? showings : shown).map((s) => (
-          <a
-            key={s.key}
-            href={bookingHref(s, film)}
-            target="_blank"
-            rel="noopener"
-            aria-label={showingLabel(s, film)}
-            className={cx(styles.row, s.past && styles.past)}
-          >
+          <ShowingLink key={s.key} showing={s} title={film.title} className={styles.row}>
             <span className={styles.time}>{s.time}</span>
             <span className={styles.where}>{s.cinema}</span>
-          </a>
+          </ShowingLink>
         ))}
       </div>
 
@@ -91,10 +76,8 @@ function FilmCard({ film, showings }: { film: Film; showings: ShowingView[] }) {
 }
 
 export default function FilmGrid({ films, showings }: Props) {
-  const groups = useMemo(
-    () =>
-      groupBy(showings, (s) => s.filmId).sort(([a], [b]) => collator.compare(films[a].title, films[b].title)),
-    [films, showings],
+  const groups = groupBy(showings, (s) => s.filmId).sort(([a], [b]) =>
+    collator.compare(films[a].title, films[b].title),
   );
 
   return (

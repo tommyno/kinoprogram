@@ -63,7 +63,3 @@
   white-space: nowrap;
 }
 
-.past {
-  color: var(--past-ink);
-  background: var(--past-bg);
-}

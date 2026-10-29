@@ -1,7 +1,7 @@
-export const TIME_ZONE = 'Europe/Oslo';
+const TIME_ZONE = 'Europe/Oslo';
 
 // A show counts as started this long after its start time (ads and trailers run first).
-export const PAST_GRACE_MINUTES = 15;
+const PAST_GRACE_MINUTES = 15;
 
 /** A point in the program: the day and minutes since midnight. */
 export interface ProgramTime {
@@ -26,7 +26,7 @@ const labelFormat = new Intl.DateTimeFormat('nb-NO', {
   month: 'long',
 });
 
-export function toMinutes(time: string): number {
+function toMinutes(time: string): number {
   return Number(time.slice(0, 2)) * 60 + Number(time.slice(3, 5));
 }
 
@@ -36,34 +36,27 @@ export function addDays(day: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-/** Program slot for a Filmweb start time ("2026-10-31T19:15:00" → day 2026-10-31, 19:15). */
+/** Program slot for an Oslo local start time ("2026-10-31T19:15:00" → day 2026-10-31, 19:15). */
 export function programSlot(start: string): ProgramTime & { time: string } {
   const time = start.slice(11, 16);
   return { day: start.slice(0, 10), minutes: toMinutes(time), time };
 }
 
-function osloParts(at: Date): Record<string, string> {
-  return Object.fromEntries(clockFormat.formatToParts(at).map((p) => [p.type, p.value]));
+/** An instant as Oslo local time: "2026-10-29T18:00:00". */
+export function osloDateTime(at: Date): string {
+  const p = Object.fromEntries(clockFormat.formatToParts(at).map((part) => [part.type, part.value]));
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:00`;
 }
 
 /** The current point in the program, in Oslo time whatever the viewer's or server's zone. */
 export function programNow(at: Date = new Date()): ProgramTime {
-  const parts = osloParts(at);
-  return {
-    day: `${parts.year}-${parts.month}-${parts.day}`,
-    minutes: Number(parts.hour) * 60 + Number(parts.minute),
-  };
+  const { day, minutes } = programSlot(osloDateTime(at));
+  return { day, minutes };
 }
 
-/** An instant as Oslo local time in Filmweb's format: "2026-10-29T18:00:00". */
-export function osloDateTime(at: Date): string {
-  const p = osloParts(at);
-  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:00`;
-}
-
-export function isPast(slot: ProgramTime, now: ProgramTime, graceMinutes = PAST_GRACE_MINUTES): boolean {
+export function isPast(slot: ProgramTime, now: ProgramTime): boolean {
   if (slot.day !== now.day) return slot.day < now.day;
-  return slot.minutes + graceMinutes < now.minutes;
+  return slot.minutes + PAST_GRACE_MINUTES < now.minutes;
 }
 
 /** "i dag", "i morgen" or e.g. "lørdag 31. oktober". */

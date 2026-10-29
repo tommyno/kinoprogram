@@ -1,21 +1,22 @@
 ---
-import { dayLabel } from '../lib/time.ts';
 import styles from './Header.module.css';
 
 interface Props {
   day: string;
+  /** "i dag", "i morgen" or the date written out. */
+  label: string;
   today: string;
   lastDay: string;
 }
 
-const { day, today, lastDay } = Astro.props;
+const { day, label, today, lastDay } = Astro.props;
 ---
 
 <header>
   <h1 class={styles.title}>
     Kinoprogram for Oslo{' '}
     <span class={styles.picker}>
-      <span>{dayLabel(day, today)}</span>
+      <span>{label}</span>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M6 9l6 6 6-6"></path>
       </svg>

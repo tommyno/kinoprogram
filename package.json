@@ -6,7 +6,7 @@
     "node": ">=22.23.4"
   },
   "scripts": {
-    "dev": "FILMWEB_SOURCE=live astro dev",
+    "dev": "PROGRAM_SOURCE=live astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",

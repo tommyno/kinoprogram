@@ -1,5 +1,5 @@
 import { USER_AGENT } from './http.ts';
-import { sortProgram, type Film, type Program, type Showing } from './program.ts';
+import type { Film, Program, Showing } from './program.ts';
 import { osloDateTime, programSlot } from './time.ts';
 
 // Cinemateket isn't in Filmweb. Its calendar feed holds the next 100 screenings (about three weeks).
@@ -31,14 +31,12 @@ function unescapeText(value: string): string {
   return value.replace(/\\n/gi, '\n').replace(/\\([,;\\])/g, '$1').trim();
 }
 
-/** "20261029T170000Z" → Date; floating times without Z are Oslo local already. */
-function parseDate(value: string): { local: string; date: Date | null } {
-  const m = value.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(Z?)$/);
+/** "20261029T170000Z" → Date. The feed only uses UTC times. */
+function parseDate(value: string): Date {
+  const m = value.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/);
   if (!m) throw new Error(`Ukjent datoformat i Cinemateket-feeden: ${value}`);
-  const [, y, mo, d, h, mi, s, utc] = m;
-  if (!utc) return { local: `${y}-${mo}-${d}T${h}:${mi}:${s}`, date: null };
-  const date = new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi, +s));
-  return { local: osloDateTime(date), date };
+  const [, y, mo, d, h, mi, s] = m;
+  return new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi, +s));
 }
 
 export function parseFeed(ics: string): CinemateketEvent[] {
@@ -51,16 +49,15 @@ export function parseFeed(ics: string): CinemateketEvent[] {
     if (line === 'BEGIN:VEVENT') {
       fields = {};
     } else if (line === 'END:VEVENT' && fields) {
-      if (fields.UID && fields.DTSTART && fields.SUMMARY) {
+      if (fields.UID && fields.DTSTART && fields.SUMMARY && fields.URL) {
         const start = parseDate(fields.DTSTART);
-        const end = fields.DTEND ? parseDate(fields.DTEND) : null;
         events.push({
           uid: fields.UID,
-          start: start.local,
-          minutes: start.date && end?.date ? Math.round((end.date.getTime() - start.date.getTime()) / 60_000) || null : null,
+          start: osloDateTime(start),
+          minutes: fields.DTEND ? Math.round((parseDate(fields.DTEND).getTime() - start.getTime()) / 60_000) || null : null,
           title: unescapeText(fields.SUMMARY),
           screen: unescapeText(fields.LOCATION ?? '').split(' - ')[0].trim(),
-          url: unescapeText(fields.URL ?? 'https://www.cinemateket.no/forestillinger'),
+          url: unescapeText(fields.URL),
         });
       }
       fields = null;
@@ -73,7 +70,7 @@ export function parseFeed(ics: string): CinemateketEvent[] {
 }
 
 /** Cinemateket's screenings as a program. Times link to the film page, where tickets are sold. */
-export function cinemateketProgram(events: CinemateketEvent[], fetchedAt: string): Program {
+export function cinemateketProgram(events: CinemateketEvent[]): Program {
   const films: Record<string, Film> = {};
   const days: Record<string, Showing[]> = {};
 
@@ -82,7 +79,6 @@ export function cinemateketProgram(events: CinemateketEvent[], fetchedAt: string
     if (!event.minutes) continue;
     const filmId = `CINEMATEKET:${event.url.split('/').filter(Boolean).pop()}`;
     films[filmId] ??= {
-      id: filmId,
       title: event.title,
       minutes: event.minutes,
       ageRating: null,
@@ -95,13 +91,10 @@ export function cinemateketProgram(events: CinemateketEvent[], fetchedAt: string
       filmId,
       cinema: CINEMA,
       screen: event.screen,
-      day: slot.day,
-      time: slot.time,
-      minutes: slot.minutes,
-      bookingUrl: null,
-      tags: [],
+      ...slot,
+      bookingUrl: event.url,
     });
   }
 
-  return sortProgram({ fetchedAt, films, cinemas: Object.keys(days).length ? [CINEMA] : [], days });
+  return { films, days };
 }
