@@ -6,14 +6,13 @@
     "node": ">=22.23.4"
   },
   "scripts": {
-    "dev": "PROGRAM_SOURCE=live astro dev",
-    "build": "astro build",
+    "dev": "astro dev",
+    "build": "vitest run && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
     "check": "astro check",
     "fixture": "node scripts/update-fixture.ts",
-    "dev:fixture": "astro dev",
     "icons": "node scripts/make-icons.ts"
   },
   "dependencies": {

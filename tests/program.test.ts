@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { FilmwebSnapshot, filmwebProgram, shortScreen, type RawShow } from '../src/lib/filmweb.ts';
 import { mergePrograms } from '../src/lib/program.ts';
-import { assertPlausible, resolveSource } from '../src/lib/source.ts';
+import { assertPlausible } from '../src/lib/source.ts';
 import { programNow } from '../src/lib/time.ts';
 
 const fixture = FilmwebSnapshot.parse(JSON.parse(readFileSync('tests/fixtures/filmweb-oslo.json', 'utf8')));
@@ -115,14 +115,5 @@ describe('the Filmweb fixture', () => {
 describe('assertPlausible', () => {
   it('rejects an empty program', () => {
     expect(() => assertPlausible({ films: {}, days: {} }, fixtureDay)).toThrow(/ingen visninger/);
-  });
-});
-
-describe('resolveSource', () => {
-  it('fetches live on Vercel and CI, uses the fixture locally', () => {
-    expect(resolveSource({ VERCEL: '1' })).toBe('live');
-    expect(resolveSource({ CI: 'true' })).toBe('live');
-    expect(resolveSource({})).toBe('fixture');
-    expect(resolveSource({ VERCEL: '1', PROGRAM_SOURCE: 'fixture' })).toBe('fixture');
   });
 });
