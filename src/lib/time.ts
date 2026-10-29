@@ -1,0 +1,72 @@
+export const TIME_ZONE = 'Europe/Oslo';
+
+// A show counts as started this long after its start time (ads and trailers run first).
+export const PAST_GRACE_MINUTES = 15;
+
+/** A point in the program: the day and minutes since midnight. */
+export interface ProgramTime {
+  day: string;
+  minutes: number;
+}
+
+const clockFormat = new Intl.DateTimeFormat('en-CA', {
+  timeZone: TIME_ZONE,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+});
+
+const labelFormat = new Intl.DateTimeFormat('nb-NO', {
+  timeZone: 'UTC',
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+});
+
+export function toMinutes(time: string): number {
+  return Number(time.slice(0, 2)) * 60 + Number(time.slice(3, 5));
+}
+
+export function addDays(day: string, days: number): string {
+  const d = new Date(`${day}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+/** Program slot for a Filmweb start time ("2026-10-31T19:15:00" → day 2026-10-31, 19:15). */
+export function programSlot(start: string): ProgramTime & { time: string } {
+  const time = start.slice(11, 16);
+  return { day: start.slice(0, 10), minutes: toMinutes(time), time };
+}
+
+/** The current point in the program, in Oslo time whatever the viewer's or server's zone. */
+export function programNow(at: Date = new Date()): ProgramTime {
+  const parts = Object.fromEntries(clockFormat.formatToParts(at).map((p) => [p.type, p.value]));
+  return {
+    day: `${parts.year}-${parts.month}-${parts.day}`,
+    minutes: Number(parts.hour) * 60 + Number(parts.minute),
+  };
+}
+
+export function isPast(slot: ProgramTime, now: ProgramTime, graceMinutes = PAST_GRACE_MINUTES): boolean {
+  if (slot.day !== now.day) return slot.day < now.day;
+  return slot.minutes + graceMinutes < now.minutes;
+}
+
+/** "i dag", "i morgen" or e.g. "lørdag 31. oktober". */
+export function dayLabel(day: string, today: string): string {
+  if (day === today) return 'i dag';
+  if (day === addDays(today, 1)) return 'i morgen';
+  return labelFormat.format(new Date(`${day}T12:00:00Z`));
+}
+
+/** 110 → "1 t 50 min". */
+export function formatDuration(minutes: number | null): string {
+  if (!minutes) return '';
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return h ? `${h} t ${m} min` : `${m} min`;
+}
