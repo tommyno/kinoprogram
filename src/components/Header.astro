@@ -1,0 +1,51 @@
+---
+import { dayLabel } from '../lib/time.ts';
+import styles from './Header.module.css';
+
+interface Props {
+  day: string;
+  today: string;
+  lastDay: string;
+}
+
+const { day, today, lastDay } = Astro.props;
+---
+
+<header>
+  <h1 class={styles.title}>
+    Kinoprogram for Oslo{' '}
+    <span class={styles.picker}>
+      <span>{dayLabel(day, today)}</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 9l6 6 6-6"></path>
+      </svg>
+      <input
+        class={styles.input}
+        type="date"
+        aria-label="Velg dato"
+        value={day}
+        min={today}
+        max={lastDay}
+        data-today={today}
+        data-date-picker
+      />
+    </span>
+  </h1>
+</header>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('[data-date-picker]');
+
+  // Desktop browsers only open the calendar from its icon; open it from anywhere on the label
+  input?.addEventListener('click', () => {
+    try {
+      input.showPicker();
+    } catch {}
+  });
+
+  input?.addEventListener('change', () => {
+    if (!input.value) return;
+    const path = input.value === input.dataset.today ? '/' : `/${input.value}`;
+    location.href = path + location.search;
+  });
+</script>

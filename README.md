@@ -6,16 +6,17 @@ Kinoprogrammet for alle kinoene i Oslo på én side. Statisk Astro-side som bygg
 
 | Kommando | Hva den gjør |
 | :-- | :-- |
-| `npm run dev` | Utviklingsserver på `localhost:4321` (bruker fixture, ingen kall til Filmweb) |
-| `npm run build` | Bygger til `dist/` |
-| `npm test` | Kjører testene (vitest) |
-| `npm run check` | Typesjekk (astro check) |
-| `npm run fixture` | Henter ferskt program fra Filmweb til `tests/fixtures/filmweb-oslo.json` |
+| `pnpm dev` | Utviklingsserver på `localhost:4321` med live data fra Filmweb (cachet i én time) |
+| `pnpm dev:fixture` | Utviklingsserver med fixture, ingen kall til Filmweb |
+| `pnpm build` | Bygger til `dist/` |
+| `pnpm test` | Kjører testene (vitest) |
+| `pnpm check` | Typesjekk (astro check) |
+| `pnpm fixture` | Henter ferskt program fra Filmweb til `tests/fixtures/filmweb-oslo.json` |
 
 ## Data
 
 - Kilde: Filmwebs GraphQL-API (`movieinfoqs.filmweb.no/graphql`), to kall per bygg.
-- `FILMWEB_SOURCE=live|fixture` styrer hvor dataene kommer fra. Standard er `live` på Vercel/CI og `fixture` lokalt.
+- `FILMWEB_SOURCE=live|fixture` styrer hvor dataene kommer fra. Standard er `live` på Vercel/CI og i `pnpm dev`, ellers `fixture` (tester og lokale bygg).
 - Lokale live-bygg cacher svaret i `.cache/` i én time.
 - Finnes det ingen visninger i dag, feiler bygget, og forrige versjon blir liggende.
 

@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from './Header.astro';
+import Program from './Program.tsx';
+import { getProgram } from '../lib/source.ts';
+import { dayLabel, programNow } from '../lib/time.ts';
+import styles from './ProgramPage.module.css';
+
+interface Props {
+  day: string;
+}
+
+const { day } = Astro.props;
+const program = await getProgram();
+const today = programNow().day;
+const lastDay = Object.keys(program.days).at(-1) ?? today;
+const showings = program.days[day] ?? [];
+const films = Object.fromEntries(showings.map((s) => [s.filmId, program.films[s.filmId]]));
+---
+
+<Base title={`Kinoprogram for Oslo ${dayLabel(day, today)}`}>
+  <main class={styles.page}>
+    <Header day={day} today={today} lastDay={lastDay} />
+    <Program client:load films={films} showings={showings} />
+    <footer class={styles.footer}>
+      Programdata fra <a href="https://www.filmweb.no">Filmweb</a>
+    </footer>
+  </main>
+</Base>

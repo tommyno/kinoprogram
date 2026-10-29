@@ -1,19 +1,6 @@
 ---
-// Placeholder until the program page is built: shows that the data layer works end to end.
-import Base from '../layouts/Base.astro';
-import { getProgram } from '../lib/source.ts';
+import ProgramPage from '../components/ProgramPage.astro';
 import { programNow } from '../lib/time.ts';
-
-const program = await getProgram();
-const today = programNow().day;
-const showings = program.days[today] ?? [];
-const films = new Set(showings.map((s) => s.filmId)).size;
-const cinemas = new Set(showings.map((s) => s.cinema)).size;
 ---
 
-<Base title="Kinoprogram for Oslo">
-  <main>
-    <h1>Kinoprogram for Oslo i dag</h1>
-    <p>{films} filmer · {showings.length} forestillinger · {cinemas} kinoer</p>
-  </main>
-</Base>
+<ProgramPage day={programNow().day} />

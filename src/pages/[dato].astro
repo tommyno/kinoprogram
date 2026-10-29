@@ -1,0 +1,17 @@
+---
+import ProgramPage from '../components/ProgramPage.astro';
+import { getProgram } from '../lib/source.ts';
+import { programNow } from '../lib/time.ts';
+
+export async function getStaticPaths() {
+  const program = await getProgram();
+  const today = programNow().day;
+  return Object.keys(program.days)
+    .filter((day) => day >= today)
+    .map((dato) => ({ params: { dato } }));
+}
+
+const { dato } = Astro.params;
+---
+
+<ProgramPage day={dato} />

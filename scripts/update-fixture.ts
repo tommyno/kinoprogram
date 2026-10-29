@@ -1,4 +1,4 @@
-// Refreshes the test/dev fixture with one live fetch: `npm run fixture`
+// Refreshes the test/dev fixture with one live fetch: `pnpm fixture`
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { fetchSnapshot } from '../src/lib/filmweb.ts';

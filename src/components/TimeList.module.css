@@ -1,0 +1,93 @@
+.pastToggle {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  margin: 0 0 16px;
+  padding: 0 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 6px;
+  background: var(--past-bg);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hour {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+
+.hourLabel {
+  font-size: 26px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.6;
+}
+
+.rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: 0 24px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-height: 48px;
+  border-bottom: 1px solid var(--line-soft);
+  text-decoration: none;
+}
+
+.row:hover .title {
+  text-decoration: underline;
+}
+
+.time {
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title,
+.where {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.where {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.past {
+  color: var(--past-ink);
+  background: var(--past-bg);
+}
+
+@media (max-width: 480px) {
+  .hour {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
