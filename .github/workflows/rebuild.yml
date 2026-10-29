@@ -1,0 +1,26 @@
+# Rebuilds the site on Vercel every hour so the program stays fresh.
+# Needs the repository secret VERCEL_DEPLOY_HOOK (Vercel → Settings → Git → Deploy Hooks).
+name: Rebuild
+
+on:
+  schedule:
+    # Five past every hour (UTC); also switches "i dag" to the new date just after midnight
+    - cron: '5 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger Vercel deploy hook
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$VERCEL_DEPLOY_HOOK" ]; then
+            echo "::error::Secret VERCEL_DEPLOY_HOOK mangler"
+            exit 1
+          fi
+          curl --fail --silent --show-error --retry 3 -X POST "$VERCEL_DEPLOY_HOOK"

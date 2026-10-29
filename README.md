@@ -13,6 +13,13 @@ Kinoprogrammet for alle kinoene i Oslo på én side. Statisk Astro-side som bygg
 | `pnpm check` | Typesjekk (astro check) |
 | `pnpm fixture` | Henter ferskt program fra Filmweb til `tests/fixtures/filmweb-oslo.json` |
 
+## Drift
+
+- Vercel bygger og publiserer ved hver push til `main`. Ingen miljøvariabler trengs (`VERCEL=1` gir live data).
+- [`.github/workflows/rebuild.yml`](.github/workflows/rebuild.yml) bygger siden på nytt hver time via en Vercel deploy hook, så programmet holder seg ferskt og «i dag» bytter dato like etter midnatt.
+  - Oppsett: Vercel → Settings → Git → Deploy Hooks → lag en hook for `main`, og legg URL-en inn som GitHub-secret `VERCEL_DEPLOY_HOOK`.
+  - Kan også kjøres manuelt fra Actions-fanen (Run workflow).
+
 ## Data
 
 - Kilder: Filmwebs GraphQL-API (`movieinfoqs.filmweb.no/graphql`, to kall per bygg) for ti kinoer, og Cinematekets kalenderfeed (`cinemateket.no/cinemateket-webcal.ics`, ett kall, ca. tre uker frem). Feiler Cinemateket, bygges siden uten.
