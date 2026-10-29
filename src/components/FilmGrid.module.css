@@ -60,18 +60,10 @@
   color: var(--muted);
 }
 
-.next,
-.cinemas {
+.times {
   display: flex;
   flex-direction: column;
-}
-
-.next {
   gap: 4px;
-}
-
-.cinemas {
-  gap: 8px;
 }
 
 .row {
@@ -100,39 +92,7 @@
   text-overflow: ellipsis;
 }
 
-.cinema {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.cinemaName {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  padding: 0 8px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  font-size: 13px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  text-decoration: none;
-}
-
-.row:hover,
-.chip:hover {
+.row:hover {
   border-color: var(--ink);
 }
 

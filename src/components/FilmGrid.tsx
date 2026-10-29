@@ -46,7 +46,7 @@ function Poster({ film }: { film: Film }) {
 function FilmCard({ film, showings }: { film: Film; showings: ShowingView[] }) {
   const [open, setOpen] = useState(false);
   const upcoming = showings.filter((s) => !s.past);
-  // Collapsed: the next few; once all have started, the last few
+  // Collapsed: the next few; once all have started, the last few. Expanded: all, in time order
   const shown = upcoming.length ? upcoming.slice(0, COLLAPSED_COUNT) : showings.slice(-COLLAPSED_COUNT);
   const more = showings.length - shown.length;
   const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join(' · ');
@@ -65,48 +65,21 @@ function FilmCard({ film, showings }: { film: Film; showings: ShowingView[] }) {
         {meta && <p className={styles.meta}>{meta}</p>}
       </div>
 
-      {open ? (
-        <div className={styles.cinemas}>
-          {groupBy(showings, (s) => s.cinema)
-            .sort(([a], [b]) => collator.compare(a, b))
-            .map(([cinema, list]) => (
-              <div key={cinema} className={styles.cinema}>
-                <span className={styles.cinemaName}>{cinema}</span>
-                <div className={styles.chips}>
-                  {list.map((s) => (
-                    <a
-                      key={s.key}
-                      href={bookingHref(s, film)}
-                      target="_blank"
-                      rel="noopener"
-                      aria-label={showingLabel(s, film)}
-                      title={s.screen || undefined}
-                      className={cx(styles.chip, s.past && styles.past)}
-                    >
-                      {s.time}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            ))}
-        </div>
-      ) : (
-        <div className={styles.next}>
-          {shown.map((s) => (
-            <a
-              key={s.key}
-              href={bookingHref(s, film)}
-              target="_blank"
-              rel="noopener"
-              aria-label={showingLabel(s, film)}
-              className={cx(styles.row, s.past && styles.past)}
-            >
-              <span className={styles.time}>{s.time}</span>
-              <span className={styles.where}>{s.cinema}</span>
-            </a>
-          ))}
-        </div>
-      )}
+      <div className={styles.times}>
+        {(open ? showings : shown).map((s) => (
+          <a
+            key={s.key}
+            href={bookingHref(s, film)}
+            target="_blank"
+            rel="noopener"
+            aria-label={showingLabel(s, film)}
+            className={cx(styles.row, s.past && styles.past)}
+          >
+            <span className={styles.time}>{s.time}</span>
+            <span className={styles.where}>{s.cinema}</span>
+          </a>
+        ))}
+      </div>
 
       {more > 0 && (
         <button type="button" className={styles.more} aria-expanded={open} onClick={() => setOpen(!open)}>
