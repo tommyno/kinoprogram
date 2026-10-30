@@ -25,7 +25,7 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
 
 <Base title={`${film.title} – Kinoprogram for Oslo`} description={`Alle visningene av ${film.title} på kino i Oslo, dag for dag.`}>
   <main class={pageStyles.page}>
-    <a href="/" class={styles.back}>← Kinoprogram for Oslo</a>
+    <a href="/" class={styles.back} data-back>← Kinoprogram for Oslo</a>
 
     <header class={styles.header}>
       <div class={styles.poster} data-poster>
@@ -88,6 +88,15 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
 
   markPast();
   setInterval(markPast, 60_000);
+
+  // Coming from the program, go back in history instead, so it opens at the same date, sort and scroll position
+  const back = document.querySelector<HTMLAnchorElement>('[data-back]')!;
+  back.addEventListener('click', (event) => {
+    const fromProgram = document.referrer.startsWith(location.origin) && history.length > 1;
+    if (!fromProgram || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    event.preventDefault();
+    history.back();
+  });
 
   const poster = document.querySelector<HTMLElement>('[data-poster]')!;
   const heading = document.querySelector<HTMLElement>('[data-heading]')!;
