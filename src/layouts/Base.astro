@@ -37,6 +37,22 @@ const image = new URL('/og.png', Astro.site);
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="apple-mobile-web-app-title" content="Kinoprogram" />
 
+    <!-- Inline in the head, so it is listening before the page first renders -->
+    <script is:inline>
+      // Film pages slide in from the right and back out the same way; other navigations cross-fade
+      const onFilmPage = location.pathname.startsWith('/film/');
+      addEventListener('pageswap', (event) => {
+        if (event.viewTransition && onFilmPage) sessionStorage.setItem('from-film', '1');
+      });
+      addEventListener('pagereveal', (event) => {
+        const fromFilm = sessionStorage.getItem('from-film');
+        sessionStorage.removeItem('from-film');
+        if (!event.viewTransition) return;
+        if (onFilmPage) event.viewTransition.types.add('forward');
+        else if (fromFilm) event.viewTransition.types.add('back');
+      });
+    </script>
+
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:locale" content="nb_NO" />

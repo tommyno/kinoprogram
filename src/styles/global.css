@@ -31,6 +31,65 @@ html {
   html {
     scroll-behavior: smooth;
   }
+
+  /* Pages cross-fade into each other in browsers that support it; elsewhere navigation is as before */
+  @view-transition {
+    navigation: auto;
+  }
+
+  /* Onto a film page the new page slides over from the right; back to the program it slides away again */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 350ms;
+    animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  :root:active-view-transition-type(forward, back)::view-transition-old(root),
+  :root:active-view-transition-type(forward, back)::view-transition-new(root) {
+    mix-blend-mode: normal;
+  }
+
+  :root:active-view-transition-type(forward)::view-transition-old(root) {
+    animation-name: slide-to-left;
+  }
+
+  :root:active-view-transition-type(forward)::view-transition-new(root) {
+    animation-name: slide-from-right;
+  }
+
+  :root:active-view-transition-type(back)::view-transition-old(root) {
+    z-index: 1;
+    animation-name: slide-to-right;
+  }
+
+  :root:active-view-transition-type(back)::view-transition-new(root) {
+    animation-name: slide-from-left;
+  }
+}
+
+/* The page underneath moves a little, so the one on top reads as sliding over it */
+@keyframes slide-from-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slide-to-right {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slide-from-left {
+  from {
+    transform: translateX(-25%);
+  }
+}
+
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-25%);
+  }
 }
 
 body {

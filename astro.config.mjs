@@ -8,6 +8,8 @@ const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 export default defineConfig({
   site: productionHost ? `https://${productionHost}` : 'http://localhost:3000',
   server: { port: 3000 },
+  // Fetches a page on hover or tap, so it is ready by the time the click lands
+  prefetch: { prefetchAll: true },
   // Self-hosted at build time, preloaded, with a metric-matched fallback so text doesn't jump
   fonts: [
     {
