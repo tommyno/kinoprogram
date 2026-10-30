@@ -38,6 +38,7 @@ const { day, films, showings } = Astro.props;
         </button>
       ))
     }
+    <span class={styles.indicator} aria-hidden="true" data-indicator></span>
   </div>
 
   {
@@ -70,19 +71,29 @@ const { day, films, showings } = Astro.props;
   const collapsedCount = Number(root.querySelector<HTMLElement>('[data-collapsed-count]')?.dataset.collapsedCount);
   const pastToggle = root.querySelector<HTMLButtonElement>('[data-past-toggle]');
   const hours = [...root.querySelectorAll<HTMLElement>('[data-hour]')];
+  const tabs = [...root.querySelectorAll<HTMLElement>('[data-sort]')];
+  const indicator = root.querySelector<HTMLElement>('[data-indicator]')!;
 
   const isOpen = (button: HTMLButtonElement) => button.getAttribute('aria-expanded') === 'true';
   const toggle = (button: HTMLButtonElement) => button.setAttribute('aria-expanded', String(!isOpen(button)));
   const rowsIn = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-minutes]')];
 
+  /** Moves the bar under the selected tab */
+  function placeIndicator() {
+    const tab = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true')!;
+    indicator.style.width = `${tab.offsetWidth}px`;
+    indicator.style.transform = `translateX(${tab.offsetLeft}px)`;
+  }
+
   /** Sort order kept in ?sorter= so a link opens the same view. */
   function showSort(sort: string) {
-    for (const button of root.querySelectorAll<HTMLElement>('[data-sort]')) {
+    for (const button of tabs) {
       const selected = button.dataset.sort === sort;
       button.setAttribute('aria-selected', String(selected));
       button.tabIndex = selected ? 0 : -1;
     }
     for (const view of root.querySelectorAll<HTMLElement>('[data-view]')) view.hidden = view.dataset.view !== sort;
+    placeIndicator();
   }
 
   function markPast() {
@@ -123,6 +134,8 @@ const { day, films, showings } = Astro.props;
   }
 
   function selectSort(sort: string) {
+    // Only slide when the user switches, not when the bar is first placed
+    indicator.toggleAttribute('data-slide', true);
     showSort(sort);
     const url = new URL(location.href);
     if (sort === 'film') url.searchParams.delete('sorter');
@@ -130,7 +143,6 @@ const { day, films, showings } = Astro.props;
     history.replaceState(null, '', url);
   }
 
-  const tabs = [...root.querySelectorAll<HTMLElement>('[data-sort]')];
   for (const [index, tab] of tabs.entries()) {
     tab.addEventListener('click', () => selectSort(tab.dataset.sort!));
     // Arrow keys move between tabs, as in any tablist
@@ -158,6 +170,10 @@ const { day, films, showings } = Astro.props;
 
   const fromUrl = new URLSearchParams(location.search).get('sorter');
   if (fromUrl === 'tid' || fromUrl === 'kino') showSort(fromUrl);
+
+  // Tab widths change with the viewport and once the font loads
+  const resizeObserver = new ResizeObserver(placeIndicator);
+  tabs.forEach((tab) => resizeObserver.observe(tab));
 
   // Started showings grey out as the clock passes them
   update();
