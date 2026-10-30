@@ -84,6 +84,29 @@ describe('filmwebProgram', () => {
       pageUrl: 'https://www.filmweb.no/film/EDI1',
     });
     expect(result.films.EDI1.posterSrcSet).toContain('https://cdn.sanity.io/p.jpg?w=640&auto=format 640w');
+    // No size in the file name, so no large versions
+    expect(result.films.EDI1.posterLarge).toBeUndefined();
+  });
+
+  it('offers large posters up to the size in the file name', () => {
+    const result = programOf(
+      [show({})],
+      [
+        {
+          mainVersionId: 'EDI1',
+          lengthInMinutes: 100,
+          rating: null,
+          sanityImagePosterUrl: 'https://cdn.sanity.io/p-1128x1670.jpg?auto=format',
+          synopsisIngress: null,
+          synopsisBodyText: null,
+        },
+      ],
+    );
+    const large = result.films.EDI1.posterLarge!;
+    expect(large.width).toBe(1128);
+    expect(large.srcSet).toContain('https://cdn.sanity.io/p-1128x1670.jpg?auto=format&w=960&auto=format 960w');
+    expect(large.srcSet).toMatch(/w=1128&auto=format 1128w$/);
+    expect(large.srcSet).not.toContain('1280w');
   });
 
   it('falls back to the body text when a film has no ingress', () => {

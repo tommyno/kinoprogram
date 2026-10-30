@@ -24,6 +24,23 @@
 .poster {
   flex: none;
   width: 104px;
+  padding: 0;
+  border-radius: var(--radius);
+}
+
+button.poster {
+  cursor: zoom-in;
+}
+
+/* Opened by a click: on its own row above the title, as wide as the page or the image allows */
+.header:has(.poster[data-expanded]) {
+  flex-wrap: wrap;
+}
+
+.poster[data-expanded] {
+  width: 100%;
+  max-width: var(--poster-width);
+  cursor: zoom-out;
 }
 
 .heading {
@@ -166,8 +183,22 @@
     align-items: flex-end;
   }
 
+  /* The text sits at the poster's foot, but the poster stays at the top when opened text grows past it */
   .poster {
+    align-self: flex-start;
+  }
+
+  .poster:not([data-expanded]) {
     width: 160px;
+  }
+
+  /* A full-width poster would be far taller than the screen; the text narrows to stay beside it */
+  .header:has(.poster[data-expanded]) {
+    flex-wrap: nowrap;
+  }
+
+  .poster[data-expanded] {
+    max-width: min(var(--poster-width), 50%);
   }
 
   /* The day name lines up with the first row of times */

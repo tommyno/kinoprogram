@@ -11,6 +11,8 @@ export type Film = {
   posterUrl: string | null;
   /** Resized versions of the poster, when the source offers them. */
   posterSrcSet?: string;
+  /** Versions up to the poster's own width, for the film page where a click opens it to full width. */
+  posterLarge?: { srcSet: string; width: number };
   /** The film's page at the source: Filmweb, or Cinemateket for its own screenings. */
   pageUrl: string;
 };

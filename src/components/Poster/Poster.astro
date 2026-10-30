@@ -6,14 +6,16 @@ import styles from './Poster.module.css';
 type Props = {
   film: Film;
   sizes: string;
+  /** Larger versions than the film's own srcset, where the page needs them. */
+  srcset?: string;
 };
 
-const { film, sizes } = Astro.props;
+const { film, sizes, srcset = film.posterSrcSet } = Astro.props;
 ---
 
 {
   film.posterUrl ? (
-    <img class={styles.poster} src={film.posterUrl} srcset={film.posterSrcSet} sizes={sizes} width="400" height="600" loading="lazy" alt="" />
+    <img class={styles.poster} src={film.posterUrl} srcset={srcset} sizes={sizes} width="400" height="600" loading="lazy" alt="" />
   ) : (
     <div class={`${styles.poster} ${styles.placeholder}`}>
       <svg viewBox="0 0 100 150" preserveAspectRatio="none" aria-hidden="true">

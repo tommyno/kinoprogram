@@ -9,6 +9,7 @@ export const LOCATION = 'Oslo';
 const FILM_URL = 'https://www.filmweb.no/film/';
 // Posters live on Sanity's CDN, which resizes by query string
 const POSTER_WIDTHS = [200, 320, 480, 640];
+const LARGE_POSTER_WIDTHS = [...POSTER_WIDTHS, 960, 1280, 1920];
 
 const SHOWS_QUERY = `query Shows($location: String) {
   showQuery {
@@ -122,6 +123,17 @@ function posterSrc(url: string, width: number): string {
   return `${url}${url.includes('?') ? '&' : '?'}w=${width}&auto=format`;
 }
 
+function srcSet(url: string, widths: number[]): string {
+  return widths.map((w) => `${posterSrc(url, w)} ${w}w`).join(', ');
+}
+
+/** The CDN scales images up too, so the large versions stop at the size in the file name, as in "…-1128x1670.jpg". */
+function largePoster(url: string): Film['posterLarge'] {
+  const width = Number(url.match(/-(\d+)x\d+\.\w+(\?|$)/)?.[1]);
+  if (!width) return undefined;
+  return { srcSet: srcSet(url, [...LARGE_POSTER_WIDTHS.filter((w) => w < width), width]), width };
+}
+
 export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
   const movies = new Map(snapshot.movies.map((m) => [m.mainVersionId, m]));
   const films: Record<string, Film> = {};
@@ -149,7 +161,8 @@ export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
       // Many films have only the long body text, no ingress
       synopsis: plainText(movie?.synopsisIngress) ?? plainText(movie?.synopsisBodyText),
       posterUrl: poster && posterSrc(poster, 320),
-      posterSrcSet: poster ? POSTER_WIDTHS.map((w) => `${posterSrc(poster, w)} ${w}w`).join(', ') : undefined,
+      posterSrcSet: poster ? srcSet(poster, POSTER_WIDTHS) : undefined,
+      posterLarge: poster ? largePoster(poster) : undefined,
       pageUrl: FILM_URL + filmId,
     };
 

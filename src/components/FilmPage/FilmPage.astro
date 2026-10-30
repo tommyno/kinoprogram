@@ -26,9 +26,24 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
   <a href="/" class={styles.back} data-back>← Kinoprogram for Oslo</a>
 
   <header class={styles.header}>
-    <div class={styles.poster} data-poster>
-      <Poster film={film} sizes="(min-width: 700px) 160px, 104px" />
-    </div>
+    {
+      film.posterLarge ? (
+        <button
+          type="button"
+          class={styles.poster}
+          style={`--poster-width: ${film.posterLarge.width}px`}
+          aria-expanded="false"
+          aria-label="Vis plakaten stor"
+          data-poster
+        >
+          <Poster film={film} srcset={film.posterLarge.srcSet} sizes="(min-width: 700px) 160px, 104px" />
+        </button>
+      ) : (
+        <div class={styles.poster} data-poster>
+          <Poster film={film} sizes="(min-width: 700px) 160px, 104px" />
+        </div>
+      )
+    }
     <div class={styles.heading} data-heading>
       <h1 class={styles.title}>{film.title}</h1>
       {meta && <p class={styles.meta}>{meta}</p>}
@@ -86,6 +101,20 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
     event.preventDefault();
     history.back();
   });
+
+  // A click opens the poster to the page width, or its own width if that is smaller, and closes it again
+  const poster = document.querySelector<HTMLElement>('button[data-poster]');
+  if (poster) {
+    const image = poster.querySelector('img')!;
+    const smallSizes = image.sizes;
+    poster.addEventListener('click', () => {
+      const expanded = poster.toggleAttribute('data-expanded');
+      poster.setAttribute('aria-expanded', String(expanded));
+      // The browser then picks the version that is sharp at the new width
+      if (expanded) image.sizes = `${poster.offsetWidth}px`;
+      else image.sizes = smallSizes;
+    });
+  }
 
   const synopsis = document.querySelector<HTMLElement>('[data-synopsis]');
 
