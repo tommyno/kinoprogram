@@ -3,50 +3,33 @@
   display: contents;
 }
 
-.toolbar {
-  padding-bottom: 20px;
-}
-
-.sort {
+/* Equal thirds on phones, natural width on wider screens */
+.tabs {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
+  border-bottom: 1px solid var(--line-strong);
 }
 
-.sortLabel {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-.segmented {
-  display: inline-flex;
-  border: 1px solid var(--ink);
-  border-radius: 999px;
-}
-
-.segment {
-  padding: 0 16px;
+.tab {
+  flex: 1;
   min-height: 44px;
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 14px;
+  padding: 0 16px;
+  /* Overlaps the tablist line so the active bar sits on it */
+  margin-bottom: -1px;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  font-size: 15px;
   font-weight: 600;
 }
 
-/* Rounded here rather than clipped by the group, so the focus ring is not cut off */
-.segment:first-child {
-  border-radius: 999px 0 0 999px;
+.tab[aria-selected='true'] {
+  border-bottom-color: var(--ink);
+  color: var(--ink);
 }
 
-.segment:last-child {
-  border-radius: 0 999px 999px 0;
-}
-
-.segment[aria-pressed='true'] {
-  background: var(--ink);
-  color: var(--bg);
+@media (min-width: 640px) {
+  .tab {
+    flex: none;
+  }
 }
 
 .empty {

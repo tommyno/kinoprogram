@@ -21,19 +21,23 @@ const { day, films, showings } = Astro.props;
 ---
 
 <div class={styles.program} data-program data-day={day}>
-  <div class={styles.toolbar}>
-    <div role="group" aria-label="Sorter" class={styles.sort}>
-      <span class={styles.sortLabel}>Sorter</span>
-      <div class={styles.segmented}>
-        {
-          SORTS.map((option) => (
-            <button type="button" class={styles.segment} aria-pressed={option.key === 'film' ? 'true' : 'false'} data-sort={option.key}>
-              {option.label}
-            </button>
-          ))
-        }
-      </div>
-    </div>
+  <div role="tablist" aria-label="Sorter" class={styles.tabs}>
+    {
+      SORTS.map((option) => (
+        <button
+          type="button"
+          role="tab"
+          id={`tab-${option.key}`}
+          class={styles.tab}
+          aria-selected={option.key === 'film' ? 'true' : 'false'}
+          aria-controls={`view-${option.key}`}
+          tabindex={option.key === 'film' ? 0 : -1}
+          data-sort={option.key}
+        >
+          {option.label}
+        </button>
+      ))
+    }
   </div>
 
   {
@@ -41,13 +45,13 @@ const { day, films, showings } = Astro.props;
       <p class={styles.empty}>Ingen forestillinger denne dagen. Velg en annen dato.</p>
     ) : (
       <>
-        <div data-view="film">
+        <div role="tabpanel" id="view-film" aria-labelledby="tab-film" data-view="film">
           <FilmGrid films={films} showings={showings} />
         </div>
-        <div data-view="tid" hidden>
+        <div role="tabpanel" id="view-tid" aria-labelledby="tab-tid" data-view="tid" hidden>
           <TimeList films={films} showings={showings} />
         </div>
-        <div data-view="kino" hidden>
+        <div role="tabpanel" id="view-kino" aria-labelledby="tab-kino" data-view="kino" hidden>
           <CinemaColumns films={films} showings={showings} />
         </div>
       </>
@@ -74,7 +78,9 @@ const { day, films, showings } = Astro.props;
   /** Sort order kept in ?sorter= so a link opens the same view. */
   function showSort(sort: string) {
     for (const button of root.querySelectorAll<HTMLElement>('[data-sort]')) {
-      button.setAttribute('aria-pressed', String(button.dataset.sort === sort));
+      const selected = button.dataset.sort === sort;
+      button.setAttribute('aria-selected', String(selected));
+      button.tabIndex = selected ? 0 : -1;
     }
     for (const view of root.querySelectorAll<HTMLElement>('[data-view]')) view.hidden = view.dataset.view !== sort;
   }
@@ -116,14 +122,24 @@ const { day, films, showings } = Astro.props;
     updateTimeList();
   }
 
-  for (const button of root.querySelectorAll<HTMLElement>('[data-sort]')) {
-    button.addEventListener('click', () => {
-      const sort = button.dataset.sort!;
-      showSort(sort);
-      const url = new URL(location.href);
-      if (sort === 'film') url.searchParams.delete('sorter');
-      else url.searchParams.set('sorter', sort);
-      history.replaceState(null, '', url);
+  function selectSort(sort: string) {
+    showSort(sort);
+    const url = new URL(location.href);
+    if (sort === 'film') url.searchParams.delete('sorter');
+    else url.searchParams.set('sorter', sort);
+    history.replaceState(null, '', url);
+  }
+
+  const tabs = [...root.querySelectorAll<HTMLElement>('[data-sort]')];
+  for (const [index, tab] of tabs.entries()) {
+    tab.addEventListener('click', () => selectSort(tab.dataset.sort!));
+    // Arrow keys move between tabs, as in any tablist
+    tab.addEventListener('keydown', (event) => {
+      const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+      if (!step) return;
+      const next = tabs[(index + step + tabs.length) % tabs.length];
+      next.focus();
+      selectSort(next.dataset.sort!);
     });
   }
 
