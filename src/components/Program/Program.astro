@@ -2,6 +2,7 @@
 import type { Film, Showing } from '@lib/program.ts';
 import CinemaColumns from '@components/CinemaColumns/CinemaColumns.astro';
 import FilmGrid from '@components/FilmGrid/FilmGrid.astro';
+import FilmSearch from '@components/FilmSearch/FilmSearch.astro';
 import TimeList from '@components/TimeList/TimeList.astro';
 import styles from './Program.module.css';
 
@@ -9,19 +10,22 @@ const SORTS = [
   { key: 'film', label: 'Film' },
   { key: 'tid', label: 'Tidspunkt' },
   { key: 'kino', label: 'Kino' },
+  { key: 'sok', label: 'Søk' },
 ];
 
 type Props = {
   day: string;
   films: Record<string, Film>;
   showings: Showing[];
+  /** Every film still showing, for the search. */
+  upcoming: Film[];
 };
 
-const { day, films, showings } = Astro.props;
+const { day, films, showings, upcoming } = Astro.props;
 ---
 
 <div class={styles.program} data-program data-day={day}>
-  <div role="tablist" aria-label="Sorter" class={styles.tabs}>
+  <div role="tablist" aria-label="Visning" class={styles.tabs}>
     {
       SORTS.map((option) => (
         <button
@@ -43,7 +47,7 @@ const { day, films, showings } = Astro.props;
 
   {
     showings.length === 0 ? (
-      <p class={styles.empty}>Ingen forestillinger denne dagen. Velg en annen dato.</p>
+      <p class={styles.empty} data-empty>Ingen forestillinger denne dagen. Velg en annen dato.</p>
     ) : (
       <>
         <div role="tabpanel" id="view-film" aria-labelledby="tab-film" data-view="film">
@@ -58,6 +62,9 @@ const { day, films, showings } = Astro.props;
       </>
     )
   }
+  <div role="tabpanel" id="view-sok" aria-labelledby="tab-sok" data-view="sok" hidden>
+    <FilmSearch films={upcoming} />
+  </div>
 </div>
 
 <script>
@@ -73,6 +80,7 @@ const { day, films, showings } = Astro.props;
   const hours = [...root.querySelectorAll<HTMLElement>('[data-hour]')];
   const tabs = [...root.querySelectorAll<HTMLElement>('[data-sort]')];
   const indicator = root.querySelector<HTMLElement>('[data-indicator]')!;
+  const empty = root.querySelector<HTMLElement>('[data-empty]');
 
   const isOpen = (button: HTMLButtonElement) => button.getAttribute('aria-expanded') === 'true';
   const toggle = (button: HTMLButtonElement) => button.setAttribute('aria-expanded', String(!isOpen(button)));
@@ -93,6 +101,8 @@ const { day, films, showings } = Astro.props;
       button.tabIndex = selected ? 0 : -1;
     }
     for (const view of root.querySelectorAll<HTMLElement>('[data-view]')) view.hidden = view.dataset.view !== sort;
+    // A day without showings can still be searched
+    if (empty) empty.hidden = sort === 'sok';
     placeIndicator();
   }
 
@@ -169,7 +179,7 @@ const { day, films, showings } = Astro.props;
   });
 
   const fromUrl = new URLSearchParams(location.search).get('sorter');
-  if (fromUrl === 'tid' || fromUrl === 'kino') showSort(fromUrl);
+  if (fromUrl === 'tid' || fromUrl === 'kino' || fromUrl === 'sok') showSort(fromUrl);
 
   // Tab widths change with the viewport and once the font loads
   const resizeObserver = new ResizeObserver(placeIndicator);

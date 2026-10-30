@@ -1,0 +1,108 @@
+.search {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  position: absolute;
+  left: 14px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* 16px keeps iOS from zooming in on focus */
+.input {
+  width: 100%;
+  height: 48px;
+  margin: 0;
+  padding: 0 48px 0 44px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--bg);
+  font: inherit;
+  font-size: 16px;
+  color: var(--ink);
+  appearance: none;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+/* The clear button below replaces the browser's own */
+.input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.clear {
+  position: absolute;
+  right: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+}
+
+.count {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.empty {
+  padding: 48px 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr));
+  gap: 32px 16px;
+  align-items: start;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.card:hover .title {
+  text-decoration: underline;
+}
+
+.meta {
+  font-size: 12px;
+  color: var(--muted);
+}

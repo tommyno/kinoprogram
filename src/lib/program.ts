@@ -63,6 +63,16 @@ export function filmDays(program: Program, filmId: string, from: string): [strin
     .filter(([, list]) => list.length > 0);
 }
 
+/** Every film with a showing from the given day on, A–Å. */
+export function upcomingFilms(program: Program, from: string): Film[] {
+  const ids = new Set(
+    Object.entries(program.days)
+      .filter(([day]) => day >= from)
+      .flatMap(([, list]) => list.map((s) => s.filmId)),
+  );
+  return [...ids].map((id) => program.films[id]).sort((a, b) => collator.compare(a.title, b.title));
+}
+
 /** Combines the sources' programs: days in ascending order, each sorted by start time. */
 export function mergePrograms(programs: Program[]): Program {
   const films: Record<string, Film> = {};

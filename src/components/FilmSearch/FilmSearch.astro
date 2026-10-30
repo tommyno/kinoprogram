@@ -1,0 +1,97 @@
+---
+import { filmPath, type Film } from '@lib/program.ts';
+import { formatDuration } from '@lib/time.ts';
+import Poster from '@components/Poster/Poster.astro';
+import styles from './FilmSearch.module.css';
+
+type Props = {
+  /** Every film still showing, A–Å. */
+  films: Film[];
+};
+
+const { films } = Astro.props;
+---
+
+<div class={styles.search} data-search>
+  <div class={styles.top}>
+    <div class={styles.field}>
+      <svg class={styles.icon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="M20 20l-3.5-3.5"></path>
+      </svg>
+      <input type="search" class={styles.input} aria-label="Søk etter film" placeholder="Søk etter film" autocomplete="off" spellcheck="false" data-search-input />
+      <button type="button" class={styles.clear} aria-label="Tøm søket" hidden data-search-clear>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+    <p class={styles.count} role="status" data-search-count>{films.length} filmer</p>
+  </div>
+
+  <p class={styles.empty} role="status" hidden data-search-empty></p>
+
+  <section aria-label="Alle filmer" class={styles.grid}>
+    {
+      films.map((film, index) => {
+        const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join(' · ');
+        return (
+          <a href={filmPath(film)} class={styles.card} data-title={film.title} data-stagger style={`--i: ${index}`}>
+            <Poster film={film} sizes="(min-width: 1000px) 200px, 45vw" />
+            <span class={styles.heading}>
+              <span class={styles.title}>{film.title}</span>
+              {meta && <span class={styles.meta}>{meta}</span>}
+            </span>
+          </a>
+        );
+      })
+    }
+  </section>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-search]')!;
+  const input = root.querySelector<HTMLInputElement>('[data-search-input]')!;
+  const clear = root.querySelector<HTMLButtonElement>('[data-search-clear]')!;
+  const count = root.querySelector<HTMLElement>('[data-search-count]')!;
+  const empty = root.querySelector<HTMLElement>('[data-search-empty]')!;
+  const cards = [...root.querySelectorAll<HTMLElement>('[data-title]')];
+
+  // Case and accents don't matter: "amelie" finds "Amélie"
+  const fold = (text: string) => text.toLowerCase().normalize('NFKD').replace(/\p{M}/gu, '');
+  const titles = new Map(cards.map((card) => [card, fold(card.dataset.title!)]));
+
+  function filter() {
+    const query = input.value.trim();
+    const needle = fold(query);
+    let hits = 0;
+    for (const card of cards) {
+      card.hidden = !titles.get(card)!.includes(needle);
+      if (!card.hidden) hits++;
+    }
+    count.textContent = hits === 0 ? '' : needle ? `${hits} treff` : `${hits} filmer`;
+    empty.textContent = `Ingen filmer med «${query}».`;
+    empty.hidden = hits > 0;
+    clear.hidden = !input.value;
+  }
+
+  /** The search is kept in ?q= so a link opens the same results. */
+  function search() {
+    filter();
+    const url = new URL(location.href);
+    const query = input.value.trim();
+    if (query) url.searchParams.set('q', query);
+    else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+  }
+
+  input.addEventListener('input', search);
+  clear.addEventListener('click', () => {
+    input.value = '';
+    search();
+    input.focus();
+  });
+
+  input.value = new URLSearchParams(location.search).get('q') ?? '';
+  filter();
+</script>

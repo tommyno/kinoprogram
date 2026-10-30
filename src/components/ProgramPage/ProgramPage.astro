@@ -3,7 +3,7 @@ import Base from '@layouts/Base.astro';
 import Footer from '@components/Footer/Footer.astro';
 import Header from '@components/Header/Header.astro';
 import Program from '@components/Program/Program.astro';
-import { collator } from '@lib/program.ts';
+import { collator, upcomingFilms } from '@lib/program.ts';
 import { getProgram } from '@lib/source.ts';
 import { dayLabel, programNow } from '@lib/time.ts';
 import styles from './ProgramPage.module.css';
@@ -18,6 +18,7 @@ const today = programNow().day;
 const lastDay = Object.keys(program.days).at(-1) ?? today;
 const showings = program.days[day] ?? [];
 const films = Object.fromEntries(showings.map((s) => [s.filmId, program.films[s.filmId]]));
+const upcoming = upcomingFilms(program, today);
 const label = dayLabel(day, today);
 const cinemas = [...new Set(Object.values(program.days).flat().map((s) => s.cinema))].sort(collator.compare);
 const description = `Hva går på kino i Oslo ${label}? Alle filmene og tidene fra ${cinemas.slice(0, -1).join(', ')} og ${cinemas.at(-1)}.`;
@@ -26,7 +27,7 @@ const description = `Hva går på kino i Oslo ${label}? Alle filmene og tidene f
 <Base title={`Kinoprogram for Oslo ${label}`} description={description}>
   <main class={styles.page}>
     <Header day={day} label={label} today={today} lastDay={lastDay} />
-    <Program day={day} films={films} showings={showings} />
+    <Program day={day} films={films} showings={showings} upcoming={upcoming} />
     <Footer />
   </main>
 </Base>

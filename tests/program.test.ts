@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { FilmwebSnapshot, filmwebProgram, shortScreen, type RawShow } from '../src/lib/filmweb.ts';
-import { filmDays, mergePrograms, slugify } from '../src/lib/program.ts';
+import { filmDays, mergePrograms, slugify, upcomingFilms } from '../src/lib/program.ts';
 import { assertPlausible } from '../src/lib/source.ts';
 import { programNow } from '../src/lib/time.ts';
 
@@ -143,6 +143,21 @@ describe('filmDays', () => {
     const days = filmDays(result, 'EDI1', '2026-10-30');
     expect(days.map(([day]) => day)).toEqual(['2026-10-30', '2026-11-02']);
     expect(days.flatMap(([, list]) => list).every((s) => s.filmId === 'EDI1')).toBe(true);
+  });
+});
+
+describe('upcomingFilms', () => {
+  const result = mergePrograms([
+    programOf([
+      show({ movieMainVersionId: 'EDI1', movieTitle: 'Øyeblikk', showStart: '2026-11-20T18:00:00', ticketSaleUrl: 'https://example.test/1' }),
+      show({ movieMainVersionId: 'EDI2', movieTitle: 'Amélie', showStart: '2026-10-30T18:00:00', ticketSaleUrl: 'https://example.test/2' }),
+      show({ movieMainVersionId: 'EDI2', movieTitle: 'Amélie', showStart: '2026-10-31T18:00:00', ticketSaleUrl: 'https://example.test/3' }),
+      show({ movieMainVersionId: 'EDI3', movieTitle: 'Before', showStart: '2026-10-29T18:00:00', ticketSaleUrl: 'https://example.test/4' }),
+    ]),
+  ]);
+
+  it('lists each film once, A–Å, leaving out films that have stopped showing', () => {
+    expect(upcomingFilms(result, '2026-10-30').map((f) => f.title)).toEqual(['Amélie', 'Øyeblikk']);
   });
 });
 
