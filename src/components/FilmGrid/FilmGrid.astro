@@ -25,7 +25,7 @@ const groups = groupBy(showings, (s) => s.filmId).sort(([a], [b]) => collator.co
       const more = list.length - COLLAPSED_COUNT;
       return (
         <article class={styles.card} data-card>
-          <a href={film.pageUrl} target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+          <a href={film.pageUrl} title="Mer om filmen" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
             {film.posterUrl ? (
               <img
                 class={styles.poster}
@@ -47,7 +47,7 @@ const groups = groupBy(showings, (s) => s.filmId).sort(([a], [b]) => collator.co
           </a>
           <div class={styles.heading}>
             <h2 class={styles.title}>
-              <a href={film.pageUrl} target="_blank" rel="noopener">
+              <a href={film.pageUrl} title="Mer om filmen" target="_blank" rel="noopener">
                 {film.title}
               </a>
             </h2>

@@ -14,6 +14,7 @@ const { showing, title, class: className, hidden } = Astro.props;
 
 <a
   href={showing.bookingUrl}
+  title="Kjøp billett"
   target="_blank"
   rel="noopener"
   aria-label={`${title}, ${showing.time}, ${showing.cinema}`}
