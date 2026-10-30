@@ -1,3 +1,20 @@
+.top {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.top:hover {
+  border-color: var(--ink);
+}
+
 .footer {
   display: flex;
   flex-wrap: wrap;

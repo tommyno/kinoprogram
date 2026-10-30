@@ -2,7 +2,18 @@
 import styles from './Footer.module.css';
 ---
 
+<button type="button" class={styles.top} data-to-top>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 19V5M6 11l6-6 6 6"></path>
+  </svg>
+  Til toppen
+</button>
 <footer class={styles.footer}>
   <span>Programdata fra <a href="https://www.filmweb.no">Filmweb</a> og <a href="https://www.cinemateket.no">Cinemateket</a></span>
   <a href="https://github.com/tommyno/kinoprogram">Fork på GitHub</a>
 </footer>
+
+<script>
+  // Scrolls without adding # to the URL; smoothness comes from scroll-behavior in global.css
+  document.querySelector('[data-to-top]')?.addEventListener('click', () => window.scrollTo({ top: 0 }));
+</script>
