@@ -85,6 +85,11 @@
   padding-top: 0;
 }
 
+/* The footer draws its own line */
+.day:last-child {
+  border-bottom: 0;
+}
+
 .dayHeading {
   display: flex;
   flex-wrap: wrap;
