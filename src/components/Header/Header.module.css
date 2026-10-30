@@ -7,12 +7,16 @@
 
 .picker {
   position: relative;
+  display: inline-block;
+  border-bottom: 3px solid var(--ink);
+  white-space: nowrap;
+}
+
+.button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border-bottom: 3px solid var(--ink);
-  white-space: nowrap;
-  cursor: pointer;
+  letter-spacing: inherit;
 }
 
 .input {

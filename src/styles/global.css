@@ -71,8 +71,3 @@ button {
   color: var(--past-ink);
   background: var(--past-bg);
 }
-
-:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
-}

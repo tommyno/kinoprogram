@@ -16,14 +16,18 @@ const { day, label, today, lastDay } = Astro.props;
   <h1 class={styles.title}>
     Kinoprogram for Oslo{' '}
     <span class={styles.picker}>
-      <span>{label}</span>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M6 9l6 6 6-6"></path>
-      </svg>
+      <button type="button" class={styles.button} aria-label={`${label}, velg dato`} data-date-button>
+        <span>{label}</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </button>
+      {/* Laid over the button for pointers; keyboards use the button, as the input's own fields would change the date on every arrow key */}
       <input
         class={styles.input}
         type="date"
-        aria-label="Velg dato"
+        tabindex="-1"
+        aria-hidden="true"
         value={day}
         min={today}
         max={lastDay}
@@ -40,11 +44,14 @@ const { day, label, today, lastDay } = Astro.props;
   const input = document.querySelector<HTMLInputElement>('[data-date-picker]');
 
   // Desktop browsers only open the calendar from its icon; open it from anywhere on the label
-  input?.addEventListener('click', () => {
+  function openPicker() {
     try {
-      input.showPicker();
+      input?.showPicker();
     } catch {}
-  });
+  }
+
+  input?.addEventListener('click', openPicker);
+  document.querySelector('[data-date-button]')?.addEventListener('click', openPicker);
 
   input?.addEventListener('change', () => {
     if (!input.value) return;

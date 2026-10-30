@@ -25,7 +25,6 @@
   display: inline-flex;
   border: 1px solid var(--ink);
   border-radius: 999px;
-  overflow: hidden;
 }
 
 .segment {
@@ -35,6 +34,15 @@
   color: var(--ink);
   font-size: 14px;
   font-weight: 600;
+}
+
+/* Rounded here rather than clipped by the group, so the focus ring is not cut off */
+.segment:first-child {
+  border-radius: 999px 0 0 999px;
+}
+
+.segment:last-child {
+  border-radius: 0 999px 999px 0;
 }
 
 .segment[aria-pressed='true'] {
