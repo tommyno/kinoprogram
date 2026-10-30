@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 
 import react from '@astrojs/react';
 
@@ -11,4 +11,16 @@ export default defineConfig({
   site: productionHost ? `https://${productionHost}` : 'http://localhost:3000',
   integrations: [react()],
   server: { port: 3000 },
+  // Self-hosted at build time, preloaded, with a metric-matched fallback so text doesn't jump
+  fonts: [
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Inter',
+      cssVariable: '--font-inter',
+      weights: ['100 900'],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['sans-serif'],
+    },
+  ],
 });
