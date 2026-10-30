@@ -27,12 +27,14 @@ await sharp(svg).resize(192, 192).png().toFile('public/icon-192.png');
 await sharp(svg).resize(512, 512).png().toFile('public/icon-512.png');
 await sharp(svg).resize(512, 512).flatten({ background: INK }).png().toFile('public/icon-maskable.png');
 
-// Share image for links (Open Graph), 1200×630: the logo with the name under it, centred
+// Share image for links (Open Graph), 1200×630: the logo with the name under it, centred.
+// Everything stays inside the middle 630×630, since some services crop the image to a square
 const title = await sharp({
   text: {
-    text: `<span foreground="${INK}" weight="heavy" letter_spacing="-2048">Kinoprogram for Oslo</span>`,
+    text: `<span foreground="${INK}" weight="heavy" letter_spacing="-2048">Kinoprogram\nfor Oslo</span>`,
     font: `${FONT} 88`,
     dpi: 72,
+    align: 'centre',
     rgba: true,
   },
 })
