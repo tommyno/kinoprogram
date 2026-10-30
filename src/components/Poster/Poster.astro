@@ -1,0 +1,24 @@
+---
+// A film's poster, or a crossed-out box when the source has none. Sized by its parent
+import type { Film } from '../../lib/program.ts';
+import styles from './Poster.module.css';
+
+type Props = {
+  film: Film;
+  sizes: string;
+};
+
+const { film, sizes } = Astro.props;
+---
+
+{
+  film.posterUrl ? (
+    <img class={styles.poster} src={film.posterUrl} srcset={film.posterSrcSet} sizes={sizes} width="400" height="600" loading="lazy" alt="" />
+  ) : (
+    <div class={`${styles.poster} ${styles.placeholder}`}>
+      <svg viewBox="0 0 100 150" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 0L100 150M100 0L0 150" vector-effect="non-scaling-stroke" />
+      </svg>
+    </div>
+  )
+}

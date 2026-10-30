@@ -1,7 +1,8 @@
 ---
-import { collator, type Film, type Showing } from '../../lib/program.ts';
+import { collator, filmPath, type Film, type Showing } from '../../lib/program.ts';
 import { formatDuration } from '../../lib/time.ts';
 import { groupBy } from '../../lib/groupBy.ts';
+import Poster from '../Poster/Poster.astro';
 import ShowingLink from '../ShowingLink/ShowingLink.astro';
 import styles from './FilmGrid.module.css';
 
@@ -25,29 +26,12 @@ const groups = groupBy(showings, (s) => s.filmId).sort(([a], [b]) => collator.co
       const more = list.length - COLLAPSED_COUNT;
       return (
         <article class={styles.card} data-card data-stagger style={`--i: ${index}`}>
-          <a href={film.pageUrl} title="Mer om filmen" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
-            {film.posterUrl ? (
-              <img
-                class={styles.poster}
-                src={film.posterUrl}
-                srcset={film.posterSrcSet}
-                sizes="(min-width: 1000px) 200px, 45vw"
-                width="400"
-                height="600"
-                loading="lazy"
-                alt=""
-              />
-            ) : (
-              <div class={`${styles.poster} ${styles.placeholder}`}>
-                <svg viewBox="0 0 100 150" preserveAspectRatio="none" aria-hidden="true">
-                  <path d="M0 0L100 150M100 0L0 150" vector-effect="non-scaling-stroke" />
-                </svg>
-              </div>
-            )}
+          <a href={filmPath(film)} title="Alle visninger" tabindex="-1" aria-hidden="true">
+            <Poster film={film} sizes="(min-width: 1000px) 200px, 45vw" />
           </a>
           <div class={styles.heading}>
             <h2 class={styles.title}>
-              <a href={film.pageUrl} title="Mer om filmen" target="_blank" rel="noopener">
+              <a href={filmPath(film)} title="Alle visninger">
                 {film.title}
               </a>
             </h2>

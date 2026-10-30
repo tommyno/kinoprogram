@@ -1,5 +1,7 @@
 export type Film = {
   title: string;
+  /** Its page on this site, /film/{slug}. */
+  slug: string;
   minutes: number | null;
   ageRating: string | null;
   posterUrl: string | null;
@@ -34,9 +36,42 @@ export type Program = {
 
 export const collator = new Intl.Collator('nb');
 
+/** "Kikis budservice" → "kikis-budservice", "Glemselens øy" → "glemselens-oy". */
+export function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .replaceAll('æ', 'ae')
+    .replaceAll('ø', 'o')
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+/** The film's own page on this site. */
+export function filmPath(film: Film): string {
+  return `/film/${film.slug}`;
+}
+
+/** A film's showings per day, from the given day on. */
+export function filmDays(program: Program, filmId: string, from: string): [string, Showing[]][] {
+  return Object.entries(program.days)
+    .filter(([day]) => day >= from)
+    .map(([day, list]): [string, Showing[]] => [day, list.filter((s) => s.filmId === filmId)])
+    .filter(([, list]) => list.length > 0);
+}
+
 /** Combines the sources' programs: days in ascending order, each sorted by start time. */
 export function mergePrograms(programs: Program[]): Program {
-  const films: Record<string, Film> = Object.assign({}, ...programs.map((p) => p.films));
+  const films: Record<string, Film> = {};
+  // A title can occur twice (Filmweb lists some films under two ids); later ones get -2, -3 and so on
+  const slugs = new Set<string>();
+  for (const [id, film] of programs.flatMap((p) => Object.entries(p.films))) {
+    let slug = film.slug;
+    for (let n = 2; slugs.has(slug); n++) slug = `${film.slug}-${n}`;
+    slugs.add(slug);
+    films[id] = { ...film, slug };
+  }
   const all: Record<string, Showing[]> = {};
   for (const program of programs) {
     for (const [day, list] of Object.entries(program.days)) (all[day] ??= []).push(...list);
