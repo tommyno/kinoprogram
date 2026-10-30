@@ -22,7 +22,7 @@ const SHOWS_QUERY = `query Shows($location: String) {
 const MOVIES_QUERY = `query Movies($location: String) {
   movieQuery {
     getCurrentMovies(location: $location) {
-      mainVersionId lengthInMinutes rating sanityImagePosterUrl synopsisIngress
+      mainVersionId lengthInMinutes rating sanityImagePosterUrl synopsisIngress synopsisBodyText
     }
   }
 }`;
@@ -47,6 +47,7 @@ export const RawMovie = z.object({
   rating: z.string().nullable(),
   sanityImagePosterUrl: z.string().nullable(),
   synopsisIngress: z.string().nullable(),
+  synopsisBodyText: z.string().nullable(),
 });
 export type RawMovie = z.infer<typeof RawMovie>;
 
@@ -145,7 +146,8 @@ export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
       slug: slugify(title),
       minutes: show.lengthInMinutes || movie?.lengthInMinutes || null,
       ageRating: ageRating(show.rating) ?? ageRating(movie?.rating ?? null),
-      synopsis: plainText(movie?.synopsisIngress),
+      // Many films have only the long body text, no ingress
+      synopsis: plainText(movie?.synopsisIngress) ?? plainText(movie?.synopsisBodyText),
       posterUrl: poster && posterSrc(poster, 320),
       posterSrcSet: poster ? POSTER_WIDTHS.map((w) => `${posterSrc(poster, w)} ${w}w`).join(', ') : undefined,
       pageUrl: FILM_URL + filmId,

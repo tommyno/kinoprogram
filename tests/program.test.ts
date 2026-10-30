@@ -70,6 +70,7 @@ describe('filmwebProgram', () => {
           rating: null,
           sanityImagePosterUrl: 'https://cdn.sanity.io/p.jpg',
           synopsisIngress: '<i>Om filmen.</i>',
+          synopsisBodyText: 'Lang tekst.',
         },
       ],
     );
@@ -83,6 +84,23 @@ describe('filmwebProgram', () => {
       pageUrl: 'https://www.filmweb.no/film/EDI1',
     });
     expect(result.films.EDI1.posterSrcSet).toContain('https://cdn.sanity.io/p.jpg?w=640&auto=format 640w');
+  });
+
+  it('falls back to the body text when a film has no ingress', () => {
+    const result = programOf(
+      [show({})],
+      [
+        {
+          mainVersionId: 'EDI1',
+          lengthInMinutes: 100,
+          rating: null,
+          sanityImagePosterUrl: null,
+          synopsisIngress: '',
+          synopsisBodyText: 'Første avsnitt.\n\nAndre avsnitt.',
+        },
+      ],
+    );
+    expect(result.films.EDI1.synopsis).toBe('Første avsnitt.\n\nAndre avsnitt.');
   });
 });
 
