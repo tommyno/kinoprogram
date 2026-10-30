@@ -1,0 +1,36 @@
+---
+import type { Film, Showing } from '../../lib/program.ts';
+import { groupBy } from '../../lib/groupBy.ts';
+import ShowingLink from '../ShowingLink/ShowingLink.astro';
+import styles from './TimeList.module.css';
+
+type Props = {
+  films: Record<string, Film>;
+  showings: Showing[];
+};
+
+const { films, showings } = Astro.props;
+---
+
+<div>
+  {/* Shown and labelled by the Program script once some showings have started */}
+  <button type="button" class={styles.pastToggle} aria-expanded="false" hidden data-past-toggle></button>
+  {
+    groupBy(showings, (s) => s.time.slice(0, 2)).map(([hour, list]) => (
+      <section class={styles.hour} data-hour>
+        <h2 class={styles.hourLabel}>{hour}:00</h2>
+        <div class={styles.rows}>
+          {list.map((s) => (
+            <ShowingLink showing={s} title={films[s.filmId].title} class={styles.row}>
+              <span class={styles.time}>{s.time}</span>
+              <span class={styles.text}>
+                <span class={styles.title}>{films[s.filmId].title}</span>
+                <span class={styles.where}>{s.cinema}</span>
+              </span>
+            </ShowingLink>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</div>

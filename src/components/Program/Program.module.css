@@ -1,3 +1,8 @@
+/* The toolbar and view stay direct children of the page layout */
+.program {
+  display: contents;
+}
+
 .toolbar {
   padding-bottom: 20px;
   border-bottom: 1px solid var(--line);

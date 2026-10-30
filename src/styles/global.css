@@ -61,7 +61,12 @@ button {
   cursor: pointer;
 }
 
-/* Showings that have started (set by ShowingLink) */
+/* Components set their own display, which would otherwise win over the hidden attribute */
+[hidden] {
+  display: none !important;
+}
+
+/* Showings that have started (set by the Program script) */
 [data-past] {
   color: var(--past-ink);
   background: var(--past-bg);

@@ -1,0 +1,34 @@
+---
+import { collator, type Film, type Showing } from '../../lib/program.ts';
+import { groupBy } from '../../lib/groupBy.ts';
+import ShowingLink from '../ShowingLink/ShowingLink.astro';
+import styles from './CinemaColumns.module.css';
+
+type Props = {
+  films: Record<string, Film>;
+  showings: Showing[];
+};
+
+const { films, showings } = Astro.props;
+const cinemas = groupBy(showings, (s) => s.cinema).sort(([a], [b]) => collator.compare(a, b));
+---
+
+<div class={styles.columns}>
+  {
+    cinemas.map(([cinema, list]) => (
+      <section class={styles.cinema}>
+        <h2 class={styles.name}>
+          {cinema}
+          <span class={styles.count}>{list.length} visninger</span>
+        </h2>
+        {list.map((s) => (
+          <ShowingLink showing={s} title={films[s.filmId].title} class={styles.row}>
+            <span class={styles.time}>{s.time}</span>
+            <span class={styles.title}>{films[s.filmId].title}</span>
+            <span class={styles.screen}>{s.screen}</span>
+          </ShowingLink>
+        ))}
+      </section>
+    ))
+  }
+</div>

@@ -1,0 +1,149 @@
+---
+import type { Film, Showing } from '../../lib/program.ts';
+import CinemaColumns from '../CinemaColumns/CinemaColumns.astro';
+import FilmGrid from '../FilmGrid/FilmGrid.astro';
+import TimeList from '../TimeList/TimeList.astro';
+import styles from './Program.module.css';
+
+const SORTS = [
+  { key: 'film', label: 'Film' },
+  { key: 'tid', label: 'Tidspunkt' },
+  { key: 'kino', label: 'Kino' },
+];
+
+type Props = {
+  day: string;
+  films: Record<string, Film>;
+  showings: Showing[];
+};
+
+const { day, films, showings } = Astro.props;
+---
+
+<div class={styles.program} data-program data-day={day}>
+  <div class={styles.toolbar}>
+    <div role="group" aria-label="Sorter" class={styles.sort}>
+      <span class={styles.sortLabel}>Sorter</span>
+      <div class={styles.segmented}>
+        {
+          SORTS.map((option) => (
+            <button type="button" class={styles.segment} aria-pressed={option.key === 'film' ? 'true' : 'false'} data-sort={option.key}>
+              {option.label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  {
+    showings.length === 0 ? (
+      <p class={styles.empty}>Ingen forestillinger denne dagen. Velg en annen dato.</p>
+    ) : (
+      <>
+        <div data-view="film">
+          <FilmGrid films={films} showings={showings} />
+        </div>
+        <div data-view="tid" hidden>
+          <TimeList films={films} showings={showings} />
+        </div>
+        <div data-view="kino" hidden>
+          <CinemaColumns films={films} showings={showings} />
+        </div>
+      </>
+    )
+  }
+</div>
+
+<script>
+  import { isPast, programNow } from '../../lib/time.ts';
+
+  const root = document.querySelector<HTMLElement>('[data-program]')!;
+  const day = root.dataset.day!;
+  const links = [...root.querySelectorAll<HTMLElement>('[data-minutes]')];
+  const labels = new Map(links.map((link) => [link, link.getAttribute('aria-label')]));
+  const cards = [...root.querySelectorAll<HTMLElement>('[data-card]')];
+  const collapsedCount = Number(root.querySelector<HTMLElement>('[data-collapsed-count]')?.dataset.collapsedCount);
+  const pastToggle = root.querySelector<HTMLButtonElement>('[data-past-toggle]');
+  const hours = [...root.querySelectorAll<HTMLElement>('[data-hour]')];
+
+  const isOpen = (button: HTMLButtonElement) => button.getAttribute('aria-expanded') === 'true';
+  const toggle = (button: HTMLButtonElement) => button.setAttribute('aria-expanded', String(!isOpen(button)));
+  const rowsIn = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-minutes]')];
+
+  /** Sort order kept in ?sorter= so a link opens the same view. */
+  function showSort(sort: string) {
+    for (const button of root.querySelectorAll<HTMLElement>('[data-sort]')) {
+      button.setAttribute('aria-pressed', String(button.dataset.sort === sort));
+    }
+    for (const view of root.querySelectorAll<HTMLElement>('[data-view]')) view.hidden = view.dataset.view !== sort;
+  }
+
+  function markPast() {
+    const now = programNow();
+    for (const link of links) {
+      const past = isPast({ day, minutes: Number(link.dataset.minutes) }, now);
+      link.toggleAttribute('data-past', past);
+      link.setAttribute('aria-label', past ? `${labels.get(link)} (startet)` : `${labels.get(link)}`);
+    }
+  }
+
+  function updateCard(card: HTMLElement) {
+    const rows = rowsIn(card);
+    const button = card.querySelector<HTMLButtonElement>('[data-more]')!;
+    const upcoming = rows.filter((row) => !row.hasAttribute('data-past'));
+    // Collapsed: the next few; once all have started, the last few. Expanded: all, in time order
+    const shown = upcoming.length ? upcoming.slice(0, collapsedCount) : rows.slice(-collapsedCount);
+    const more = rows.length - shown.length;
+    for (const row of rows) row.hidden = !isOpen(button) && !shown.includes(row);
+    button.hidden = more === 0;
+    button.textContent = isOpen(button) ? 'Vis færre' : `+ ${more} ${more === 1 ? 'tid' : 'tider'} til`;
+  }
+
+  function updateTimeList() {
+    if (!pastToggle) return;
+    const rows = hours.flatMap(rowsIn);
+    const pastCount = rows.filter((row) => row.hasAttribute('data-past')).length;
+    for (const row of rows) row.hidden = !isOpen(pastToggle) && row.hasAttribute('data-past');
+    for (const hour of hours) hour.hidden = rowsIn(hour).every((row) => row.hidden);
+    pastToggle.hidden = pastCount === 0;
+    pastToggle.textContent = isOpen(pastToggle) ? 'Skjul tidligere' : `Vis tidligere (${pastCount})`;
+  }
+
+  function update() {
+    markPast();
+    cards.forEach(updateCard);
+    updateTimeList();
+  }
+
+  for (const button of root.querySelectorAll<HTMLElement>('[data-sort]')) {
+    button.addEventListener('click', () => {
+      const sort = button.dataset.sort!;
+      showSort(sort);
+      const url = new URL(location.href);
+      if (sort === 'film') url.searchParams.delete('sorter');
+      else url.searchParams.set('sorter', sort);
+      history.replaceState(null, '', url);
+    });
+  }
+
+  for (const card of cards) {
+    const button = card.querySelector<HTMLButtonElement>('[data-more]')!;
+    button.addEventListener('click', () => {
+      toggle(button);
+      updateCard(card);
+    });
+  }
+
+  pastToggle?.addEventListener('click', () => {
+    toggle(pastToggle);
+    updateTimeList();
+  });
+
+  const fromUrl = new URLSearchParams(location.search).get('sorter');
+  if (fromUrl === 'tid' || fromUrl === 'kino') showSort(fromUrl);
+
+  // Started showings grey out as the clock passes them
+  update();
+  setInterval(update, 60_000);
+</script>

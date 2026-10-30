@@ -1,0 +1,25 @@
+---
+// A showing's ticket link. The Program script marks started showings with data-past, which global.css greys out
+import type { Showing } from '../../lib/program.ts';
+
+type Props = {
+  showing: Showing;
+  title: string;
+  class: string;
+  hidden?: boolean;
+};
+
+const { showing, title, class: className, hidden } = Astro.props;
+---
+
+<a
+  href={showing.bookingUrl}
+  target="_blank"
+  rel="noopener"
+  aria-label={`${title}, ${showing.time}, ${showing.cinema}`}
+  data-minutes={showing.minutes}
+  class={className}
+  hidden={hidden}
+>
+  <slot />
+</a>
