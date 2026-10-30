@@ -45,7 +45,7 @@ const image = new URL('/og.png', Astro.site);
 
     <!-- Inline in the head, so it is listening before the page first renders -->
     <script is:inline>
-      // Film pages slide in from the right and back out the same way; other navigations cross-fade
+      // Film pages nudge in from the right and back out the same way; other navigations cross-fade
       const onFilmPage = location.pathname.startsWith('/film/');
       addEventListener('pageswap', (event) => {
         if (event.viewTransition && onFilmPage) sessionStorage.setItem('from-film', '1');

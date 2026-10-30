@@ -37,16 +37,11 @@ html {
     navigation: auto;
   }
 
-  /* Onto a film page the new page slides over from the right; back to the program it slides away again */
+  /* Onto a film page the pages nudge a little to the left while they fade; back to the program they nudge right */
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation-duration: 350ms;
+    animation-duration: 300ms;
     animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
-  }
-
-  :root:active-view-transition-type(forward, back)::view-transition-old(root),
-  :root:active-view-transition-type(forward, back)::view-transition-new(root) {
-    mix-blend-mode: normal;
   }
 
   :root:active-view-transition-type(forward)::view-transition-old(root) {
@@ -58,7 +53,6 @@ html {
   }
 
   :root:active-view-transition-type(back)::view-transition-old(root) {
-    z-index: 1;
     animation-name: slide-to-right;
   }
 
@@ -67,28 +61,48 @@ html {
   }
 }
 
-/* The page underneath moves a little, so the one on top reads as sliding over it */
+/* The old page is gone before the new one fades in, so the two never show through each other */
 @keyframes slide-from-right {
   from {
-    transform: translateX(100%);
+    opacity: 0;
+    transform: translateX(32px);
+  }
+
+  30% {
+    opacity: 0;
   }
 }
 
 @keyframes slide-to-right {
+  30%,
   to {
-    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(32px);
   }
 }
 
 @keyframes slide-from-left {
   from {
-    transform: translateX(-25%);
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+
+  30% {
+    opacity: 0;
   }
 }
 
 @keyframes slide-to-left {
+  30%,
   to {
-    transform: translateX(-25%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(-32px);
   }
 }
 
