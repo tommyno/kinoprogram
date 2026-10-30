@@ -23,6 +23,11 @@ await writeFile('public/favicon.ico', Buffer.concat([ico, png32]));
 // Apple touch icon: full square, iOS rounds the corners itself
 await sharp(svg).resize(180, 180).flatten({ background: INK }).png().toFile('public/apple-touch-icon.png');
 
+// App icons for the manifest. The letter already sits inside the maskable safe zone, so filling the corners is enough
+await sharp(svg).resize(192, 192).png().toFile('public/icon-192.png');
+await sharp(svg).resize(512, 512).png().toFile('public/icon-512.png');
+await sharp(svg).resize(512, 512).flatten({ background: INK }).png().toFile('public/icon-maskable.png');
+
 // Share image for links (Open Graph), 1200×630
 function text(markup: string, size: number) {
   return sharp({ text: { text: markup, font: `${FONT} ${size}`, dpi: 72, rgba: true } }).png().toBuffer();
@@ -40,4 +45,4 @@ await sharp({ create: { width: 1200, height: 630, channels: 4, background: '#fff
   .png()
   .toFile('public/og.png');
 
-console.log('public/favicon.ico, public/apple-touch-icon.png, public/og.png');
+console.log('public/favicon.ico, public/apple-touch-icon.png, public/icon-*.png, public/og.png');

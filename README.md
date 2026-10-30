@@ -13,7 +13,7 @@ A static Astro site that is rebuilt on a schedule; the program is fetched from F
 | `pnpm test`    | Runs the tests (vitest)                                                                                |
 | `pnpm check`   | Type check (astro check)                                                                               |
 | `pnpm fixture` | Refreshes the test data in `tests/fixtures/` from both sources                                         |
-| `pnpm icons`   | Generates `favicon.ico`, `apple-touch-icon.png` and the share image `og.png` from `public/favicon.svg` |
+| `pnpm icons`   | Generates `favicon.ico`, `apple-touch-icon.png`, the app icons `icon-*.png` and the share image `og.png` from `public/favicon.svg` |
 
 ## Deployment
 
