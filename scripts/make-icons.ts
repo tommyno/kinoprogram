@@ -3,7 +3,6 @@ import { readFile, writeFile } from 'node:fs/promises';
 import sharp from 'sharp';
 
 const INK = '#111111';
-const MUTED = '#5e5e5e';
 const FONT = 'Helvetica Neue';
 const svg = await readFile('public/favicon.svg');
 
@@ -28,19 +27,27 @@ await sharp(svg).resize(192, 192).png().toFile('public/icon-192.png');
 await sharp(svg).resize(512, 512).png().toFile('public/icon-512.png');
 await sharp(svg).resize(512, 512).flatten({ background: INK }).png().toFile('public/icon-maskable.png');
 
-// Share image for links (Open Graph), 1200×630
-function text(markup: string, size: number) {
-  return sharp({ text: { text: markup, font: `${FONT} ${size}`, dpi: 72, rgba: true } }).png().toBuffer();
-}
-const title = await text(`<span foreground="${INK}" weight="heavy" letter_spacing="-2048">Kinoprogram for Oslo</span>`, 96);
-const subtitle = await text(`<span foreground="${MUTED}">Alle kinoene i Oslo på én side</span>`, 40);
-const icon = await sharp(svg).resize(112, 112).png().toBuffer();
+// Share image for links (Open Graph), 1200×630: the logo with the name under it, centred
+const title = await sharp({
+  text: {
+    text: `<span foreground="${INK}" weight="heavy" letter_spacing="-2048">Kinoprogram for Oslo</span>`,
+    font: `${FONT} 88`,
+    dpi: 72,
+    rgba: true,
+  },
+})
+  .png()
+  .toBuffer();
+const { width: titleWidth = 0, height: titleHeight = 0 } = await sharp(title).metadata();
+const ICON_SIZE = 200;
+const GAP = 48;
+const top = Math.round((630 - ICON_SIZE - GAP - titleHeight) / 2);
+const icon = await sharp(svg).resize(ICON_SIZE, ICON_SIZE).png().toBuffer();
 
 await sharp({ create: { width: 1200, height: 630, channels: 4, background: '#ffffff' } })
   .composite([
-    { input: icon, left: 80, top: 80 },
-    { input: title, left: 80, top: 330 },
-    { input: subtitle, left: 82, top: 470 },
+    { input: icon, left: (1200 - ICON_SIZE) / 2, top },
+    { input: title, left: Math.round((1200 - titleWidth) / 2), top: top + ICON_SIZE + GAP },
   ])
   .png()
   .toFile('public/og.png');
