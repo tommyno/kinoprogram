@@ -1,0 +1,154 @@
+/* A row of its own at the bottom of the footer */
+.button {
+  display: none;
+  flex-basis: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Only on touch screens, and not once the site is running as the installed app */
+@media (pointer: coarse) and (display-mode: browser) {
+  .button {
+    display: inline-flex;
+  }
+}
+
+/* A sheet along the bottom of the screen, where the thumb is */
+.dialog {
+  width: 100%;
+  max-width: 480px;
+  max-height: 90dvh;
+  margin: auto auto 0;
+  padding: 24px 20px calc(20px + env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: 12px 12px 0 0;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 0.4);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dialog[open] {
+    animation: slide-up 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .dialog[open]::backdrop {
+    animation: fade-in 300ms ease-out;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.intro {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* The icon as it will look on the home screen */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.app img {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.lead {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.steps {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+  counter-reset: step;
+  font-size: 15px;
+}
+
+/* Tall lines, so the drawn buttons fit inline with the text */
+.steps li {
+  position: relative;
+  padding-left: 40px;
+  line-height: 32px;
+  counter-increment: step;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  top: 2px;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Drawn like the browser's own button, so it is easy to spot */
+.key {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin: 0 2px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  vertical-align: middle;
+}
+
+.close {
+  width: 100%;
+  min-height: 48px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 15px;
+  font-weight: 700;
+}

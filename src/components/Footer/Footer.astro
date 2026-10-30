@@ -1,4 +1,5 @@
 ---
+import InstallApp from '@components/InstallApp/InstallApp.astro';
 import styles from './Footer.module.css';
 
 type Props = {
@@ -22,6 +23,7 @@ const { noTopButton = false } = Astro.props;
 <footer class={styles.footer}>
   <span>Programdata fra <a href="https://www.filmweb.no">Filmweb</a> og <a href="https://www.cinemateket.no">Cinemateket</a></span>
   <span>Fork på <a href="https://github.com/tommyno/kinoprogram">GitHub</a></span>
+  <InstallApp />
 </footer>
 
 <script>
