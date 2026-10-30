@@ -20,9 +20,7 @@ A static Astro site that is rebuilt on a schedule; the program is fetched from F
 ## Deployment
 
 - Vercel builds and publishes on every push to `main`. No environment variables are needed.
-- [`.github/workflows/rebuild.yml`](.github/workflows/rebuild.yml) rebuilds the site every hour through a Vercel deploy hook, so the program stays fresh and "i dag" (today) moves to the new date just after midnight.
-  - Setup: Vercel → Settings → Git → Deploy Hooks → create a hook for `main`, and add its URL as the GitHub secret `VERCEL_DEPLOY_HOOK`.
-  - It can also be run by hand from the Actions tab (Run workflow).
+- [`.github/workflows/rebuild.yml`](.github/workflows/rebuild.yml) rebuilds the site every six hours through a Vercel deploy hook, so the program stays fresh and "i dag" (today) moves to the new date after midnight.
 
 ## Data
 
