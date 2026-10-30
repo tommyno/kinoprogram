@@ -17,10 +17,7 @@ const cinemas = groupBy(showings, (s) => s.cinema).sort(([a], [b]) => collator.c
   {
     cinemas.map(([cinema, list]) => (
       <section class={styles.cinema}>
-        <h2 class={styles.name}>
-          {cinema}
-          <span class={styles.count}>{list.length} visninger</span>
-        </h2>
+        <h2 class={styles.name}>{cinema}</h2>
         {list.map((s) => (
           <ShowingLink showing={s} title={films[s.filmId].title} class={styles.row}>
             <span class={styles.time}>{s.time}</span>
