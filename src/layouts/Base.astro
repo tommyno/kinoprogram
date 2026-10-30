@@ -2,11 +2,14 @@
 import { Font } from 'astro:assets';
 import '@styles/global.css';
 import { BUILD_ID } from '@lib/build.ts';
+import styles from './Base.module.css';
 
 type Props = {
   title: string;
   description?: string;
   noindex?: boolean;
+  /** Added to the page's <main>. */
+  class?: string;
 };
 
 const SITE_NAME = 'Kinoprogram for Oslo';
@@ -15,6 +18,7 @@ const {
   title,
   description = 'Hva går på kino i Oslo? Alle filmene og tidene fra alle kinoene i byen, samlet på én side.',
   noindex = false,
+  class: className,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const image = new URL('/og.png', Astro.site);
@@ -68,7 +72,9 @@ const image = new URL('/og.png', Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <slot />
+    <main class:list={[styles.page, className]}>
+      <slot />
+    </main>
   </body>
 </html>
 

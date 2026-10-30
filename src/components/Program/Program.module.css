@@ -3,7 +3,7 @@
   display: contents;
 }
 
-/* Equal thirds on phones, natural width on wider screens */
+/* Equal widths on phones, natural width on wider screens */
 .tabs {
   position: relative;
   display: flex;

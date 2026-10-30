@@ -3,10 +3,9 @@ import Base from '@layouts/Base.astro';
 import Footer from '@components/Footer/Footer.astro';
 import Poster from '@components/Poster/Poster.astro';
 import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
-import { filmDays } from '@lib/program.ts';
+import { filmDays, filmMeta } from '@lib/program.ts';
 import { getProgram } from '@lib/source.ts';
-import { dayLabel, formatDay, formatDuration, programNow } from '@lib/time.ts';
-import pageStyles from '@components/ProgramPage/ProgramPage.module.css';
+import { dayLabel, formatDay, programNow } from '@lib/time.ts';
 import styles from './FilmPage.module.css';
 
 type Props = {
@@ -18,76 +17,66 @@ const program = await getProgram();
 const today = programNow().day;
 const film = program.films[filmId];
 const days = filmDays(program, filmId, today);
-const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join(' · ');
+const meta = filmMeta(film);
 // pageUrl is the film's page at Filmweb, or at Cinemateket for its own screenings
 const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? 'Cinemateket' : 'Filmweb';
 ---
 
 <Base title={`${film.title} – Kinoprogram for Oslo`} description={`Alle visningene av ${film.title} på kino i Oslo, dag for dag.`}>
-  <main class={pageStyles.page}>
-    <a href="/" class={styles.back} data-back>← Kinoprogram for Oslo</a>
+  <a href="/" class={styles.back} data-back>← Kinoprogram for Oslo</a>
 
-    <header class={styles.header}>
-      <div class={styles.poster} data-poster>
-        <Poster film={film} sizes="(min-width: 700px) 160px, 104px" />
-      </div>
-      <div class={styles.heading} data-heading>
-        <h1 class={styles.title}>{film.title}</h1>
-        {meta && <p class={styles.meta}>{meta}</p>}
-        {film.synopsis && <p class={styles.synopsis} data-synopsis>{film.synopsis}</p>}
-        <a href={film.pageUrl} class={styles.source} target="_blank" rel="noopener">
-          {sourceName}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
-          </svg>
-        </a>
-      </div>
-    </header>
-
-    <div>
-      {
-        days.map(([day, list], index) => {
-          const label = dayLabel(day, today);
-          return (
-            <section class={styles.day} data-day={day} data-stagger style={`--i: ${index}`}>
-              <h2 class={styles.dayHeading}>
-                <span class={styles.dayLabel}>{label}</span>
-                {label !== formatDay(day) && <span class={styles.date}>{formatDay(day)}</span>}
-              </h2>
-              <div class={styles.times}>
-                {list.map((s) => (
-                  <ShowingLink showing={s} title={film.title} class={styles.row}>
-                    <span class={styles.time}>{s.time}</span>
-                    <span class={styles.where}>{s.cinema}</span>
-                    <span class={styles.screen}>{s.screen}</span>
-                  </ShowingLink>
-                ))}
-              </div>
-            </section>
-          );
-        })
-      }
+  <header class={styles.header}>
+    <div class={styles.poster} data-poster>
+      <Poster film={film} sizes="(min-width: 700px) 160px, 104px" />
     </div>
+    <div class={styles.heading} data-heading>
+      <h1 class={styles.title}>{film.title}</h1>
+      {meta && <p class={styles.meta}>{meta}</p>}
+      {film.synopsis && <p class={styles.synopsis} data-synopsis>{film.synopsis}</p>}
+      <a href={film.pageUrl} class={styles.source} target="_blank" rel="noopener">
+        {sourceName}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
+        </svg>
+      </a>
+    </div>
+  </header>
 
-    <Footer />
-  </main>
+  <div>
+    {
+      days.map(([day, list], index) => {
+        const label = dayLabel(day, today);
+        return (
+          <section class={styles.day} data-stagger style={`--i: ${index}`}>
+            <h2 class={styles.dayHeading}>
+              <span class={styles.dayLabel}>{label}</span>
+              {label !== formatDay(day) && <span class={styles.date}>{formatDay(day)}</span>}
+            </h2>
+            <div class={styles.times}>
+              {list.map((s) => (
+                <ShowingLink showing={s} title={film.title} class={styles.row}>
+                  <span class={styles.time}>{s.time}</span>
+                  <span class={styles.where}>{s.cinema}</span>
+                  <span class={styles.screen}>{s.screen}</span>
+                </ShowingLink>
+              ))}
+            </div>
+          </section>
+        );
+      })
+    }
+  </div>
+
+  <Footer />
 </Base>
 
 <script>
-  import { isPast, programNow } from '@lib/time.ts';
+  import { markPast } from '@lib/time.ts';
 
   // Started showings grey out as the clock passes them, as in the program
-  function markPast() {
-    const now = programNow();
-    for (const section of document.querySelectorAll<HTMLElement>('[data-day]')) {
-      for (const link of section.querySelectorAll<HTMLElement>('[data-minutes]')) {
-        link.toggleAttribute('data-past', isPast({ day: section.dataset.day!, minutes: Number(link.dataset.minutes) }, now));
-      }
-    }
-  }
-
-  markPast();
-  setInterval(markPast, 60_000);
+  const links = [...document.querySelectorAll<HTMLElement>('[data-minutes]')];
+  markPast(links);
+  setInterval(() => markPast(links), 60_000);
 
   // Coming from the program, go back in history instead, so it opens at the same date, sort and scroll position
   const back = document.querySelector<HTMLAnchorElement>('[data-back]')!;
@@ -98,50 +87,48 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
     history.back();
   });
 
-  const poster = document.querySelector<HTMLElement>('[data-poster]')!;
-  const heading = document.querySelector<HTMLElement>('[data-heading]')!;
   const synopsis = document.querySelector<HTMLElement>('[data-synopsis]');
-  let expanded = false;
 
-  /** Cuts the synopsis off so the text column is no taller than the poster, until it is clicked open. */
-  function fitSynopsis() {
-    if (!synopsis) return;
-    synopsis.style.maxHeight = '';
-    const overflow = heading.offsetHeight - poster.offsetHeight;
-    const clamped = !expanded && overflow > 0;
-    synopsis.toggleAttribute('data-clamped', clamped);
-    if (clamped) {
-      // At least two lines, so there is something to fade
-      const minimum = 2 * parseFloat(getComputedStyle(synopsis).lineHeight);
-      synopsis.style.maxHeight = `${Math.max(synopsis.offsetHeight - overflow, minimum)}px`;
-    }
-    // Opens from the keyboard too while cut off
-    if (clamped) {
-      synopsis.tabIndex = 0;
-      synopsis.setAttribute('role', 'button');
-      synopsis.setAttribute('aria-expanded', 'false');
-    } else {
-      synopsis.removeAttribute('tabindex');
-      synopsis.removeAttribute('role');
-      synopsis.removeAttribute('aria-expanded');
-    }
-  }
-
-  function expandSynopsis() {
-    if (!synopsis?.hasAttribute('data-clamped')) return;
-    expanded = true;
-    fitSynopsis();
-  }
-
-  synopsis?.addEventListener('click', expandSynopsis);
-  synopsis?.addEventListener('keydown', (event) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    event.preventDefault();
-    expandSynopsis();
-  });
-
-  // Line breaks change with the viewport and once the font loads
   if (synopsis) {
+    const poster = document.querySelector<HTMLElement>('[data-poster]')!;
+    const heading = document.querySelector<HTMLElement>('[data-heading]')!;
+    let expanded = false;
+
+    /** Cuts the synopsis off so the text column is no taller than the poster, until it is clicked open. */
+    const fitSynopsis = () => {
+      synopsis.style.maxHeight = '';
+      const overflow = heading.offsetHeight - poster.offsetHeight;
+      const clamped = !expanded && overflow > 0;
+      synopsis.toggleAttribute('data-clamped', clamped);
+      if (clamped) {
+        // At least two lines, so there is something to fade
+        const minimum = 2 * parseFloat(getComputedStyle(synopsis).lineHeight);
+        synopsis.style.maxHeight = `${Math.max(synopsis.offsetHeight - overflow, minimum)}px`;
+        // Opens from the keyboard too while cut off
+        synopsis.tabIndex = 0;
+        synopsis.setAttribute('role', 'button');
+        synopsis.setAttribute('aria-expanded', 'false');
+      } else {
+        synopsis.removeAttribute('tabindex');
+        synopsis.removeAttribute('role');
+        synopsis.removeAttribute('aria-expanded');
+      }
+    };
+
+    const expandSynopsis = () => {
+      if (!synopsis.hasAttribute('data-clamped')) return;
+      expanded = true;
+      fitSynopsis();
+    };
+
+    synopsis.addEventListener('click', expandSynopsis);
+    synopsis.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      expandSynopsis();
+    });
+
+    // Line breaks change with the viewport and once the font loads
     new ResizeObserver(fitSynopsis).observe(heading.parentElement!);
     document.fonts.ready.then(fitSynopsis);
   }

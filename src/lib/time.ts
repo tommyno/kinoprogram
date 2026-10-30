@@ -59,12 +59,23 @@ export function isPast(slot: ProgramTime, now: ProgramTime): boolean {
   return slot.minutes + PAST_GRACE_MINUTES < now.minutes;
 }
 
-/** "i dag", "i morgen" or e.g. "lørdag 31. oktober". */
+/** Marks started showing links (see ShowingLink) with data-past, which global.css greys out, and says so in their label. */
+export function markPast(links: HTMLElement[]): void {
+  const now = programNow();
+  for (const link of links) {
+    const past = isPast({ day: link.dataset.day!, minutes: Number(link.dataset.minutes) }, now);
+    const label = (link.dataset.label ??= link.getAttribute('aria-label')!);
+    link.toggleAttribute('data-past', past);
+    link.setAttribute('aria-label', past ? `${label} (startet)` : label);
+  }
+}
+
 /** "2026-11-01" → "søndag 1. november". */
 export function formatDay(day: string): string {
   return labelFormat.format(new Date(`${day}T12:00:00Z`));
 }
 
+/** "i dag", "i morgen" or e.g. "lørdag 31. oktober". */
 export function dayLabel(day: string, today: string): string {
   if (day === today) return 'i dag';
   if (day === addDays(today, 1)) return 'i morgen';

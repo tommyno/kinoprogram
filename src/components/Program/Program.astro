@@ -14,17 +14,16 @@ const SORTS = [
 ];
 
 type Props = {
-  day: string;
   films: Record<string, Film>;
   showings: Showing[];
   /** Every film still showing, for the search. */
   upcoming: Film[];
 };
 
-const { day, films, showings, upcoming } = Astro.props;
+const { films, showings, upcoming } = Astro.props;
 ---
 
-<div class={styles.program} data-program data-day={day}>
+<div class={styles.program} data-program>
   <div role="tablist" aria-label="Visning" class={styles.tabs}>
     {
       SORTS.map((option) => (
@@ -68,12 +67,10 @@ const { day, films, showings, upcoming } = Astro.props;
 </div>
 
 <script>
-  import { isPast, programNow } from '@lib/time.ts';
+  import { markPast } from '@lib/time.ts';
 
   const root = document.querySelector<HTMLElement>('[data-program]')!;
-  const day = root.dataset.day!;
   const links = [...root.querySelectorAll<HTMLElement>('[data-minutes]')];
-  const labels = new Map(links.map((link) => [link, link.getAttribute('aria-label')]));
   const cards = [...root.querySelectorAll<HTMLElement>('[data-card]')];
   const collapsedCount = Number(root.querySelector<HTMLElement>('[data-collapsed-count]')?.dataset.collapsedCount);
   const pastToggle = root.querySelector<HTMLButtonElement>('[data-past-toggle]');
@@ -110,15 +107,6 @@ const { day, films, showings, upcoming } = Astro.props;
     placeIndicator();
   }
 
-  function markPast() {
-    const now = programNow();
-    for (const link of links) {
-      const past = isPast({ day, minutes: Number(link.dataset.minutes) }, now);
-      link.toggleAttribute('data-past', past);
-      link.setAttribute('aria-label', past ? `${labels.get(link)} (startet)` : `${labels.get(link)}`);
-    }
-  }
-
   function updateCard(card: HTMLElement) {
     const rows = rowsIn(card);
     const button = card.querySelector<HTMLButtonElement>('[data-more]')!;
@@ -142,7 +130,7 @@ const { day, films, showings, upcoming } = Astro.props;
   }
 
   function update() {
-    markPast();
+    markPast(links);
     cards.forEach(updateCard);
     updateTimeList();
   }
@@ -187,7 +175,7 @@ const { day, films, showings, upcoming } = Astro.props;
   });
 
   const fromUrl = new URLSearchParams(location.search).get('sorter');
-  if (fromUrl === 'tid' || fromUrl === 'kino' || fromUrl === 'sok') showSort(fromUrl);
+  if (tabs.some((tab) => tab.dataset.sort === fromUrl)) showSort(fromUrl!);
 
   // Tab widths change with the viewport and once the font loads
   const resizeObserver = new ResizeObserver(placeIndicator);

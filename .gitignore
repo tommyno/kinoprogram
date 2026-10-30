@@ -23,5 +23,5 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# Filmweb fetch cache (local live builds)
+# Source fetch cache (local builds)
 .cache/

@@ -1,6 +1,5 @@
 ---
-import { filmPath, type Film } from '@lib/program.ts';
-import { formatDuration } from '@lib/time.ts';
+import { filmMeta, filmPath, type Film } from '@lib/program.ts';
 import Poster from '@components/Poster/Poster.astro';
 import styles from './FilmSearch.module.css';
 
@@ -34,7 +33,7 @@ const { films } = Astro.props;
   <section aria-label="Alle filmer" class={styles.grid}>
     {
       films.map((film, index) => {
-        const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join(' · ');
+        const meta = filmMeta(film);
         return (
           <a href={filmPath(film)} class={styles.card} data-title={film.title} data-stagger style={`--i: ${index}`}>
             <Poster film={film} sizes="(min-width: 1000px) 200px, 45vw" />

@@ -1,5 +1,5 @@
 ---
-// A showing's ticket link. The Program script marks started showings with data-past, which global.css greys out
+// A showing's ticket link. markPast in time.ts marks it once the showing has started
 import type { Showing } from '@lib/program.ts';
 
 type Props = {
@@ -18,6 +18,7 @@ const { showing, title, class: className, hidden } = Astro.props;
   target="_blank"
   rel="noopener"
   aria-label={`${title}, ${showing.time}, ${showing.cinema}`}
+  data-day={showing.day}
   data-minutes={showing.minutes}
   class={className}
   hidden={hidden}

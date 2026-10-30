@@ -1,7 +1,5 @@
 ---
-import { collator, filmPath, type Film, type Showing } from '@lib/program.ts';
-import { formatDuration } from '@lib/time.ts';
-import { groupBy } from '@lib/groupBy.ts';
+import { collator, filmMeta, filmPath, type Film, type Showing } from '@lib/program.ts';
 import Poster from '@components/Poster/Poster.astro';
 import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
 import styles from './FilmGrid.module.css';
@@ -15,14 +13,14 @@ type Props = {
 };
 
 const { films, showings } = Astro.props;
-const groups = groupBy(showings, (s) => s.filmId).sort(([a], [b]) => collator.compare(films[a].title, films[b].title));
+const groups = [...Map.groupBy(showings, (s) => s.filmId)].sort(([a], [b]) => collator.compare(films[a].title, films[b].title));
 ---
 
 <section aria-label="Filmer" class={styles.grid} data-collapsed-count={COLLAPSED_COUNT}>
   {
     groups.map(([filmId, list], index) => {
       const film = films[filmId];
-      const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join(' · ');
+      const meta = filmMeta(film);
       const more = list.length - COLLAPSED_COUNT;
       return (
         <article class={styles.card} data-card data-stagger style={`--i: ${index}`}>

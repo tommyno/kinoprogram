@@ -1,6 +1,5 @@
 ---
 import { collator, type Film, type Showing } from '@lib/program.ts';
-import { groupBy } from '@lib/groupBy.ts';
 import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
 import styles from './CinemaColumns.module.css';
 
@@ -10,7 +9,7 @@ type Props = {
 };
 
 const { films, showings } = Astro.props;
-const cinemas = groupBy(showings, (s) => s.cinema).sort(([a], [b]) => collator.compare(a, b));
+const cinemas = [...Map.groupBy(showings, (s) => s.cinema)].sort(([a], [b]) => collator.compare(a, b));
 ---
 
 <div class={styles.columns}>

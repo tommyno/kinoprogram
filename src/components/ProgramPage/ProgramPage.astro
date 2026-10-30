@@ -6,7 +6,6 @@ import Program from '@components/Program/Program.astro';
 import { collator, upcomingFilms } from '@lib/program.ts';
 import { getProgram } from '@lib/source.ts';
 import { dayLabel, programNow } from '@lib/time.ts';
-import styles from './ProgramPage.module.css';
 
 type Props = {
   day: string;
@@ -25,9 +24,7 @@ const description = `Hva går på kino i Oslo ${label}? Alle filmene og tidene f
 ---
 
 <Base title={`Kinoprogram for Oslo ${label}`} description={description}>
-  <main class={styles.page}>
-    <Header day={day} label={label} today={today} lastDay={lastDay} />
-    <Program day={day} films={films} showings={showings} upcoming={upcoming} />
-    <Footer />
-  </main>
+  <Header day={day} label={label} today={today} lastDay={lastDay} />
+  <Program films={films} showings={showings} upcoming={upcoming} />
+  <Footer />
 </Base>

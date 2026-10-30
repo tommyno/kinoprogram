@@ -39,8 +39,6 @@ const { day, label, today, lastDay } = Astro.props;
 </header>
 
 <script>
-  import { programNow } from '@lib/time.ts';
-
   const input = document.querySelector<HTMLInputElement>('[data-date-picker]');
 
   // Desktop browsers only open the calendar from its icon; open it from anywhere on the label
@@ -57,10 +55,5 @@ const { day, label, today, lastDay } = Astro.props;
     if (!input.value) return;
     const path = input.value === input.dataset.today ? '/' : `/${input.value}`;
     location.href = path + location.search;
-  });
-
-  // An installed app resumes without reloading; after midnight, fetch the new day's program
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && programNow().day !== input?.dataset.today) location.reload();
   });
 </script>
