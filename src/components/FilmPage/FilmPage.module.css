@@ -42,10 +42,14 @@
   white-space: pre-line;
 }
 
-/* Cut off by the script so the text column is no taller than the poster; fades out, a click shows the rest */
+/* Too long for the poster, so a click opens and closes it */
+.synopsis[role='button'] {
+  cursor: pointer;
+}
+
+/* Cut off by the script so the text column is no taller than the poster; fades out */
 .synopsis[data-clamped] {
   overflow: hidden;
-  cursor: pointer;
   mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
 }
 

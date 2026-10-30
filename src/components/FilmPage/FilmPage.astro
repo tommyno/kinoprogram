@@ -94,7 +94,7 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
     const heading = document.querySelector<HTMLElement>('[data-heading]')!;
     let expanded = false;
 
-    /** Cuts the synopsis off so the text column is no taller than the poster, until it is clicked open. */
+    /** Cuts the synopsis off so the text column is no taller than the poster; a click opens and closes it. */
     const fitSynopsis = () => {
       synopsis.style.maxHeight = '';
       const overflow = heading.offsetHeight - poster.offsetHeight;
@@ -104,10 +104,12 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
         // At least two lines, so there is something to fade
         const minimum = 2 * parseFloat(getComputedStyle(synopsis).lineHeight);
         synopsis.style.maxHeight = `${Math.max(synopsis.offsetHeight - overflow, minimum)}px`;
-        // Opens from the keyboard too while cut off
+      }
+      // Opens and closes from the keyboard too while it is too long for the poster
+      if (overflow > 0) {
         synopsis.tabIndex = 0;
         synopsis.setAttribute('role', 'button');
-        synopsis.setAttribute('aria-expanded', 'false');
+        synopsis.setAttribute('aria-expanded', String(expanded));
       } else {
         synopsis.removeAttribute('tabindex');
         synopsis.removeAttribute('role');
@@ -115,17 +117,17 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
       }
     };
 
-    const expandSynopsis = () => {
-      if (!synopsis.hasAttribute('data-clamped')) return;
-      expanded = true;
+    const toggleSynopsis = () => {
+      if (!synopsis.hasAttribute('role')) return;
+      expanded = !expanded;
       fitSynopsis();
     };
 
-    synopsis.addEventListener('click', expandSynopsis);
+    synopsis.addEventListener('click', toggleSynopsis);
     synopsis.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
-      expandSynopsis();
+      toggleSynopsis();
     });
 
     // Line breaks change with the viewport and once the font loads
