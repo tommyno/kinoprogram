@@ -1,15 +1,15 @@
 ---
-import Base from '../layouts/Base.astro';
-import Header from './Header.astro';
-import Program from './Program.tsx';
-import { collator } from '../lib/program.ts';
-import { getProgram } from '../lib/source.ts';
-import { dayLabel, programNow } from '../lib/time.ts';
+import Base from '../../layouts/Base.astro';
+import Header from '../Header/Header.astro';
+import Program from '../Program/Program.tsx';
+import { collator } from '../../lib/program.ts';
+import { getProgram } from '../../lib/source.ts';
+import { dayLabel, programNow } from '../../lib/time.ts';
 import styles from './ProgramPage.module.css';
 
-interface Props {
+type Props = {
   day: string;
-}
+};
 
 const { day } = Astro.props;
 const program = await getProgram();

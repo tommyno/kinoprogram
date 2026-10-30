@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import type { Film, Showing } from '../lib/program.ts';
-import { isPast, programNow, type ProgramTime } from '../lib/time.ts';
-import CinemaColumns from './CinemaColumns.tsx';
-import FilmGrid from './FilmGrid.tsx';
-import TimeList from './TimeList.tsx';
+import type { Film, Showing } from '../../lib/program.ts';
+import { isPast, programNow, type ProgramTime } from '../../lib/time.ts';
+import CinemaColumns from '../CinemaColumns/CinemaColumns.tsx';
+import FilmGrid from '../FilmGrid/FilmGrid.tsx';
+import TimeList from '../TimeList/TimeList.tsx';
 import styles from './Program.module.css';
 
 type Sort = 'film' | 'tid' | 'kino';
@@ -14,10 +14,10 @@ const SORTS: { key: Sort; label: string }[] = [
   { key: 'kino', label: 'Kino' },
 ];
 
-interface Props {
+type Props = {
   films: Record<string, Film>;
   showings: Showing[];
-}
+};
 
 /** Current Oslo time, refreshed every minute. Null until mounted, so server and client render alike. */
 function useNow(): ProgramTime | null {

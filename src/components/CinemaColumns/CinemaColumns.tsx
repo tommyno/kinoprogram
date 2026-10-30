@@ -1,11 +1,12 @@
-import { collator, type Film } from '../lib/program.ts';
-import { groupBy, ShowingLink, type ShowingView } from './showing.tsx';
+import { collator, type Film } from '../../lib/program.ts';
+import { groupBy } from '../../lib/groupBy.ts';
+import { ShowingLink, type ShowingView } from '../ShowingLink/ShowingLink.tsx';
 import styles from './CinemaColumns.module.css';
 
-interface Props {
+type Props = {
   films: Record<string, Film>;
   showings: ShowingView[];
-}
+};
 
 export default function CinemaColumns({ films, showings }: Props) {
   const cinemas = groupBy(showings, (s) => s.cinema).sort(([a], [b]) => collator.compare(a, b));

@@ -8,7 +8,7 @@ export const CINEMA = 'Cinemateket';
 // The feed has no images, so every Cinemateket film gets the same logo poster
 const POSTER = '/posters/cinemateket.svg';
 
-export interface CinemateketEvent {
+export type CinemateketEvent = {
   uid: string;
   /** Oslo local time, "2026-10-29T18:00:00". */
   start: string;
@@ -17,7 +17,7 @@ export interface CinemateketEvent {
   /** "Lillebil" or "Tancred". */
   screen: string;
   url: string;
-}
+};
 
 export async function fetchCinemateketFeed(): Promise<string> {
   const res = await fetch(FEED_URL, { headers: { 'user-agent': USER_AGENT } });

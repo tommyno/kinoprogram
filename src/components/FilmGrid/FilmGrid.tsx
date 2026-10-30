@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { collator, type Film } from '../lib/program.ts';
-import { formatDuration } from '../lib/time.ts';
-import { groupBy, ShowingLink, type ShowingView } from './showing.tsx';
+import { collator, type Film } from '../../lib/program.ts';
+import { formatDuration } from '../../lib/time.ts';
+import { groupBy } from '../../lib/groupBy.ts';
+import { ShowingLink, type ShowingView } from '../ShowingLink/ShowingLink.tsx';
 import styles from './FilmGrid.module.css';
 
 const COLLAPSED_COUNT = 3;
 
-interface Props {
+type Props = {
   films: Record<string, Film>;
   showings: ShowingView[];
-}
+};
 
 function Poster({ film }: { film: Film }) {
   if (!film.posterUrl) {

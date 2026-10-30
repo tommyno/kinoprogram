@@ -4,10 +4,10 @@ const TIME_ZONE = 'Europe/Oslo';
 const PAST_GRACE_MINUTES = 15;
 
 /** A point in the program: the day and minutes since midnight. */
-export interface ProgramTime {
+export type ProgramTime = {
   day: string;
   minutes: number;
-}
+};
 
 const clockFormat = new Intl.DateTimeFormat('nb-NO', {
   timeZone: TIME_ZONE,

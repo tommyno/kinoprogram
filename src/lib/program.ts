@@ -1,4 +1,4 @@
-export interface Film {
+export type Film = {
   title: string;
   minutes: number | null;
   ageRating: string | null;
@@ -7,9 +7,9 @@ export interface Film {
   posterSrcSet?: string;
   /** The film's page at the source: Filmweb, or Cinemateket for its own screenings. */
   pageUrl: string;
-}
+};
 
-export interface Showing {
+export type Showing = {
   /** Stable id within the source. */
   key: string;
   filmId: string;
@@ -24,13 +24,13 @@ export interface Showing {
   minutes: number;
   /** Where to buy tickets: the booking page, or the film's page when there is none. */
   bookingUrl: string;
-}
+};
 
-export interface Program {
+export type Program = {
   films: Record<string, Film>;
   /** Showings per day. */
   days: Record<string, Showing[]>;
-}
+};
 
 export const collator = new Intl.Collator('nb');
 

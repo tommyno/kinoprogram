@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import type { Film } from '../lib/program.ts';
-import { groupBy, ShowingLink, type ShowingView } from './showing.tsx';
+import type { Film } from '../../lib/program.ts';
+import { groupBy } from '../../lib/groupBy.ts';
+import { ShowingLink, type ShowingView } from '../ShowingLink/ShowingLink.tsx';
 import styles from './TimeList.module.css';
 
-interface Props {
+type Props = {
   films: Record<string, Film>;
   showings: ShowingView[];
-}
+};
 
 export default function TimeList({ films, showings }: Props) {
   const [showPast, setShowPast] = useState(false);
