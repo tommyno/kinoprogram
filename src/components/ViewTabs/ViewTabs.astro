@@ -1,0 +1,54 @@
+---
+import styles from './ViewTabs.module.css';
+
+const VIEWS = [
+  { key: 'film', label: 'Film', href: '/' },
+  { key: 'tid', label: 'Tidspunkt', href: '/?sorter=tid' },
+  { key: 'kino', label: 'Kino', href: '/?sorter=kino' },
+];
+
+type Props = {
+  /** On the search page the views link back to today's program; otherwise they are tabs the Program script switches. */
+  onSearch?: boolean;
+};
+
+const { onSearch = false } = Astro.props;
+---
+
+{
+  onSearch ? (
+    <nav aria-label="Visning" class={styles.tabs}>
+      {VIEWS.map((view) => (
+        <a href={view.href} class={styles.tab}>
+          {view.label}
+        </a>
+      ))}
+      <a href="/sok" class={styles.tab} aria-current="page">
+        Søk
+      </a>
+    </nav>
+  ) : (
+    <div class={styles.tabs}>
+      <div role="tablist" aria-label="Visning" class={styles.tablist}>
+        {VIEWS.map((view) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${view.key}`}
+            class={styles.tab}
+            aria-selected={view.key === 'film' ? 'true' : 'false'}
+            aria-controls={`view-${view.key}`}
+            tabindex={view.key === 'film' ? 0 : -1}
+            data-sort={view.key}
+          >
+            {view.label}
+          </button>
+        ))}
+      </div>
+      <a href="/sok" class={styles.tab}>
+        Søk
+      </a>
+      <span class={styles.indicator} aria-hidden="true" data-indicator />
+    </div>
+  )
+}

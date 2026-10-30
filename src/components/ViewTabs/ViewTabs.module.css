@@ -1,0 +1,67 @@
+/* Equal widths on phones, natural width on wider screens */
+.tabs {
+  position: relative;
+  display: flex;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+/* Three of the four tabs; Søk beside it is a link to its own page. All four share the row as equals */
+.tablist {
+  display: contents;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 16px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tab[aria-selected='true'],
+.tab[aria-current='page'] {
+  color: var(--ink);
+}
+
+/* The active bar, placed under the selected tab by the Program script; overlaps the tablist line */
+.indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 3px;
+  background: var(--ink);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .indicator[data-slide] {
+    transition:
+      transform 250ms ease-out,
+      width 250ms ease-out;
+  }
+}
+
+/* The same bar on the search page, where there is nothing to slide */
+.tab[aria-current='page'] {
+  position: relative;
+}
+
+.tab[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 3px;
+  background: var(--ink);
+}
+
+@media (min-width: 640px) {
+  .tab {
+    flex: none;
+  }
+}

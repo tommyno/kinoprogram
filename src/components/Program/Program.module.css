@@ -3,49 +3,6 @@
   display: contents;
 }
 
-/* Equal widths on phones, natural width on wider screens */
-.tabs {
-  position: relative;
-  display: flex;
-  border-bottom: 1px solid var(--line-strong);
-}
-
-.tab {
-  flex: 1;
-  min-height: 44px;
-  padding: 0 16px;
-  color: var(--muted);
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.tab[aria-selected='true'] {
-  color: var(--ink);
-}
-
-/* The active bar, placed under the selected tab by the Program script; overlaps the tablist line */
-.indicator {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  height: 3px;
-  background: var(--ink);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .indicator[data-slide] {
-    transition:
-      transform 250ms ease-out,
-      width 250ms ease-out;
-  }
-}
-
-@media (min-width: 640px) {
-  .tab {
-    flex: none;
-  }
-}
-
 .empty {
   padding: 48px 16px;
   border: 1px dashed var(--line-strong);

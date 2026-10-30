@@ -1,0 +1,19 @@
+---
+import Base from '@layouts/Base.astro';
+import FilmSearch from '@components/FilmSearch/FilmSearch.astro';
+import Footer from '@components/Footer/Footer.astro';
+import Header from '@components/Header/Header.astro';
+import ViewTabs from '@components/ViewTabs/ViewTabs.astro';
+import { upcomingFilms } from '@lib/program.ts';
+import { getProgram } from '@lib/source.ts';
+import { programNow } from '@lib/time.ts';
+
+const films = upcomingFilms(await getProgram(), programNow().day);
+---
+
+<Base title="Søk etter film – Kinoprogram for Oslo" description="Søk blant alle filmene som går på kino i Oslo.">
+  <Header />
+  <ViewTabs onSearch />
+  <FilmSearch films={films} />
+  <Footer />
+</Base>
