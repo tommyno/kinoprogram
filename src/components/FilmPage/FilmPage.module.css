@@ -12,9 +12,10 @@
   text-decoration: underline;
 }
 
+/* Top-aligned on phones, where the title can wrap to several lines */
 .header {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 16px 24px;
   padding-bottom: 24px;
   border-bottom: 1px solid var(--line-strong);
@@ -32,6 +33,22 @@
   min-width: 0;
 }
 
+/* Source line breaks are kept */
+.synopsis {
+  max-width: 65ch;
+  margin: 4px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+/* Cut off by the script so the text column is no taller than the poster; fades out, a click shows the rest */
+.synopsis[data-clamped] {
+  overflow: hidden;
+  cursor: pointer;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
+}
+
 .title {
   font-size: clamp(28px, 5vw, 48px);
   font-weight: 800;
@@ -46,6 +63,10 @@
 
 .source {
   align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
   font-size: 13px;
   font-weight: 600;
   text-underline-offset: 3px;
@@ -132,6 +153,10 @@
 }
 
 @media (min-width: 700px) {
+  .header {
+    align-items: flex-end;
+  }
+
   .poster {
     width: 160px;
   }

@@ -63,13 +63,22 @@ describe('filmwebProgram', () => {
   it('builds films with Filmweb links and resized posters', () => {
     const result = programOf(
       [show({})],
-      [{ mainVersionId: 'EDI1', lengthInMinutes: 100, rating: null, sanityImagePosterUrl: 'https://cdn.sanity.io/p.jpg' }],
+      [
+        {
+          mainVersionId: 'EDI1',
+          lengthInMinutes: 100,
+          rating: null,
+          sanityImagePosterUrl: 'https://cdn.sanity.io/p.jpg',
+          synopsisIngress: '<i>Om filmen.</i>',
+        },
+      ],
     );
     expect(result.films.EDI1).toMatchObject({
       title: 'Film',
       slug: 'film',
       minutes: 100,
       ageRating: '12 år',
+      synopsis: 'Om filmen.',
       posterUrl: 'https://cdn.sanity.io/p.jpg?w=320&auto=format',
       pageUrl: 'https://www.filmweb.no/film/EDI1',
     });

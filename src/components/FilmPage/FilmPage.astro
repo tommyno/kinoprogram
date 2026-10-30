@@ -19,6 +19,8 @@ const today = programNow().day;
 const film = program.films[filmId];
 const days = filmDays(program, filmId, today);
 const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join(' · ');
+// pageUrl is the film's page at Filmweb, or at Cinemateket for its own screenings
+const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? 'Cinemateket' : 'Filmweb';
 ---
 
 <Base title={`${film.title} – Kinoprogram for Oslo`} description={`Alle visningene av ${film.title} på kino i Oslo, dag for dag.`}>
@@ -26,13 +28,19 @@ const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join
     <a href="/" class={styles.back}>← Kinoprogram for Oslo</a>
 
     <header class={styles.header}>
-      <div class={styles.poster}>
+      <div class={styles.poster} data-poster>
         <Poster film={film} sizes="(min-width: 700px) 160px, 104px" />
       </div>
-      <div class={styles.heading}>
+      <div class={styles.heading} data-heading>
         <h1 class={styles.title}>{film.title}</h1>
         {meta && <p class={styles.meta}>{meta}</p>}
-        <a href={film.pageUrl} class={styles.source} target="_blank" rel="noopener">Mer om filmen ↗</a>
+        {film.synopsis && <p class={styles.synopsis} data-synopsis>{film.synopsis}</p>}
+        <a href={film.pageUrl} class={styles.source} target="_blank" rel="noopener">
+          Mer på {sourceName}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
+          </svg>
+        </a>
       </div>
     </header>
 
@@ -80,4 +88,52 @@ const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join
 
   markPast();
   setInterval(markPast, 60_000);
+
+  const poster = document.querySelector<HTMLElement>('[data-poster]')!;
+  const heading = document.querySelector<HTMLElement>('[data-heading]')!;
+  const synopsis = document.querySelector<HTMLElement>('[data-synopsis]');
+  let expanded = false;
+
+  /** Cuts the synopsis off so the text column is no taller than the poster, until it is clicked open. */
+  function fitSynopsis() {
+    if (!synopsis) return;
+    synopsis.style.maxHeight = '';
+    const overflow = heading.offsetHeight - poster.offsetHeight;
+    const clamped = !expanded && overflow > 0;
+    synopsis.toggleAttribute('data-clamped', clamped);
+    if (clamped) {
+      // At least two lines, so there is something to fade
+      const minimum = 2 * parseFloat(getComputedStyle(synopsis).lineHeight);
+      synopsis.style.maxHeight = `${Math.max(synopsis.offsetHeight - overflow, minimum)}px`;
+    }
+    // Opens from the keyboard too while cut off
+    if (clamped) {
+      synopsis.tabIndex = 0;
+      synopsis.setAttribute('role', 'button');
+      synopsis.setAttribute('aria-expanded', 'false');
+    } else {
+      synopsis.removeAttribute('tabindex');
+      synopsis.removeAttribute('role');
+      synopsis.removeAttribute('aria-expanded');
+    }
+  }
+
+  function expandSynopsis() {
+    if (!synopsis?.hasAttribute('data-clamped')) return;
+    expanded = true;
+    fitSynopsis();
+  }
+
+  synopsis?.addEventListener('click', expandSynopsis);
+  synopsis?.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    expandSynopsis();
+  });
+
+  // Line breaks change with the viewport and once the font loads
+  if (synopsis) {
+    new ResizeObserver(fitSynopsis).observe(heading.parentElement!);
+    document.fonts.ready.then(fitSynopsis);
+  }
 </script>

@@ -22,7 +22,7 @@ const SHOWS_QUERY = `query Shows($location: String) {
 const MOVIES_QUERY = `query Movies($location: String) {
   movieQuery {
     getCurrentMovies(location: $location) {
-      mainVersionId lengthInMinutes rating sanityImagePosterUrl
+      mainVersionId lengthInMinutes rating sanityImagePosterUrl synopsisIngress
     }
   }
 }`;
@@ -46,6 +46,7 @@ export const RawMovie = z.object({
   lengthInMinutes: z.number().nullable(),
   rating: z.string().nullable(),
   sanityImagePosterUrl: z.string().nullable(),
+  synopsisIngress: z.string().nullable(),
 });
 export type RawMovie = z.infer<typeof RawMovie>;
 
@@ -111,6 +112,11 @@ function ageRating(rating: string | null): string | null {
   return r === 'Alle' ? 'Tillatt for alle' : r;
 }
 
+// A few ingresses have HTML in them, like <i>…</i>
+function plainText(value: string | null | undefined): string | null {
+  return orNull(value?.replace(/<[^>]+>/g, ''));
+}
+
 function posterSrc(url: string, width: number): string {
   return `${url}${url.includes('?') ? '&' : '?'}w=${width}&auto=format`;
 }
@@ -139,6 +145,7 @@ export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
       slug: slugify(title),
       minutes: show.lengthInMinutes || movie?.lengthInMinutes || null,
       ageRating: ageRating(show.rating) ?? ageRating(movie?.rating ?? null),
+      synopsis: plainText(movie?.synopsisIngress),
       posterUrl: poster && posterSrc(poster, 320),
       posterSrcSet: poster ? POSTER_WIDTHS.map((w) => `${posterSrc(poster, w)} ${w}w`).join(', ') : undefined,
       pageUrl: FILM_URL + filmId,
