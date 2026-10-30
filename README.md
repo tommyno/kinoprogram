@@ -4,9 +4,11 @@
 
 Every cinema in Oslo and what's showing, on one page, without ads or bloat.
 
-A static Astro site that is rebuilt on a schedule; the program is fetched from Filmweb and Cinemateket at build time.
+[![Kinoprogram for Oslo](.github/screenshot.png)](https://kinoprogram.vercel.app)
 
-## Commands
+## Development
+
+A static Astro site that is rebuilt on a schedule; the program is fetched from Filmweb and Cinemateket at build time.
 
 | Command        | What it does                                                                                           |
 | :------------- | :----------------------------------------------------------------------------------------------------- |
