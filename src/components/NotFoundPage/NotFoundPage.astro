@@ -1,0 +1,26 @@
+---
+import Base from '@layouts/Base.astro';
+import Footer from '@components/Footer/Footer.astro';
+import headerStyles from '@components/Header/Header.module.css';
+import pageStyles from '@components/ProgramPage/ProgramPage.module.css';
+import styles from './NotFoundPage.module.css';
+---
+
+<Base title="Fant ikke siden – Kinoprogram for Oslo" noindex>
+  <main class:list={[pageStyles.page, styles.page]}>
+    <header>
+      <p class={headerStyles.title}>Kinoprogram for Oslo</p>
+    </header>
+
+    <section class={styles.notFound}>
+      <h1 class={styles.title}>Fant ikke siden</h1>
+      <p class={styles.text}>Datoen eller filmens siste visning kan ha passert, eller lenken er feil.</p>
+      <div class={styles.actions}>
+        <a href="/" class={styles.primary}>Se dagens kinoprogram</a>
+        <a href="/?sorter=sok" class={styles.secondary}>Søk etter film</a>
+      </div>
+    </section>
+
+    <Footer noTopButton />
+  </main>
+</Base>
