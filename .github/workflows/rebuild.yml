@@ -1,11 +1,12 @@
-# Rebuilds the site on Vercel every hour so the program stays fresh.
+# Rebuilds the site on Vercel every six hours so the program stays fresh.
 # Needs the repository secret VERCEL_DEPLOY_HOOK (Vercel → Settings → Git → Deploy Hooks).
 name: Rebuild
 
 on:
   schedule:
-    # Five past every hour (UTC); also switches "i dag" to the new date just after midnight
-    - cron: '5 * * * *'
+    # Every six hours at an off-peak minute (UTC). The 23:37 run lands just after midnight
+    # in Oslo in winter (01:37 in summer) and switches "i dag" to the new date
+    - cron: '37 5,11,17,23 * * *'
   workflow_dispatch:
 
 permissions: {}
