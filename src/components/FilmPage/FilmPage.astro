@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+import Footer from '../Footer/Footer.astro';
+import Poster from '../Poster/Poster.astro';
+import ShowingLink from '../ShowingLink/ShowingLink.astro';
+import { filmDays } from '../../lib/program.ts';
+import { getProgram } from '../../lib/source.ts';
+import { dayLabel, formatDay, formatDuration, programNow } from '../../lib/time.ts';
+import pageStyles from '../ProgramPage/ProgramPage.module.css';
+import styles from './FilmPage.module.css';
+
+type Props = {
+  filmId: string;
+};
+
+const { filmId } = Astro.props;
+const program = await getProgram();
+const today = programNow().day;
+const film = program.films[filmId];
+const days = filmDays(program, filmId, today);
+const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join(' · ');
+---
+
+<Base title={`${film.title} – Kinoprogram for Oslo`} description={`Alle visningene av ${film.title} på kino i Oslo, dag for dag.`}>
+  <main class={pageStyles.page}>
+    <a href="/" class={styles.back}>← Kinoprogram for Oslo</a>
+
+    <header class={styles.header}>
+      <div class={styles.poster}>
+        <Poster film={film} sizes="(min-width: 700px) 160px, 104px" />
+      </div>
+      <div class={styles.heading}>
+        <h1 class={styles.title}>{film.title}</h1>
+        {meta && <p class={styles.meta}>{meta}</p>}
+        <a href={film.pageUrl} class={styles.source} target="_blank" rel="noopener">Mer om filmen ↗</a>
+      </div>
+    </header>
+
+    <div>
+      {
+        days.map(([day, list], index) => {
+          const label = dayLabel(day, today);
+          return (
+            <section class={styles.day} data-day={day} data-stagger style={`--i: ${index}`}>
+              <h2 class={styles.dayHeading}>
+                <span class={styles.dayLabel}>{label}</span>
+                {label !== formatDay(day) && <span class={styles.date}>{formatDay(day)}</span>}
+              </h2>
+              <div class={styles.times}>
+                {list.map((s) => (
+                  <ShowingLink showing={s} title={film.title} class={styles.row}>
+                    <span class={styles.time}>{s.time}</span>
+                    <span class={styles.where}>{s.cinema}</span>
+                    <span class={styles.screen}>{s.screen}</span>
+                  </ShowingLink>
+                ))}
+              </div>
+            </section>
+          );
+        })
+      }
+    </div>
+
+    <Footer />
+  </main>
+</Base>
+
+<script>
+  import { isPast, programNow } from '../../lib/time.ts';
+
+  // Started showings grey out as the clock passes them, as in the program
+  function markPast() {
+    const now = programNow();
+    for (const section of document.querySelectorAll<HTMLElement>('[data-day]')) {
+      for (const link of section.querySelectorAll<HTMLElement>('[data-minutes]')) {
+        link.toggleAttribute('data-past', isPast({ day: section.dataset.day!, minutes: Number(link.dataset.minutes) }, now));
+      }
+    }
+  }
+
+  markPast();
+  setInterval(markPast, 60_000);
+</script>

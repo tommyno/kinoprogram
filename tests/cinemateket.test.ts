@@ -64,6 +64,7 @@ describe('cinemateketProgram', () => {
     expect(program.films).toEqual({
       'CINEMATEKET:the-arbor': {
         title: 'The Arbor',
+        slug: 'cinemateket-the-arbor',
         minutes: 94,
         ageRating: null,
         posterUrl: '/posters/cinemateket.svg',
@@ -86,7 +87,7 @@ describe('cinemateketProgram', () => {
 describe('mergePrograms', () => {
   it('combines films and days from both sources, sorted by start', () => {
     const filmweb: Program = {
-      films: { EDI1: { title: 'Annen film', minutes: 90, ageRating: null, posterUrl: null, pageUrl: '' } },
+      films: { EDI1: { title: 'Annen film', slug: 'annen-film', minutes: 90, ageRating: null, posterUrl: null, pageUrl: '' } },
       days: {
         '2026-10-29': [
           { key: 'a', filmId: 'EDI1', cinema: 'Saga', screen: 'Sal 1', day: '2026-10-29', time: '20:00', minutes: 1200, bookingUrl: '' },

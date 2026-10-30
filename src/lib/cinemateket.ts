@@ -1,5 +1,5 @@
 import { USER_AGENT } from './http.ts';
-import type { Film, Program, Showing } from './program.ts';
+import { slugify, type Film, type Program, type Showing } from './program.ts';
 import { osloDateTime, programSlot } from './time.ts';
 
 // Cinemateket isn't in Filmweb. Its calendar feed holds the next 100 screenings (about three weeks).
@@ -80,6 +80,8 @@ export function cinemateketProgram(events: CinemateketEvent[]): Program {
     const filmId = `CINEMATEKET:${event.url.split('/').filter(Boolean).pop()}`;
     films[filmId] ??= {
       title: event.title,
+      // Filmweb often lists the same film, so the prefix keeps the two pages apart
+      slug: `cinemateket-${slugify(event.title)}`,
       minutes: event.minutes,
       ageRating: null,
       posterUrl: POSTER,

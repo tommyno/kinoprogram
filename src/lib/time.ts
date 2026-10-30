@@ -60,10 +60,15 @@ export function isPast(slot: ProgramTime, now: ProgramTime): boolean {
 }
 
 /** "i dag", "i morgen" or e.g. "lørdag 31. oktober". */
+/** "2026-11-01" → "søndag 1. november". */
+export function formatDay(day: string): string {
+  return labelFormat.format(new Date(`${day}T12:00:00Z`));
+}
+
 export function dayLabel(day: string, today: string): string {
   if (day === today) return 'i dag';
   if (day === addDays(today, 1)) return 'i morgen';
-  return labelFormat.format(new Date(`${day}T12:00:00Z`));
+  return formatDay(day);
 }
 
 /** 110 → "1 t 50 min". */

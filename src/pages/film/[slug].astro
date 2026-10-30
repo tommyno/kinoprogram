@@ -1,0 +1,21 @@
+---
+import FilmPage from '../../components/FilmPage/FilmPage.astro';
+import { getProgram } from '../../lib/source.ts';
+import { programNow } from '../../lib/time.ts';
+
+// One page for every film with showings from today on
+export async function getStaticPaths() {
+  const program = await getProgram();
+  const today = programNow().day;
+  const ids = new Set(
+    Object.entries(program.days)
+      .filter(([day]) => day >= today)
+      .flatMap(([, list]) => list.map((s) => s.filmId)),
+  );
+  return [...ids].map((filmId) => ({ params: { slug: program.films[filmId].slug }, props: { filmId } }));
+}
+
+const { filmId } = Astro.props;
+---
+
+<FilmPage filmId={filmId} />

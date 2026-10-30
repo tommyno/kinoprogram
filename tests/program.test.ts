@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { FilmwebSnapshot, filmwebProgram, shortScreen, type RawShow } from '../src/lib/filmweb.ts';
-import { mergePrograms } from '../src/lib/program.ts';
+import { filmDays, mergePrograms, slugify } from '../src/lib/program.ts';
 import { assertPlausible } from '../src/lib/source.ts';
 import { programNow } from '../src/lib/time.ts';
 
@@ -67,6 +67,7 @@ describe('filmwebProgram', () => {
     );
     expect(result.films.EDI1).toMatchObject({
       title: 'Film',
+      slug: 'film',
       minutes: 100,
       ageRating: '12 år',
       posterUrl: 'https://cdn.sanity.io/p.jpg?w=320&auto=format',
@@ -87,6 +88,52 @@ describe('mergePrograms', () => {
     ]);
     expect(Object.keys(result.days)).toEqual(['2026-10-30', '2026-10-31']);
     expect(result.days['2026-10-30'].map((s) => s.time)).toEqual(['12:00', '21:00']);
+  });
+
+  it('numbers films that share a slug', () => {
+    const result = mergePrograms([
+      programOf([
+        show({ movieTitle: 'Jak zyc, zeby nie zwariowac' }),
+        show({ movieMainVersionId: 'EDI2', movieTitle: 'JAK ZYC ZEBY NIE ZWARIOWAC', ticketSaleUrl: 'https://example.test/2' }),
+        show({ movieMainVersionId: 'EDI3', movieTitle: 'Jak zyc zeby nie zwariowac', ticketSaleUrl: 'https://example.test/3' }),
+      ]),
+    ]);
+    expect(Object.values(result.films).map((f) => f.slug)).toEqual([
+      'jak-zyc-zeby-nie-zwariowac',
+      'jak-zyc-zeby-nie-zwariowac-2',
+      'jak-zyc-zeby-nie-zwariowac-3',
+    ]);
+  });
+});
+
+describe('slugify', () => {
+  it.each([
+    ['Verity', 'verity'],
+    ['Glemselens øy', 'glemselens-oy'],
+    ['Kjærast', 'kjaerast'],
+    ['Drapet på Benjamin Hermansen', 'drapet-pa-benjamin-hermansen'],
+    ['Knife: The Attempted Murder of Salman Rushdie', 'knife-the-attempted-murder-of-salman-rushdie'],
+    ['Filipiñana', 'filipinana'],
+    ['Ha-Chan Shake your Booty!', 'ha-chan-shake-your-booty'],
+  ])('%s → %s', (title, expected) => {
+    expect(slugify(title)).toBe(expected);
+  });
+});
+
+describe('filmDays', () => {
+  const result = mergePrograms([
+    programOf([
+      show({ showStart: '2026-10-29T18:00:00', ticketSaleUrl: 'https://example.test/past' }),
+      show({ showStart: '2026-10-30T18:00:00', ticketSaleUrl: 'https://example.test/today' }),
+      show({ showStart: '2026-11-02T20:00:00', ticketSaleUrl: 'https://example.test/later' }),
+      show({ movieMainVersionId: 'EDI2', showStart: '2026-10-31T18:00:00', ticketSaleUrl: 'https://example.test/other' }),
+    ]),
+  ]);
+
+  it("lists only the film's days, from the given day on", () => {
+    const days = filmDays(result, 'EDI1', '2026-10-30');
+    expect(days.map(([day]) => day)).toEqual(['2026-10-30', '2026-11-02']);
+    expect(days.flatMap(([, list]) => list).every((s) => s.filmId === 'EDI1')).toBe(true);
   });
 });
 

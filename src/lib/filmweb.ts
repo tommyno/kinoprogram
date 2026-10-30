@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { USER_AGENT } from './http.ts';
-import type { Film, Program, Showing } from './program.ts';
+import { slugify, type Film, type Program, type Showing } from './program.ts';
 import { programSlot } from './time.ts';
 
 // Filmweb's public site backend (undocumented). One call returns every show in a city.
@@ -133,8 +133,10 @@ export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
     const filmId = show.movieMainVersionId;
     const movie = movies.get(filmId);
     const poster = orNull(movie?.sanityImagePosterUrl);
+    const title = show.movieTitle.trim();
     films[filmId] ??= {
-      title: show.movieTitle.trim(),
+      title,
+      slug: slugify(title),
       minutes: show.lengthInMinutes || movie?.lengthInMinutes || null,
       ageRating: ageRating(show.rating) ?? ageRating(movie?.rating ?? null),
       posterUrl: poster && posterSrc(poster, 320),

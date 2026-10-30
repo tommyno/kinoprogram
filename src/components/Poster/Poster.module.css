@@ -1,0 +1,22 @@
+.poster {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  background: var(--placeholder);
+  border: 1px solid var(--placeholder-line);
+  border-radius: var(--radius);
+}
+
+.placeholder {
+  position: relative;
+}
+
+.placeholder svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  stroke: var(--placeholder-line);
+  fill: none;
+}
