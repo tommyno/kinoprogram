@@ -26,12 +26,12 @@ const groups = groupBy(showings, (s) => s.filmId).sort(([a], [b]) => collator.co
       const more = list.length - COLLAPSED_COUNT;
       return (
         <article class={styles.card} data-card data-stagger style={`--i: ${index}`}>
-          <a href={filmPath(film)} title="Alle visninger" tabindex="-1" aria-hidden="true">
+          <a href={filmPath(film)} title="Se alle visninger" tabindex="-1" aria-hidden="true">
             <Poster film={film} sizes="(min-width: 1000px) 200px, 45vw" />
           </a>
           <div class={styles.heading}>
             <h2 class={styles.title}>
-              <a href={filmPath(film)} title="Alle visninger">
+              <a href={filmPath(film)} title="Se alle visninger">
                 {film.title}
               </a>
             </h2>
