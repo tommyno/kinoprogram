@@ -1,6 +1,7 @@
 ---
 import { Font } from 'astro:assets';
 import '@styles/global.css';
+import { BUILD_ID } from '@lib/build.ts';
 
 type Props = {
   title: string;
@@ -36,6 +37,7 @@ const image = new URL('/og.png', Astro.site);
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="apple-mobile-web-app-title" content="Kinoprogram" />
+    <meta name="build" content={BUILD_ID} />
 
     <!-- Inline in the head, so it is listening before the page first renders -->
     <script is:inline>
@@ -69,3 +71,16 @@ const image = new URL('/og.png', Astro.site);
     <slot />
   </body>
 </html>
+
+<script>
+  const build = document.querySelector<HTMLMetaElement>('meta[name="build"]')?.content;
+
+  // An installed app resumes without reloading; when it comes back into view, load the latest build if there is one
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible') return;
+    try {
+      const response = await fetch('/version.txt', { cache: 'no-store' });
+      if (response.ok && (await response.text()) !== build) location.reload();
+    } catch {}
+  });
+</script>
