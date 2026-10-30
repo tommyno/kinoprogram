@@ -1,5 +1,7 @@
 # Kinoprogram for Oslo
 
+**→ [kinoprogram.vercel.app](https://kinoprogram.vercel.app)**
+
 Every cinema in Oslo and what's showing, on one page, without ads or bloat.
 
 A static Astro site that is rebuilt on a schedule; the program is fetched from Filmweb and Cinemateket at build time.
