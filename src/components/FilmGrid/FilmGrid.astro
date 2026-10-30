@@ -1,9 +1,9 @@
 ---
-import { collator, filmPath, type Film, type Showing } from '../../lib/program.ts';
-import { formatDuration } from '../../lib/time.ts';
-import { groupBy } from '../../lib/groupBy.ts';
-import Poster from '../Poster/Poster.astro';
-import ShowingLink from '../ShowingLink/ShowingLink.astro';
+import { collator, filmPath, type Film, type Showing } from '@lib/program.ts';
+import { formatDuration } from '@lib/time.ts';
+import { groupBy } from '@lib/groupBy.ts';
+import Poster from '@components/Poster/Poster.astro';
+import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
 import styles from './FilmGrid.module.css';
 
 // Rendered collapsed to the first few times; the Program script moves that to the next few as showings start

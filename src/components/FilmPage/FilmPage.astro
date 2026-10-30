@@ -1,12 +1,12 @@
 ---
-import Base from '../../layouts/Base.astro';
-import Footer from '../Footer/Footer.astro';
-import Poster from '../Poster/Poster.astro';
-import ShowingLink from '../ShowingLink/ShowingLink.astro';
-import { filmDays } from '../../lib/program.ts';
-import { getProgram } from '../../lib/source.ts';
-import { dayLabel, formatDay, formatDuration, programNow } from '../../lib/time.ts';
-import pageStyles from '../ProgramPage/ProgramPage.module.css';
+import Base from '@layouts/Base.astro';
+import Footer from '@components/Footer/Footer.astro';
+import Poster from '@components/Poster/Poster.astro';
+import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
+import { filmDays } from '@lib/program.ts';
+import { getProgram } from '@lib/source.ts';
+import { dayLabel, formatDay, formatDuration, programNow } from '@lib/time.ts';
+import pageStyles from '@components/ProgramPage/ProgramPage.module.css';
 import styles from './FilmPage.module.css';
 
 type Props = {
@@ -74,7 +74,7 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
 </Base>
 
 <script>
-  import { isPast, programNow } from '../../lib/time.ts';
+  import { isPast, programNow } from '@lib/time.ts';
 
   // Started showings grey out as the clock passes them, as in the program
   function markPast() {

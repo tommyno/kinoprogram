@@ -1,8 +1,8 @@
 ---
-import type { Film, Showing } from '../../lib/program.ts';
-import CinemaColumns from '../CinemaColumns/CinemaColumns.astro';
-import FilmGrid from '../FilmGrid/FilmGrid.astro';
-import TimeList from '../TimeList/TimeList.astro';
+import type { Film, Showing } from '@lib/program.ts';
+import CinemaColumns from '@components/CinemaColumns/CinemaColumns.astro';
+import FilmGrid from '@components/FilmGrid/FilmGrid.astro';
+import TimeList from '@components/TimeList/TimeList.astro';
 import styles from './Program.module.css';
 
 const SORTS = [
@@ -61,7 +61,7 @@ const { day, films, showings } = Astro.props;
 </div>
 
 <script>
-  import { isPast, programNow } from '../../lib/time.ts';
+  import { isPast, programNow } from '@lib/time.ts';
 
   const root = document.querySelector<HTMLElement>('[data-program]')!;
   const day = root.dataset.day!;

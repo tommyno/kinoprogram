@@ -1,7 +1,7 @@
 ---
-import FilmPage from '../../components/FilmPage/FilmPage.astro';
-import { getProgram } from '../../lib/source.ts';
-import { programNow } from '../../lib/time.ts';
+import FilmPage from '@components/FilmPage/FilmPage.astro';
+import { getProgram } from '@lib/source.ts';
+import { programNow } from '@lib/time.ts';
 
 // One page for every film with showings from today on
 export async function getStaticPaths() {

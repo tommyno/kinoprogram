@@ -1,11 +1,11 @@
 ---
-import Base from '../../layouts/Base.astro';
-import Footer from '../Footer/Footer.astro';
-import Header from '../Header/Header.astro';
-import Program from '../Program/Program.astro';
-import { collator } from '../../lib/program.ts';
-import { getProgram } from '../../lib/source.ts';
-import { dayLabel, programNow } from '../../lib/time.ts';
+import Base from '@layouts/Base.astro';
+import Footer from '@components/Footer/Footer.astro';
+import Header from '@components/Header/Header.astro';
+import Program from '@components/Program/Program.astro';
+import { collator } from '@lib/program.ts';
+import { getProgram } from '@lib/source.ts';
+import { dayLabel, programNow } from '@lib/time.ts';
 import styles from './ProgramPage.module.css';
 
 type Props = {

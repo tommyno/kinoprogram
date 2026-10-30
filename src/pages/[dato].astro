@@ -1,7 +1,7 @@
 ---
-import ProgramPage from '../components/ProgramPage/ProgramPage.astro';
-import { getProgram } from '../lib/source.ts';
-import { programNow } from '../lib/time.ts';
+import ProgramPage from '@components/ProgramPage/ProgramPage.astro';
+import { getProgram } from '@lib/source.ts';
+import { programNow } from '@lib/time.ts';
 
 export async function getStaticPaths() {
   const program = await getProgram();
