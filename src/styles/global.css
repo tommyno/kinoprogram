@@ -72,6 +72,21 @@ button {
   display: none !important;
 }
 
+/* Items fade in one after another, replaying each time their view is unhidden; --i is the item's index */
+@media (prefers-reduced-motion: no-preference) {
+  [data-stagger] {
+    animation: stagger-in 250ms ease-out backwards;
+    animation-delay: calc(min(var(--i), 15) * 30ms);
+  }
+}
+
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
 /* Showings that have started (set by the Program script) */
 [data-past] {
   color: var(--past-ink);

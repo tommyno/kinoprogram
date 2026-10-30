@@ -15,8 +15,8 @@ const cinemas = groupBy(showings, (s) => s.cinema).sort(([a], [b]) => collator.c
 
 <div class={styles.columns}>
   {
-    cinemas.map(([cinema, list]) => (
-      <section class={styles.cinema}>
+    cinemas.map(([cinema, list], index) => (
+      <section class={styles.cinema} data-stagger style={`--i: ${index}`}>
         <h2 class={styles.name}>{cinema}</h2>
         {list.map((s) => (
           <ShowingLink showing={s} title={films[s.filmId].title} class={styles.row}>

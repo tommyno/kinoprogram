@@ -19,12 +19,12 @@ const groups = groupBy(showings, (s) => s.filmId).sort(([a], [b]) => collator.co
 
 <section aria-label="Filmer" class={styles.grid} data-collapsed-count={COLLAPSED_COUNT}>
   {
-    groups.map(([filmId, list]) => {
+    groups.map(([filmId, list], index) => {
       const film = films[filmId];
       const meta = [formatDuration(film.minutes), film.ageRating].filter(Boolean).join(' · ');
       const more = list.length - COLLAPSED_COUNT;
       return (
-        <article class={styles.card} data-card>
+        <article class={styles.card} data-card data-stagger style={`--i: ${index}`}>
           <a href={film.pageUrl} title="Mer om filmen" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
             {film.posterUrl ? (
               <img
