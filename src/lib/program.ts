@@ -4,6 +4,8 @@ export type Film = {
   slug: string;
   minutes: number | null;
   ageRating: string | null;
+  /** A few lines about the film, with line breaks kept. */
+  synopsis: string | null;
   posterUrl: string | null;
   /** Resized versions of the poster, when the source offers them. */
   posterSrcSet?: string;

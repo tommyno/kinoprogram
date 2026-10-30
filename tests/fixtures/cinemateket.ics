@@ -6,46 +6,6 @@ CALSCALE:GREGORIAN
 X-WR-CALNAME:Cinemateket Forestillinger
 PREFERRED_LANGUAGE:NO
 BEGIN:VEVENT
-UID:the-arbor---lillebil---29-10-2026-1800@cinemateket.no
-DTSTAMP:20260924T135300Z
-DTSTART:20261029T170000Z
-DTEND:20261029T183400Z
-SUMMARY:The Arbor
-DESCRIPTION:Clio Barnards toneangivende hybrid om dramatikeren Andrea Dunbar.
-LOCATION:Lillebil - Cinemateket 
-URL:https://www.cinemateket.no/filmer/the-arbor
-END:VEVENT
-BEGIN:VEVENT
-UID:herman---tancred---29-10-2026-1800@cinemateket.no
-DTSTAMP:20261006T103100Z
-DTSTART:20261029T170000Z
-DTEND:20261029T182800Z
-SUMMARY:Herman
-DESCRIPTION:Basert på Lars Saabye Christensens roman, og Anders Danielsen Lies debut som filmskuespiller.
-LOCATION:Tancred - Cinemateket 
-URL:https://www.cinemateket.no/filmer/herman
-END:VEVENT
-BEGIN:VEVENT
-UID:high-and-low---tancred---29-10-2026-2000@cinemateket.no
-DTSTAMP:20260918T162000Z
-DTSTART:20261029T190000Z
-DTEND:20261029T212200Z
-SUMMARY:High and Low
-DESCRIPTION:Denne intense thrilleren er nok et høydepunkt i Akira Kurosawas karriere. 
-LOCATION:Tancred - Cinemateket 
-URL:https://www.cinemateket.no/filmer/high-and-low
-END:VEVENT
-BEGIN:VEVENT
-UID:the-devils---lillebil---29-10-2026-2030@cinemateket.no
-DTSTAMP:20260917T171000Z
-DTSTART:20261029T193000Z
-DTEND:20261029T212400Z
-SUMMARY:The Devils
-DESCRIPTION:Den restaurerte utgaven av Ken Russells berømte psykologiske skrekkfilmdrama.
-LOCATION:Lillebil - Cinemateket 
-URL:https://www.cinemateket.no/filmer/the-devils
-END:VEVENT
-BEGIN:VEVENT
 UID:uten-tittel-xviii---lillebil---30-10-2026-1800@cinemateket.no
 DTSTAMP:20260925T111300Z
 DTSTART:20261030T170000Z
@@ -146,6 +106,16 @@ LOCATION:Tancred - Cinemateket
 URL:https://www.cinemateket.no/filmer/the-odyssey-70mm
 END:VEVENT
 BEGIN:VEVENT
+UID:the-devils---lillebil---31-10-2026-1900@cinemateket.no
+DTSTAMP:20261029T153100Z
+DTSTART:20261031T180000Z
+DTEND:20261031T195400Z
+SUMMARY:The Devils
+DESCRIPTION:Den restaurerte utgaven av Ken Russells berømte psykologiske skrekkfilmdrama.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-devils
+END:VEVENT
+BEGIN:VEVENT
 UID:john-wick---tancred---01-11-2026-1030@cinemateket.no
 DTSTAMP:20260921T142000Z
 DTSTART:20261101T093000Z
@@ -181,7 +151,7 @@ DTSTAMP:20260925T110300Z
 DTSTART:20261101T150000Z
 DTEND:20261101T164300Z
 SUMMARY:Funny Face
-DESCRIPTION:Stanley Donens klassiker er en studie av motemediene og motebransjen på andre siden av Atlanterhavet.
+DESCRIPTION:Stanley Donens sjarmerende musikal med Audrey Hepburn og Fred Astaire i hovedrollene. 
 LOCATION:Lillebil - Cinemateket 
 URL:https://www.cinemateket.no/filmer/funny-face
 END:VEVENT
@@ -406,16 +376,6 @@ LOCATION:Flåklypa – Barnas filmrom - Cinemateket
 URL:https://www.cinemateket.no/filmer/lyd-i-film-med-celio-de-carvalho
 END:VEVENT
 BEGIN:VEVENT
-UID:papaya---lillebil---07-11-2026-1300@cinemateket.no
-DTSTAMP:20261021T164100Z
-DTSTART:20261107T120000Z
-DTEND:20261107T131400Z
-SUMMARY:Papaya
-DESCRIPTION:Visuelt slående eventyr om et lite papayafrø sin reise ut i den store verden.
-LOCATION:Lillebil - Cinemateket 
-URL:https://www.cinemateket.no/filmer/papaya
-END:VEVENT
-BEGIN:VEVENT
 UID:chimney-town-frozen-in-time---tancred---07-11-2026-1300@cinemateket.no
 DTSTAMP:20261021T164000Z
 DTSTART:20261107T120000Z
@@ -424,6 +384,16 @@ SUMMARY:Chimney Town: Frozen in Time
 DESCRIPTION:I oppfølgeren til Poupelle of Chimney Town reiser Lubicchi til en mystisk verden der tiden står stille.
 LOCATION:Tancred - Cinemateket 
 URL:https://www.cinemateket.no/filmer/chimney-town-frozen-in-time
+END:VEVENT
+BEGIN:VEVENT
+UID:papaya---lillebil---07-11-2026-1300@cinemateket.no
+DTSTAMP:20261021T164100Z
+DTSTART:20261107T120000Z
+DTEND:20261107T131400Z
+SUMMARY:Papaya
+DESCRIPTION:Visuelt slående eventyr om et lite papayafrø sin reise ut i den store verden.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/papaya
 END:VEVENT
 BEGIN:VEVENT
 UID:the-secret-reading-club-of-kabul---lillebil---07-11-2026-1500@cinemateket.no
@@ -444,6 +414,16 @@ SUMMARY:Lady
 DESCRIPTION:En kvinnelig taxisjåfør blir privatsjåfør for en gruppe sexarbeidere i Nigerias metropol, Lagos.
 LOCATION:Tancred - Cinemateket 
 URL:https://www.cinemateket.no/filmer/lady
+END:VEVENT
+BEGIN:VEVENT
+UID:tangokurs---veiviseren---07-11-2026-1630@cinemateket.no
+DTSTAMP:20261029T162200Z
+DTSTART:20261107T153000Z
+DTEND:20261107T153000Z
+SUMMARY:Tangokurs
+DESCRIPTION:Velkommen til gratis tangokurs i Veiviseren!
+LOCATION:Veiviseren - Cinemateket 
+URL:https://www.cinemateket.no/filmer/tangokurs
 END:VEVENT
 BEGIN:VEVENT
 UID:tango---tancred---07-11-2026-1730@cinemateket.no
@@ -786,16 +766,6 @@ LOCATION:Flåklypa – Barnas filmrom - Cinemateket
 URL:https://www.cinemateket.no/filmer/origamiverksted
 END:VEVENT
 BEGIN:VEVENT
-UID:the-best-mother-in-the-world---tancred---14-11-2026-1300@cinemateket.no
-DTSTAMP:20261021T164000Z
-DTSTART:20261114T120000Z
-DTEND:20261114T134500Z
-SUMMARY:The best mother in the world
-DESCRIPTION:Et svært gripende drama med en fantastisk rolleprestasjon av Shirley Cruz.
-LOCATION:Tancred - Cinemateket 
-URL:https://www.cinemateket.no/filmer/the-best-mother-in-the-world
-END:VEVENT
-BEGIN:VEVENT
 UID:kikis-budservice---lillebil---14-11-2026-1300@cinemateket.no
 DTSTAMP:20261021T163200Z
 DTSTART:20261114T120000Z
@@ -804,6 +774,16 @@ SUMMARY:Kikis budservice
 DESCRIPTION:Møt den lille heksa Kiki i en strålende vakker og rørende animasjonsfortelling om oppvekst, vennskap og lykkemøter.
 LOCATION:Lillebil - Cinemateket 
 URL:https://www.cinemateket.no/filmer/kikis-budservice
+END:VEVENT
+BEGIN:VEVENT
+UID:the-best-mother-in-the-world---tancred---14-11-2026-1300@cinemateket.no
+DTSTAMP:20261021T164000Z
+DTSTART:20261114T120000Z
+DTEND:20261114T134500Z
+SUMMARY:The best mother in the world
+DESCRIPTION:Et svært gripende drama med en fantastisk rolleprestasjon av Shirley Cruz.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-best-mother-in-the-world
 END:VEVENT
 BEGIN:VEVENT
 UID:filipinana---tancred---14-11-2026-1515@cinemateket.no
@@ -1004,5 +984,25 @@ SUMMARY:Water
 DESCRIPTION:Deepa Mehtas praktfulle film om frigjøring. 
 LOCATION:Tancred - Cinemateket 
 URL:https://www.cinemateket.no/filmer/water
+END:VEVENT
+BEGIN:VEVENT
+UID:fra-nrk-arkivet-erik-bye---lillebil---18-11-2026-1800@cinemateket.no
+DTSTAMP:20260928T145000Z
+DTSTART:20261118T170000Z
+DTEND:20261118T190000Z
+SUMMARY:Fra NRK-arkivet: Erik Bye
+DESCRIPTION:Et dypdykk i NRKs rikholdige arkiv, denne gangen med fokus på tv-legenden Erik Bye. som i år ville fylt 100 år. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/fra-nrk-arkivet-erik-bye
+END:VEVENT
+BEGIN:VEVENT
+UID:lost-highway---tancred---18-11-2026-1900@cinemateket.no
+DTSTAMP:20260928T143300Z
+DTSTART:20261118T180000Z
+DTEND:20261118T201400Z
+SUMMARY:Lost Highway
+DESCRIPTION:En av David Lynchs mest avsindig fresende, elektriske feberfantasier.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/lost-highway
 END:VEVENT
 END:VCALENDAR

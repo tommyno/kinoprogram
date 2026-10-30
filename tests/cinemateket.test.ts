@@ -51,6 +51,7 @@ describe('parseFeed', () => {
       start: '2026-10-29T18:00:00',
       minutes: 94,
       title: 'The Arbor',
+      description: 'Clio Barnards hybrid, om dramatikeren Andrea Dunbar.',
       screen: 'Lillebil',
       url: 'https://www.cinemateket.no/filmer/the-arbor',
     });
@@ -67,6 +68,7 @@ describe('cinemateketProgram', () => {
         slug: 'cinemateket-the-arbor',
         minutes: 94,
         ageRating: null,
+        synopsis: 'Clio Barnards hybrid, om dramatikeren Andrea Dunbar.',
         posterUrl: '/posters/cinemateket.svg',
         pageUrl: 'https://www.cinemateket.no/filmer/the-arbor',
       },
@@ -87,7 +89,7 @@ describe('cinemateketProgram', () => {
 describe('mergePrograms', () => {
   it('combines films and days from both sources, sorted by start', () => {
     const filmweb: Program = {
-      films: { EDI1: { title: 'Annen film', slug: 'annen-film', minutes: 90, ageRating: null, posterUrl: null, pageUrl: '' } },
+      films: { EDI1: { title: 'Annen film', slug: 'annen-film', minutes: 90, ageRating: null, synopsis: null, posterUrl: null, pageUrl: '' } },
       days: {
         '2026-10-29': [
           { key: 'a', filmId: 'EDI1', cinema: 'Saga', screen: 'Sal 1', day: '2026-10-29', time: '20:00', minutes: 1200, bookingUrl: '' },

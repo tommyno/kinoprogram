@@ -14,6 +14,7 @@ export type CinemateketEvent = {
   start: string;
   minutes: number | null;
   title: string;
+  description: string;
   /** "Lillebil" or "Tancred". */
   screen: string;
   url: string;
@@ -56,6 +57,7 @@ export function parseFeed(ics: string): CinemateketEvent[] {
           start: osloDateTime(start),
           minutes: fields.DTEND ? Math.round((parseDate(fields.DTEND).getTime() - start.getTime()) / 60_000) || null : null,
           title: unescapeText(fields.SUMMARY),
+          description: unescapeText(fields.DESCRIPTION ?? ''),
           screen: unescapeText(fields.LOCATION ?? '').split(' - ')[0].trim(),
           url: unescapeText(fields.URL),
         });
@@ -84,6 +86,7 @@ export function cinemateketProgram(events: CinemateketEvent[]): Program {
       slug: `cinemateket-${slugify(event.title)}`,
       minutes: event.minutes,
       ageRating: null,
+      synopsis: event.description || null,
       posterUrl: POSTER,
       pageUrl: event.url,
     };
