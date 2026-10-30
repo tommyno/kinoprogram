@@ -81,6 +81,7 @@ const { day, films, showings, upcoming } = Astro.props;
   const tabs = [...root.querySelectorAll<HTMLElement>('[data-sort]')];
   const indicator = root.querySelector<HTMLElement>('[data-indicator]')!;
   const empty = root.querySelector<HTMLElement>('[data-empty]');
+  const searchInput = root.querySelector<HTMLInputElement>('[data-search-input]')!;
 
   const isOpen = (button: HTMLButtonElement) => button.getAttribute('aria-expanded') === 'true';
   const toggle = (button: HTMLButtonElement) => button.setAttribute('aria-expanded', String(!isOpen(button)));
@@ -150,6 +151,10 @@ const { day, films, showings, upcoming } = Astro.props;
     const url = new URL(location.href);
     if (sort === 'film') url.searchParams.delete('sorter');
     else url.searchParams.set('sorter', sort);
+    // The search is only in the link while its tab is open; the field keeps it for coming back
+    const query = searchInput.value.trim();
+    if (sort === 'sok' && query) url.searchParams.set('q', query);
+    else url.searchParams.delete('q');
     history.replaceState(null, '', url);
   }
 
