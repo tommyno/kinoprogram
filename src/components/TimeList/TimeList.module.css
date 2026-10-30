@@ -38,6 +38,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: 0 24px;
+  /* Clips the bottom line of the last row in every column, which would double up with the next hour's line */
+  clip-path: inset(-100vmax -100vmax 0);
 }
 
 .row {
@@ -46,6 +48,7 @@
   gap: 12px;
   align-items: center;
   min-height: 48px;
+  margin-bottom: -1px;
   border-bottom: 1px solid var(--line-soft);
   text-decoration: none;
 }
