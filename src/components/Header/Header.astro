@@ -15,7 +15,7 @@ const { day, label, today, lastDay } = Astro.props;
 <header>
   <h1 class={styles.title}>
     Kinoprogram for Oslo{' '}
-    <span class={styles.picker}>
+    <span class={styles.picker} data-day-picker>
       <button type="button" class={styles.button} aria-label={`${label}, velg dato`} data-date-button>
         <span>{label}</span>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

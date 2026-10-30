@@ -81,6 +81,7 @@ const { day, films, showings, upcoming } = Astro.props;
   const tabs = [...root.querySelectorAll<HTMLElement>('[data-sort]')];
   const indicator = root.querySelector<HTMLElement>('[data-indicator]')!;
   const empty = root.querySelector<HTMLElement>('[data-empty]');
+  const dayPicker = document.querySelector<HTMLElement>('[data-day-picker]');
   const searchInput = root.querySelector<HTMLInputElement>('[data-search-input]')!;
 
   const isOpen = (button: HTMLButtonElement) => button.getAttribute('aria-expanded') === 'true';
@@ -104,6 +105,8 @@ const { day, films, showings, upcoming } = Astro.props;
     for (const view of root.querySelectorAll<HTMLElement>('[data-view]')) view.hidden = view.dataset.view !== sort;
     // A day without showings can still be searched
     if (empty) empty.hidden = sort === 'sok';
+    // The search covers every day, so the header names no date
+    if (dayPicker) dayPicker.hidden = sort === 'sok';
     placeIndicator();
   }
 
