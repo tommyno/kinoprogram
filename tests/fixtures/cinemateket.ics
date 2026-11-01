@@ -6,116 +6,6 @@ CALSCALE:GREGORIAN
 X-WR-CALNAME:Cinemateket Forestillinger
 PREFERRED_LANGUAGE:NO
 BEGIN:VEVENT
-UID:uten-tittel-xviii---lillebil---30-10-2026-1800@cinemateket.no
-DTSTAMP:20260925T111300Z
-DTSTART:20261030T170000Z
-DTEND:20261030T190000Z
-SUMMARY:Uten tittel XVIII
-DESCRIPTION:En gang i hver programperiode vil vi invitere til en overraskelsesvisning, der vi setter opp en eldre filmtittel, håndplukket fra et filmarkiv.
-LOCATION:Lillebil - Cinemateket 
-URL:https://www.cinemateket.no/filmer/uten-tittel-xviii
-END:VEVENT
-BEGIN:VEVENT
-UID:i-know-what-you-did-last-summer---tancred---30-10-2026-1830@cinemateket.no
-DTSTAMP:20260924T135300Z
-DTSTART:20261030T173000Z
-DTEND:20261030T191100Z
-SUMMARY:Fryktens sommer
-DESCRIPTION:En skrekkelig actionfylt helaften!
-LOCATION:Tancred - Cinemateket 
-URL:https://www.cinemateket.no/filmer/fryktens-sommer
-END:VEVENT
-BEGIN:VEVENT
-UID:skrik---tancred---30-10-2026-2030@cinemateket.no
-DTSTAMP:20260924T135000Z
-DTSTART:20261030T193000Z
-DTEND:20261030T212100Z
-SUMMARY:Skrik
-DESCRIPTION:Enda mer skrekkelig action!
-LOCATION:Tancred - Cinemateket 
-URL:https://www.cinemateket.no/filmer/skrik
-END:VEVENT
-BEGIN:VEVENT
-UID:cafe-paradis---lillebil---30-10-2026-2045@cinemateket.no
-DTSTAMP:20260924T134000Z
-DTSTART:20261030T194500Z
-DTEND:20261030T212500Z
-SUMMARY:Café Paradis
-DESCRIPTION:Gripende skildring av alkoholens makt. 
-LOCATION:Lillebil - Cinemateket 
-URL:https://www.cinemateket.no/filmer/cafe-paradis
-END:VEVENT
-BEGIN:VEVENT
-UID:the-long-kiss-goodnight---tancred---31-10-2026-1030@cinemateket.no
-DTSTAMP:20260921T141200Z
-DTSTART:20261031T093000Z
-DTEND:20261031T113100Z
-SUMMARY:The Long Kiss Goodnight
-DESCRIPTION:Film og foredrag ved Yvonne Tasker om actionfilmen som fenomen.
-LOCATION:Tancred - Cinemateket 
-URL:https://www.cinemateket.no/filmer/the-long-kiss-goodnight
-END:VEVENT
-BEGIN:VEVENT
-UID:propp-berta---lillebil---31-10-2026-1300@cinemateket.no
-DTSTAMP:20260915T140200Z
-DTSTART:20261031T120000Z
-DTEND:20261031T131700Z
-SUMMARY:Propp & Berta
-DESCRIPTION:En underholdende og passe skummel dukkefilm for de minste, basert på Bent Solhofs fortellinger og tegninger.
-LOCATION:Lillebil - Cinemateket 
-URL:https://www.cinemateket.no/filmer/propp-berta
-END:VEVENT
-BEGIN:VEVENT
-UID:tai-chi-master---tancred---31-10-2026-1430@cinemateket.no
-DTSTAMP:20260921T142000Z
-DTSTART:20261031T133000Z
-DTEND:20261031T150600Z
-SUMMARY:Tai Chi Master
-DESCRIPTION:Film og foredrag ved Wayne Wong om østasiatisk actionfilm.
-LOCATION:Tancred - Cinemateket 
-URL:https://www.cinemateket.no/filmer/tai-chi-master
-END:VEVENT
-BEGIN:VEVENT
-UID:tintin---solens-tempel---lillebil---31-10-2026-1500@cinemateket.no
-DTSTAMP:20260915T140000Z
-DTSTART:20261031T140000Z
-DTEND:20261031T151500Z
-SUMMARY:Tintin – Solens tempel
-DESCRIPTION:Tegnefilm basert på Tintin-tegneseriene De syv krystallkuler og Soltemplet.
-LOCATION:Lillebil - Cinemateket 
-URL:https://www.cinemateket.no/filmer/tintin---solens-tempel
-END:VEVENT
-BEGIN:VEVENT
-UID:nouvelle-vague---lillebil---31-10-2026-1700@cinemateket.no
-DTSTAMP:20260921T142200Z
-DTSTART:20261031T160000Z
-DTEND:20261031T174600Z
-SUMMARY:Nouvelle Vague
-DESCRIPTION:Morsom og energisk film om et av filmhistoriens viktigste kapitler. 
-LOCATION:Lillebil - Cinemateket 
-URL:https://www.cinemateket.no/filmer/nouvelle-vague-2
-END:VEVENT
-BEGIN:VEVENT
-UID:the-odyssey---70mm---tancred---31-10-2026-1800@cinemateket.no
-DTSTAMP:20260921T142100Z
-DTSTART:20261031T170000Z
-DTEND:20261031T195200Z
-SUMMARY:The Odyssey – 70mm
-DESCRIPTION:Sommerens store begivenhet – spennende, episk og rørende – på 70mm. 
-LOCATION:Tancred - Cinemateket 
-URL:https://www.cinemateket.no/filmer/the-odyssey-70mm
-END:VEVENT
-BEGIN:VEVENT
-UID:the-devils---lillebil---31-10-2026-1900@cinemateket.no
-DTSTAMP:20261029T153100Z
-DTSTART:20261031T180000Z
-DTEND:20261031T195400Z
-SUMMARY:The Devils
-DESCRIPTION:Den restaurerte utgaven av Ken Russells berømte psykologiske skrekkfilmdrama.
-LOCATION:Lillebil - Cinemateket 
-URL:https://www.cinemateket.no/filmer/the-devils
-END:VEVENT
-BEGIN:VEVENT
 UID:john-wick---tancred---01-11-2026-1030@cinemateket.no
 DTSTAMP:20260921T142000Z
 DTSTART:20261101T093000Z
@@ -1004,5 +894,115 @@ SUMMARY:Lost Highway
 DESCRIPTION:En av David Lynchs mest avsindig fresende, elektriske feberfantasier.
 LOCATION:Tancred - Cinemateket 
 URL:https://www.cinemateket.no/filmer/lost-highway
+END:VEVENT
+BEGIN:VEVENT
+UID:det-gode-ekteskap---lillebil---18-11-2026-2000@cinemateket.no
+DTSTAMP:20260928T144000Z
+DTSTART:20261118T193000Z
+DTEND:20261118T210700Z
+SUMMARY:Det gode ekteskap
+DESCRIPTION:En liten, men stor, Eric Rohmer-film om en ung kvinne som en dag finner ut at hun vil gifte seg. Det eneste hun mangler, er noen å gifte seg med. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/det-gode-ekteskap
+END:VEVENT
+BEGIN:VEVENT
+UID:om-tilla---lillebil---19-11-2026-1800@cinemateket.no
+DTSTAMP:20260928T145000Z
+DTSTART:20261119T170000Z
+DTEND:20261119T181700Z
+SUMMARY:Om Tilla
+DESCRIPTION:Arne Skouens finstemte drama om unge Tilla, som lever i sin egen verden. 
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/om-tilla
+END:VEVENT
+BEGIN:VEVENT
+UID:gjenforeningen---lillebil---19-11-2026-2000@cinemateket.no
+DTSTAMP:20260928T145000Z
+DTSTART:20261119T190000Z
+DTEND:20261119T203000Z
+SUMMARY:Gjenforeningen
+DESCRIPTION:Ubehagelig og spennende om gruppedynamikk og maktstrukturer.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/gjenforeningen
+END:VEVENT
+BEGIN:VEVENT
+UID:searching-for-sugar-man---tancred---19-11-2026-2030@cinemateket.no
+DTSTAMP:20260928T145100Z
+DTSTART:20261119T193000Z
+DTEND:20261119T205600Z
+SUMMARY:Searching for Sugar Man
+DESCRIPTION:Fantastisk Oscarbelønnet musikkdokumentar om hvordan en amerikansk artist ble motstandshelt under apartheid, uten å vite noe om det.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/searching-for-sugar-man
+END:VEVENT
+BEGIN:VEVENT
+UID:11x14---lillebil---20-11-2026-1800@cinemateket.no
+DTSTAMP:20260928T144200Z
+DTSTART:20261120T170000Z
+DTEND:20261120T184100Z
+SUMMARY:11x14
+DESCRIPTION:James Bennings epokegjørende avant-garde-film fra 1977.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/11-x14
+END:VEVENT
+BEGIN:VEVENT
+UID:the-shining---tancred---20-11-2026-1900@cinemateket.no
+DTSTAMP:20260928T144300Z
+DTSTART:20261120T180000Z
+DTEND:20261120T195900Z
+SUMMARY:The Shining
+DESCRIPTION:Kubricks svimlende klaustrofobiske skrekkfilmklassiker.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/the-shining
+END:VEVENT
+BEGIN:VEVENT
+UID:exponerad---lillebil---20-11-2026-2000@cinemateket.no
+DTSTAMP:20260928T145000Z
+DTSTART:20261120T190000Z
+DTEND:20261120T203000Z
+SUMMARY:Exponerad
+DESCRIPTION:Christina Lindberg i exploitationfilm som tidvis (og kanskje ufrivillig) blir til eksperimentell kunst.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/exponerad
+END:VEVENT
+BEGIN:VEVENT
+UID:karlsson-pa-taket---tancred---21-11-2026-1300@cinemateket.no
+DTSTAMP:20260915T140200Z
+DTSTART:20261121T120000Z
+DTEND:20261121T133900Z
+SUMMARY:Karlsson på taket
+DESCRIPTION:Spillefilmen om den populære propellmannen Karlsson på taket, med sine mange spillopper.
+LOCATION:Tancred - Cinemateket 
+URL:https://www.cinemateket.no/filmer/karlsson-pa-taket-1974
+END:VEVENT
+BEGIN:VEVENT
+UID:utopiske-signaler---lillebil---21-11-2026-1300@cinemateket.no
+DTSTAMP:20260928T145000Z
+DTSTART:20261121T120000Z
+DTEND:20261121T131500Z
+SUMMARY:Utopiske signaler
+DESCRIPTION:En mulighet til å lære mer om Det Internasjonale Nyksundprosjektet, som har blitt reaktualisert gjennom Nyksund Reloaded.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/utopiske-signaler
+END:VEVENT
+BEGIN:VEVENT
+UID:utopiske-signaler---bolgen---21-11-2026-1430@cinemateket.no
+DTSTAMP:20261028T151500Z
+DTSTART:20261121T133000Z
+DTEND:20261121T144500Z
+SUMMARY:Utopiske signaler
+DESCRIPTION:En mulighet til å lære mer om Det Internasjonale Nyksundprosjektet, som har blitt reaktualisert gjennom Nyksund Reloaded.
+LOCATION:Bølgen - Cinemateket 
+URL:https://www.cinemateket.no/filmer/utopiske-signaler
+END:VEVENT
+BEGIN:VEVENT
+UID:sirocco-og-vindens-rike---lillebil---21-11-2026-1500@cinemateket.no
+DTSTAMP:20260915T140100Z
+DTSTART:20261121T140000Z
+DTEND:20261121T151400Z
+SUMMARY:Sirocco og Vindens rike
+DESCRIPTION:Vakker animasjonsfilm om en fantasifull verden som garantert vil gi en uforglemmelig kinoopplevelse for både barn og voksne.
+LOCATION:Lillebil - Cinemateket 
+URL:https://www.cinemateket.no/filmer/sirocco-og-vindens-rike
 END:VEVENT
 END:VCALENDAR

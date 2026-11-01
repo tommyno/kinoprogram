@@ -84,6 +84,9 @@ export function cinemateketProgram(events: CinemateketEvent[]): Program {
     const filmId = `CINEMATEKET:${event.url.split('/').filter(Boolean).pop()}`;
     films[filmId] ??= {
       title: event.title,
+      // The feed has no year, so these films aren't looked up at TMDB
+      originalTitle: null,
+      year: null,
       // Filmweb often lists the same film, so the prefix keeps the two pages apart
       slug: `cinemateket-${slugify(event.title)}`,
       minutes: event.minutes,

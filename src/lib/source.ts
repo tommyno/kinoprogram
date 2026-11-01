@@ -2,8 +2,9 @@ import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { cinemateketProgram, fetchCinemateketFeed, parseFeed } from './cinemateket.ts';
 import { FilmwebSnapshot, fetchSnapshot, filmwebProgram } from './filmweb.ts';
-import { mergePrograms, type Program } from './program.ts';
+import { mergePrograms, type Film, type Program } from './program.ts';
 import { programNow } from './time.ts';
+import { fetchTmdb, type TmdbFilm } from './tmdb.ts';
 
 const CACHE_DIR = '.cache';
 const CACHE_TTL_MS = 60 * 60 * 1000;
@@ -41,6 +42,22 @@ async function loadCinemateket(): Promise<Program | null> {
   }
 }
 
+/** TMDB is a bonus too: without a token, or if it fails, the films go without a score and trailer. */
+async function loadTmdb(films: Record<string, Film>): Promise<Record<string, TmdbFilm>> {
+  // Astro reads .env into import.meta.env, and Vercel's variables too; the dev server leaves process.env without it
+  const token = import.meta.env.TMDB_TOKEN;
+  if (!token) {
+    console.warn('Hopper over TMDB: TMDB_TOKEN mangler');
+    return {};
+  }
+  try {
+    return JSON.parse(await cachedText('tmdb.json', async () => JSON.stringify(await fetchTmdb(films, token))));
+  } catch (error) {
+    console.warn(`Hopper over TMDB: ${error instanceof Error ? error.message : error}`);
+    return {};
+  }
+}
+
 /** Throws when there is nothing to show today, so the build fails and Vercel keeps the previous deploy. */
 export function assertPlausible(program: Program, today: string): void {
   if (!program.days[today]?.length) {
@@ -56,6 +73,10 @@ export function getProgram(): Promise<Program> {
     const [filmweb, cinemateket] = await Promise.all([loadFilmweb(), loadCinemateket()]);
     const result = mergePrograms(cinemateket ? [filmweb, cinemateket] : [filmweb]);
     assertPlausible(result, programNow().day);
+    // A cached lookup can hold films that are no longer in the program
+    for (const [id, film] of Object.entries(await loadTmdb(result.films))) {
+      if (result.films[id]) Object.assign(result.films[id], film);
+    }
     return result;
   })();
   return program;

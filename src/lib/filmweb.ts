@@ -23,7 +23,8 @@ const SHOWS_QUERY = `query Shows($location: String) {
 const MOVIES_QUERY = `query Movies($location: String) {
   movieQuery {
     getCurrentMovies(location: $location) {
-      mainVersionId lengthInMinutes rating sanityImagePosterUrl synopsisIngress synopsisBodyText
+      mainVersionId titleOriginal productionYear premiere lengthInMinutes rating
+      sanityImagePosterUrl synopsisIngress synopsisBodyText
     }
   }
 }`;
@@ -44,6 +45,11 @@ export type RawShow = z.infer<typeof RawShow>;
 
 export const RawMovie = z.object({
   mainVersionId: z.string(),
+  titleOriginal: z.string().nullable(),
+  // "2026", or empty when unknown
+  productionYear: z.string().nullable(),
+  // Norwegian premiere, "2026-09-25T00:00:00"
+  premiere: z.string().nullable(),
   lengthInMinutes: z.number().nullable(),
   rating: z.string().nullable(),
   sanityImagePosterUrl: z.string().nullable(),
@@ -119,6 +125,18 @@ function plainText(value: string | null | undefined): string | null {
   return orNull(value?.replace(/<[^>]+>/g, ''));
 }
 
+/** Filmweb turns letters outside Latin-1 into "?", as in "?? (Gunche)", which no search would find. */
+function originalTitle(movie: RawMovie | undefined): string | null {
+  const title = orNull(movie?.titleOriginal);
+  return title && !title.includes('??') ? title : null;
+}
+
+/** The production year, the year after some classics' titles ("Zodiac (2007)"), or the premiere year. Some events have the year "1". */
+function filmYear(movie: RawMovie | undefined, title: string): number | null {
+  const years = [movie?.productionYear, title.match(/\((\d{4})\)$/)?.[1], movie?.premiere?.slice(0, 4)];
+  return years.map(Number).find((year) => year > 1887) ?? null;
+}
+
 function posterSrc(url: string, width: number): string {
   return `${url}${url.includes('?') ? '&' : '?'}w=${width}&auto=format`;
 }
@@ -155,6 +173,8 @@ export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
     const title = show.movieTitle.trim();
     films[filmId] ??= {
       title,
+      originalTitle: originalTitle(movie),
+      year: filmYear(movie, title),
       slug: slugify(title),
       minutes: show.lengthInMinutes || movie?.lengthInMinutes || null,
       ageRating: ageRating(show.rating) ?? ageRating(movie?.rating ?? null),

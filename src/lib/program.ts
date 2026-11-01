@@ -2,6 +2,10 @@ import { formatDuration } from './time.ts';
 
 export type Film = {
   title: string;
+  /** The original title, when the source has one. */
+  originalTitle: string | null;
+  /** Production year, for finding the film at TMDB. */
+  year: number | null;
   /** Its page on this site, /film/{slug}. */
   slug: string;
   minutes: number | null;
@@ -15,6 +19,10 @@ export type Film = {
   posterLarge?: { srcSet: string; width: number };
   /** The film's page at the source: Filmweb, or Cinemateket for its own screenings. */
   pageUrl: string;
+  /** TMDB's user score, when enough have voted. */
+  rating?: { value: number; votes: number; url: string };
+  /** YouTube id of the film's trailer at TMDB. */
+  trailer?: string;
 };
 
 export type Showing = {

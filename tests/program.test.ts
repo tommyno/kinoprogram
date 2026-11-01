@@ -66,6 +66,9 @@ describe('filmwebProgram', () => {
       [
         {
           mainVersionId: 'EDI1',
+          titleOriginal: null,
+          productionYear: null,
+          premiere: null,
           lengthInMinutes: 100,
           rating: null,
           sanityImagePosterUrl: 'https://cdn.sanity.io/p.jpg',
@@ -94,6 +97,9 @@ describe('filmwebProgram', () => {
       [
         {
           mainVersionId: 'EDI1',
+          titleOriginal: null,
+          productionYear: null,
+          premiere: null,
           lengthInMinutes: 100,
           rating: null,
           sanityImagePosterUrl: 'https://cdn.sanity.io/p-1128x1670.jpg?auto=format',
@@ -109,12 +115,34 @@ describe('filmwebProgram', () => {
     expect(large.srcSet).not.toContain('1280w');
   });
 
+  it('keeps the original title and year for the TMDB search', () => {
+    const movie = (titleOriginal: string, productionYear: string) => ({
+      mainVersionId: 'EDI1',
+      titleOriginal,
+      productionYear,
+      premiere: '2026-09-11T00:00:00',
+      lengthInMinutes: 100,
+      rating: null,
+      sanityImagePosterUrl: null,
+      synopsisIngress: null,
+      synopsisBodyText: null,
+    });
+    expect(programOf([show({})], [movie('Coyote vs. Acme', '')]).films.EDI1).toMatchObject({ originalTitle: 'Coyote vs. Acme', year: 2026 });
+    // Filmweb has lost the letters of titles in other scripts
+    expect(programOf([show({})], [movie('?? (Gunche)', '2025')]).films.EDI1).toMatchObject({ originalTitle: null, year: 2025 });
+    expect(programOf([show({})], [movie('Tosca', '1')]).films.EDI1.year).toBe(2026);
+    expect(programOf([show({ movieTitle: 'Zodiac (2007)' })], [{ ...movie('Zodiac (2007)', ''), premiere: '0001-01-01T00:00:00' }]).films.EDI1.year).toBe(2007);
+  });
+
   it('falls back to the body text when a film has no ingress', () => {
     const result = programOf(
       [show({})],
       [
         {
           mainVersionId: 'EDI1',
+          titleOriginal: null,
+          productionYear: null,
+          premiere: null,
           lengthInMinutes: 100,
           rating: null,
           sanityImagePosterUrl: null,
