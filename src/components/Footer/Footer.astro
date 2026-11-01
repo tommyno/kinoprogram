@@ -1,37 +1,33 @@
 ---
 import InstallApp from '@components/InstallApp/InstallApp.astro';
 import styles from './Footer.module.css';
-
-type Props = {
-  /** Leaves out "Til toppen", for pages too short to scroll. */
-  noTopButton?: boolean;
-};
-
-const { noTopButton = false } = Astro.props;
 ---
 
-{
-  !noTopButton && (
-    <button type="button" class={styles.top} data-to-top>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 19V5M6 11l6-6 6 6" />
-      </svg>
-      Til toppen
-    </button>
-  )
-}
+<button type="button" class={styles.top} data-to-top>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 19V5M6 11l6-6 6 6" />
+  </svg>
+  Til toppen
+</button>
 <footer class={styles.footer}>
   <a href="/" class={styles.logo}>
     <img src="/favicon.svg" width="40" height="40" alt="Til forsiden" />
   </a>
   <div class={styles.text}>
     <p>Alle kinoer og filmer i Oslo samlet på én side.</p>
-    <a href="/om" class={styles.about}>Om nettstedet</a>
+    <a href="/om">Om nettstedet</a>
   </div>
   <InstallApp />
 </footer>
 
 <script>
+  const toTop = document.querySelector<HTMLButtonElement>('[data-to-top]')!;
+
   // Scrolls without adding # to the URL; smoothness comes from scroll-behavior in global.css
-  document.querySelector('[data-to-top]')?.addEventListener('click', () => window.scrollTo({ top: 0 }));
+  toTop.addEventListener('click', () => window.scrollTo({ top: 0 }));
+
+  // Hidden on pages too short to scroll, rechecked as the content changes
+  new ResizeObserver(() => {
+    toTop.hidden = document.documentElement.scrollHeight <= window.innerHeight;
+  }).observe(document.body);
 </script>
