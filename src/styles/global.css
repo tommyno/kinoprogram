@@ -108,6 +108,8 @@ html {
 
 body {
   margin: 0;
+  /* Bands that span the whole window (100vw) would otherwise scroll sideways past a classic scrollbar */
+  overflow-x: clip;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font);

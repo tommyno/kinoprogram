@@ -1,3 +1,34 @@
+/* The back link and header on the film's poster, blurred and darkened, across the whole window */
+.top {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Up to the top of the page, past its padding */
+  margin-top: -32px;
+  padding: 16px 0 32px;
+  color: var(--bg);
+}
+
+/* Dark enough under white text even for a white poster; ink while the poster loads or when there is none */
+.backdrop {
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(50% - 50vw);
+  overflow: hidden;
+  background: var(--ink);
+}
+
+/* Scaled up so the blur doesn't fade out at the edges */
+.backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(48px) saturate(1.3) brightness(0.4);
+  transform: scale(1.3);
+}
+
 .back {
   align-self: flex-start;
   display: inline-flex;
@@ -12,13 +43,12 @@
   text-decoration: underline;
 }
 
-/* Top-aligned on phones, where the title can wrap to several lines */
+/* On phones the title sits beside the poster and the rest runs under both */
 .header {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px 24px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--line-strong);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 16px;
 }
 
 .poster {
@@ -33,38 +63,54 @@ button.poster {
 }
 
 /* Opened by a click: on its own row above the title, as wide as the page or the image allows */
-.header:has(.poster[data-expanded]) {
-  flex-wrap: wrap;
-}
-
 .poster[data-expanded] {
+  grid-column: 1 / -1;
   width: 100%;
   max-width: var(--poster-width);
   cursor: zoom-out;
 }
 
+.header:has(.poster[data-expanded]) .titleBlock {
+  grid-column: 1 / -1;
+}
+
+/* Its two parts are placed in the header's grid on phones, and stack beside the poster on wider screens */
 .heading {
+  display: contents;
+}
+
+.heading a {
+  text-underline-offset: 3px;
+}
+
+.titleBlock {
   display: flex;
   flex-direction: column;
   gap: 6px;
   min-width: 0;
 }
 
+.body {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 /* Source line breaks are kept */
 .synopsis {
   max-width: 65ch;
-  margin: 4px 0 0;
   font-size: 15px;
   line-height: 1.5;
   white-space: pre-line;
 }
 
-/* Too long for the poster, so a click opens and closes it */
+/* Too long, so a click opens and closes it */
 .synopsis[role='button'] {
   cursor: pointer;
 }
 
-/* Cut off by the script so the text column is no taller than the poster; fades out */
+/* Cut off by the script; fades out */
 .synopsis[data-clamped] {
   overflow: hidden;
   mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
@@ -74,13 +120,8 @@ button.poster {
 .credits {
   display: flex;
   flex-direction: column;
-  margin-top: 4px;
   font-size: 13px;
   line-height: 1.5;
-}
-
-.credits a {
-  text-underline-offset: 3px;
 }
 
 .title {
@@ -92,42 +133,55 @@ button.poster {
 
 .meta {
   font-size: 13px;
-  color: var(--muted);
 }
 
-/* The film's page at the source and its TMDB score, with the trailer button on its own row below */
-.links {
+/* The trailer, the film's page at the source and its TMDB score, as buttons of equal width on phones */
+.actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 20px;
-  margin-top: 8px;
+  gap: 8px;
 }
 
-.source {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  min-height: 44px;
-  font-size: 13px;
-  font-weight: 600;
-  text-underline-offset: 3px;
+.actions > * {
+  flex: 1 1 0;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .trailerButton {
-  align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   min-height: 44px;
-  padding: 0 16px;
-  border: 1px solid var(--line-strong);
+  padding: 0 12px;
+  border: 1px solid var(--bg);
   border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
   font-size: 13px;
   font-weight: 600;
 }
 
 .trailerButton:hover {
-  border-color: var(--ink);
+  border-color: var(--line);
+  background: var(--line);
+}
+
+.source {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--bg);
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.source:hover {
+  background: rgb(255 255 255 / 0.15);
 }
 
 /* A play icon, and a cross while the trailer is open */
@@ -258,7 +312,9 @@ button.poster {
 
 @media (min-width: 700px) {
   .header {
+    display: flex;
     align-items: flex-end;
+    gap: 32px;
   }
 
   /* The text sits at the poster's foot, but the poster stays at the top when opened text grows past it */
@@ -267,16 +323,23 @@ button.poster {
   }
 
   .poster:not([data-expanded]) {
-    width: 160px;
+    width: 180px;
   }
 
   /* A full-width poster would be far taller than the screen; the text narrows to stay beside it */
-  .header:has(.poster[data-expanded]) {
-    flex-wrap: nowrap;
-  }
-
   .poster[data-expanded] {
     max-width: min(var(--poster-width), 50%);
+  }
+
+  .heading {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .actions > * {
+    flex: none;
   }
 
   /* The day name lines up with the first row of times */

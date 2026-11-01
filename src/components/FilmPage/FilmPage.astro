@@ -40,70 +40,80 @@ function nameList(people: Person[]): (Person | string)[] {
 ---
 
 <Base title={`${film.title} – Kinoprogram for Oslo`} description={`Alle visningene av ${film.title} på kino i Oslo, dag for dag.`}>
-  <a href="/" class={styles.back} data-back>← Kinoprogram for Oslo</a>
-
-  <header class={styles.header}>
-    {
-      film.posterLarge ? (
-        <button
-          type="button"
-          class={styles.poster}
-          style={`--poster-width: ${film.posterLarge.width}px`}
-          aria-expanded="false"
-          aria-label="Vis plakaten stor"
-          data-poster
-        >
-          <Poster film={film} srcset={film.posterLarge.srcSet} sizes="(min-width: 700px) 160px, 104px" eager />
-        </button>
-      ) : (
-        <div class={styles.poster} data-poster>
-          <Poster film={film} sizes="(min-width: 700px) 160px, 104px" eager />
-        </div>
-      )
-    }
-    <div class={styles.heading} data-heading>
-      <h1 class={styles.title}>{film.title}</h1>
-      {meta && <p class={styles.meta}>{meta}</p>}
-      {film.synopsis && <p class={styles.synopsis} data-synopsis>{film.synopsis}</p>}
-      {
-        credits.length > 0 && (
-          <p class={styles.credits}>
-            {credits.map(([label, people]) => (
-              <span>
-                {label}:{' '}
-                {nameList(people).map((p) =>
-                  typeof p === 'string' ? p : <a href={p.url} target="_blank" rel="noopener">{p.name}</a>,
-                )}
-              </span>
-            ))}
-          </p>
-        )
-      }
-      <div class={styles.links}>
-        {links.map((link) => (
-          <a href={link.href} class={styles.source} target="_blank" rel="noopener" aria-label={link.label}>
-            {link.text}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
-            </svg>
-          </a>
-        ))}
-      </div>
-      {
-        film.trailer && (
-          <button type="button" class={styles.trailerButton} aria-expanded="false" aria-controls="trailer" data-trailer-button={film.trailer}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true" class={styles.play}>
-              <path d="M7 4.5v15l12-7.5z"></path>
-            </svg>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true" class={styles.close}>
-              <path d="M6 6l12 12M18 6L6 18"></path>
-            </svg>
-            <span data-label>Se trailer</span>
-          </button>
-        )
-      }
+  <div class={styles.top}>
+    <div class={styles.backdrop} aria-hidden="true">
+      {film.posterUrl && <img src={film.posterUrl} alt="" />}
     </div>
-  </header>
+
+    <a href="/" class={styles.back} data-back>← Kinoprogram for Oslo</a>
+
+    <header class={styles.header}>
+      {
+        film.posterLarge ? (
+          <button
+            type="button"
+            class={styles.poster}
+            style={`--poster-width: ${film.posterLarge.width}px`}
+            aria-expanded="false"
+            aria-label="Vis plakaten stor"
+            data-poster
+          >
+            <Poster film={film} srcset={film.posterLarge.srcSet} sizes="(min-width: 700px) 180px, 104px" eager />
+          </button>
+        ) : (
+          <div class={styles.poster} data-poster>
+            <Poster film={film} sizes="(min-width: 700px) 180px, 104px" eager />
+          </div>
+        )
+      }
+      <div class={styles.heading} data-heading>
+        <div class={styles.titleBlock}>
+          <h1 class={styles.title}>{film.title}</h1>
+          {meta && <p class={styles.meta}>{meta}</p>}
+        </div>
+        <div class={styles.body}>
+          {film.synopsis && <p class={styles.synopsis} data-synopsis>{film.synopsis}</p>}
+          {
+            credits.length > 0 && (
+              <p class={styles.credits}>
+                {credits.map(([label, people]) => (
+                  <span>
+                    {label}:{' '}
+                    {nameList(people).map((p) =>
+                      typeof p === 'string' ? p : <a href={p.url} target="_blank" rel="noopener">{p.name}</a>,
+                    )}
+                  </span>
+                ))}
+              </p>
+            )
+          }
+          <div class={styles.actions}>
+            {
+              film.trailer && (
+                <button type="button" class={styles.trailerButton} aria-expanded="false" aria-controls="trailer" data-trailer-button={film.trailer}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class={styles.play}>
+                    <path d="M7 4.5v15l12-7.5z"></path>
+                  </svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true" class={styles.close}>
+                    <path d="M6 6l12 12M18 6L6 18"></path>
+                  </svg>
+                  <span data-label>Se trailer</span>
+                </button>
+              )
+            }
+            {links.map((link) => (
+              <a href={link.href} class={styles.source} target="_blank" rel="noopener" aria-label={link.label}>
+                {link.text}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
+                </svg>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
 
   {film.trailer && <div id="trailer" class={styles.trailer} hidden></div>}
 
@@ -213,17 +223,22 @@ function nameList(people: Person[]): (Person | string)[] {
   if (synopsis) {
     const poster = document.querySelector<HTMLElement>('[data-poster]')!;
     const heading = document.querySelector<HTMLElement>('[data-heading]')!;
+    const wide = matchMedia('(min-width: 700px)');
     let expanded = false;
 
-    /** Cuts the synopsis off so the text column is no taller than the poster; a click opens and closes it. */
+    /**
+     * Cuts the synopsis off so the text column is no taller than the poster, or on phones, where it runs under the
+     * poster, at four lines; a click opens and closes it.
+     */
     const fitSynopsis = () => {
       synopsis.style.maxHeight = '';
-      const overflow = heading.offsetHeight - poster.offsetHeight;
+      const lineHeight = parseFloat(getComputedStyle(synopsis).lineHeight);
+      const overflow = wide.matches ? heading.offsetHeight - poster.offsetHeight : synopsis.offsetHeight - 4 * lineHeight;
       const clamped = !expanded && overflow > 0;
       synopsis.toggleAttribute('data-clamped', clamped);
       if (clamped) {
         // At least two lines, so there is something to fade
-        const minimum = 2 * parseFloat(getComputedStyle(synopsis).lineHeight);
+        const minimum = 2 * lineHeight;
         synopsis.style.maxHeight = `${Math.max(synopsis.offsetHeight - overflow, minimum)}px`;
       }
       // Opens and closes from the keyboard too while it is too long for the poster
