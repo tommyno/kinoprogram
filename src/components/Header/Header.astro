@@ -48,31 +48,32 @@ const { picker } = Astro.props;
   import { dayLabel, programNow } from '@lib/time.ts';
 
   const input = document.querySelector<HTMLInputElement>('[data-date-picker]');
-  const button = document.querySelector<HTMLElement>('[data-date-button]');
 
-  // "i dag" and "i morgen" are the build's; label the day again from today's date, in case Oslo has passed midnight since
-  if (input && button) {
+  if (input) {
+    const button = document.querySelector<HTMLElement>('[data-date-button]')!;
+
+    // "i dag" and "i morgen" are the build's; label the day again from today's date, in case Oslo has passed midnight since
     const today = programNow().day;
     const label = dayLabel(input.value, today);
-    button.querySelector('span')!.textContent = label;
+    const shown = button.querySelector('span')!;
+    document.title = document.title.replace(shown.textContent!, label);
+    shown.textContent = label;
     button.setAttribute('aria-label', `${label}, velg dato`);
-    document.title = `Kinoprogram for Oslo ${label}`;
     input.min = today;
+
+    // Desktop browsers only open the calendar from its icon; open it from anywhere on the label
+    const openPicker = () => {
+      try {
+        input.showPicker();
+      } catch {}
+    };
+    input.addEventListener('click', openPicker);
+    button.addEventListener('click', openPicker);
+
+    input.addEventListener('change', () => {
+      if (!input.value) return;
+      const path = input.value === programNow().day ? '/' : `/${input.value}`;
+      location.href = path + location.search;
+    });
   }
-
-  // Desktop browsers only open the calendar from its icon; open it from anywhere on the label
-  function openPicker() {
-    try {
-      input?.showPicker();
-    } catch {}
-  }
-
-  input?.addEventListener('click', openPicker);
-  button?.addEventListener('click', openPicker);
-
-  input?.addEventListener('change', () => {
-    if (!input.value) return;
-    const path = input.value === programNow().day ? '/' : `/${input.value}`;
-    location.href = path + location.search;
-  });
 </script>

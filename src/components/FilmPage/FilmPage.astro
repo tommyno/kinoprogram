@@ -22,6 +22,15 @@ const meta = filmMeta(film);
 const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? 'Cinemateket' : 'Filmweb';
 // "7,7"
 const rating = film.rating?.value.toLocaleString('nb-NO', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const links = [
+  { href: film.pageUrl, text: sourceName },
+  ...(film.rating
+    ? [{ href: film.rating.url, text: `TMDB ${rating}`, label: `TMDB ${rating} av 10, ${film.rating.votes} stemmer` }]
+    : []),
+];
+const credits: [string, Person[]][] = [];
+if (film.directors?.length) credits.push(['Regi', film.directors]);
+if (film.cast?.length) credits.push(['Med', film.cast]);
 // "Ingrid Bergman, Liv Ullmann og Lena Nyman", each name a link
 const names = new Intl.ListFormat('nb', { type: 'conjunction' });
 function nameList(people: Person[]): (Person | string)[] {
@@ -57,38 +66,28 @@ function nameList(people: Person[]): (Person | string)[] {
       {meta && <p class={styles.meta}>{meta}</p>}
       {film.synopsis && <p class={styles.synopsis} data-synopsis>{film.synopsis}</p>}
       {
-        film.directors?.length || film.cast?.length ? (
+        credits.length > 0 && (
           <p class={styles.credits}>
-            {([['Regi', film.directors], ['Med', film.cast]] as [string, Person[] | undefined][]).map(([label, people]) =>
-              people?.length ? (
-                <span>
-                  {label}:{' '}
-                  {nameList(people).map((p) =>
-                    typeof p === 'string' ? p : <a href={p.url} target="_blank" rel="noopener">{p.name}</a>,
-                  )}
-                </span>
-              ) : null,
-            )}
+            {credits.map(([label, people]) => (
+              <span>
+                {label}:{' '}
+                {nameList(people).map((p) =>
+                  typeof p === 'string' ? p : <a href={p.url} target="_blank" rel="noopener">{p.name}</a>,
+                )}
+              </span>
+            ))}
           </p>
-        ) : null
+        )
       }
       <div class={styles.links}>
-        <a href={film.pageUrl} class={styles.source} target="_blank" rel="noopener">
-          {sourceName}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
-          </svg>
-        </a>
-        {
-          film.rating && (
-            <a href={film.rating.url} class={styles.source} target="_blank" rel="noopener" aria-label={`TMDB ${rating} av 10, ${film.rating.votes} stemmer`}>
-              TMDB {rating}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
-              </svg>
-            </a>
-          )
-        }
+        {links.map((link) => (
+          <a href={link.href} class={styles.source} target="_blank" rel="noopener" aria-label={link.label}>
+            {link.text}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
+            </svg>
+          </a>
+        ))}
       </div>
       {
         film.trailer && (
@@ -106,7 +105,7 @@ function nameList(people: Person[]): (Person | string)[] {
     </div>
   </header>
 
-  {film.trailer && <div id="trailer" class={styles.trailer} hidden data-trailer></div>}
+  {film.trailer && <div id="trailer" class={styles.trailer} hidden></div>}
 
   <div>
     {
@@ -183,15 +182,14 @@ function nameList(people: Person[]): (Person | string)[] {
       const expanded = poster.toggleAttribute('data-expanded');
       poster.setAttribute('aria-expanded', String(expanded));
       // The browser then picks the version that is sharp at the new width
-      if (expanded) image.sizes = `${poster.offsetWidth}px`;
-      else image.sizes = smallSizes;
+      image.sizes = expanded ? `${poster.offsetWidth}px` : smallSizes;
     });
   }
 
   // Nothing loads from YouTube until the visitor asks for the trailer; closing it removes the player, which stops it
   const trailerButton = document.querySelector<HTMLButtonElement>('[data-trailer-button]');
   if (trailerButton) {
-    const player = document.querySelector<HTMLElement>('[data-trailer]')!;
+    const player = document.getElementById('trailer')!;
     trailerButton.addEventListener('click', () => {
       const open = trailerButton.getAttribute('aria-expanded') !== 'true';
       trailerButton.setAttribute('aria-expanded', String(open));

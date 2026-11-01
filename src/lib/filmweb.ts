@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { USER_AGENT, withRetry } from './http.ts';
+import { fetchOk } from './http.ts';
 import { slugify, type Film, type Program, type Showing } from './program.ts';
 import { programSlot } from './time.ts';
 
@@ -69,14 +69,11 @@ const ShowsData = z.object({ showQuery: z.object({ getShows: z.array(RawShow) })
 const MoviesData = z.object({ movieQuery: z.object({ getCurrentMovies: z.array(RawMovie) }) });
 
 async function query<T>(query: string, variables: Record<string, unknown>, schema: z.ZodType<T>): Promise<T> {
-  const res = await fetch(ENDPOINT, {
+  const res = await fetchOk('Filmweb', ENDPOINT, {
     method: 'POST',
-    headers: { 'content-type': 'application/json', 'user-agent': USER_AGENT },
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ query, variables }),
   });
-  if (!res.ok) {
-    throw new Error(`Filmweb svarte ${res.status} ${res.statusText}`);
-  }
   const body = (await res.json()) as { data?: unknown; errors?: { message: string }[] };
   if (body.errors?.length) {
     throw new Error(`Filmweb GraphQL-feil: ${body.errors.map((e) => e.message).join('; ')}`);
@@ -87,8 +84,8 @@ async function query<T>(query: string, variables: Record<string, unknown>, schem
 /** Fetches the full program for a city: two requests, run one after the other. */
 export async function fetchSnapshot(location: string = LOCATION): Promise<FilmwebSnapshot> {
   const fetchedAt = new Date().toISOString();
-  const shows = await withRetry('Filmweb', () => query(SHOWS_QUERY, { location }, ShowsData));
-  const movies = await withRetry('Filmweb', () => query(MOVIES_QUERY, { location }, MoviesData));
+  const shows = await query(SHOWS_QUERY, { location }, ShowsData);
+  const movies = await query(MOVIES_QUERY, { location }, MoviesData);
   return {
     fetchedAt,
     shows: shows.showQuery.getShows,

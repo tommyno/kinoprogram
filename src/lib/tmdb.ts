@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { USER_AGENT, withRetry } from './http.ts';
+import { fetchOk } from './http.ts';
 import type { Film, Person } from './program.ts';
 
 // The films' user score, trailer, director and cast, and a poster for films without one, found by title and year. Needs a read access
@@ -107,15 +107,10 @@ export function pickCredits(credits: Credits): Pick<Film, 'directors' | 'cast'> 
   };
 }
 
-function get<T>(path: string, params: Record<string, string>, schema: z.ZodType<T>, token: string): Promise<T> {
+async function get<T>(path: string, params: Record<string, string>, schema: z.ZodType<T>, token: string): Promise<T> {
   const url = `${API}${path}?${new URLSearchParams(params)}`;
-  return withRetry('TMDB', async () => {
-    const res = await fetch(url, { headers: { authorization: `Bearer ${token}`, 'user-agent': USER_AGENT } });
-    if (!res.ok) {
-      throw new Error(`TMDB svarte ${res.status} ${res.statusText}`);
-    }
-    return schema.parse(await res.json());
-  });
+  const res = await fetchOk('TMDB', url, { headers: { authorization: `Bearer ${token}` } });
+  return schema.parse(await res.json());
 }
 
 /** The original title, then the Norwegian one, without the year Filmweb puts after some classics: "The Godfather (1972)". */
@@ -130,29 +125,28 @@ export function searchTitles(film: Pick<Film, 'title' | 'originalTitle'>): strin
  * year off ("Dune" 2020), and then in the year, for titles too common to show up on the first page otherwise ("Butterfly").
  * Without a year, all searches are weighed together, so a title shared in one language isn't taken from the other.
  */
-async function search(film: Film, titles: string[], token: string): Promise<SearchResult | undefined> {
+async function search(titles: string[], year: number | null, token: string): Promise<SearchResult | undefined> {
   const queries = [...new Set(titles)];
   const languages = ['en-US', 'nb-NO'];
-  if (!film.year) {
+  if (!year) {
     const results: SearchResult[] = [];
     for (const params of queries.flatMap((query) => languages.map((language) => ({ query, language })))) {
       results.push(...(await get('/search/movie', params, SearchData, token)).results);
     }
     return findMatch(results, titles, null);
   }
-  const year = String(film.year);
   const searches = queries.flatMap((query) =>
-    languages.flatMap((language): Record<string, string>[] => [{ query, language }, { query, language, year }]),
+    languages.flatMap((language): Record<string, string>[] => [{ query, language }, { query, language, year: String(year) }]),
   );
   for (const params of searches) {
-    const match = findMatch((await get('/search/movie', params, SearchData, token)).results, titles, film.year);
+    const match = findMatch((await get('/search/movie', params, SearchData, token)).results, titles, year);
     if (match) return match;
   }
 }
 
 /** Only films whose source has no poster of its own get TMDB's: Cinemateket's, which show a logo, and the odd Filmweb film. */
 async function lookUp(film: Film, token: string): Promise<TmdbFilm | null> {
-  const match = await search(film, searchTitles(film), token);
+  const match = await search(searchTitles(film), film.year, token);
   if (!match) return null;
   const movie = await get(
     `/movie/${match.id}`,

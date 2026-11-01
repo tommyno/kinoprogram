@@ -2,6 +2,7 @@ import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { cinemateketProgram, fetchCinemateketFeed, parseFeed } from './cinemateket.ts';
 import { FilmwebSnapshot, fetchSnapshot, filmwebProgram } from './filmweb.ts';
+import { errorMessage } from './http.ts';
 import { mergePrograms, type Film, type Program } from './program.ts';
 import { programNow } from './time.ts';
 import { fetchTmdb, type TmdbFilm } from './tmdb.ts';
@@ -37,7 +38,7 @@ async function loadCinemateket(): Promise<Program | null> {
   try {
     return cinemateketProgram(parseFeed(await cachedText('cinemateket.ics', fetchCinemateketFeed)));
   } catch (error) {
-    console.warn(`Hopper over Cinemateket: ${error instanceof Error ? error.message : error}`);
+    console.warn(`Hopper over Cinemateket: ${errorMessage(error)}`);
     return null;
   }
 }
@@ -53,7 +54,7 @@ async function loadTmdb(films: Record<string, Film>): Promise<Record<string, Tmd
   try {
     return JSON.parse(await cachedText('tmdb.json', async () => JSON.stringify(await fetchTmdb(films, token))));
   } catch (error) {
-    console.warn(`Hopper over TMDB: ${error instanceof Error ? error.message : error}`);
+    console.warn(`Hopper over TMDB: ${errorMessage(error)}`);
     return {};
   }
 }
