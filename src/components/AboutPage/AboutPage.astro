@@ -1,0 +1,34 @@
+---
+import Base from '@layouts/Base.astro';
+import Footer from '@components/Footer/Footer.astro';
+import styles from './AboutPage.module.css';
+---
+
+<Base title="Om siden – Kinoprogram for Oslo" description="Hvor programmet, ratingene og trailerne på Kinoprogram for Oslo kommer fra.">
+  <a href="/" class={styles.back}>← Kinoprogram for Oslo</a>
+
+  <article class={styles.about}>
+    <h1 class={styles.title}>Om siden</h1>
+    <p>Alle kinoer og filmer i Oslo samlet på én side.</p>
+
+    <h2 class={styles.heading}>Hvor dataene kommer fra</h2>
+    <ul class={styles.list}>
+      <li>Programdata hentes fra åpne kilder på <a href="https://www.filmweb.no">Filmweb</a> og <a href="https://www.cinemateket.no">Cinemateket</a>.</li>
+      <li>
+        Ratinger og trailere hentes fra <a href="https://www.themoviedb.org">TMDB</a>.
+        <!-- TMDB's terms ask for their logo, unchanged and smaller than ours, and this notice -->
+        <span class={styles.credit}>
+          <a href="https://www.themoviedb.org" class={styles.tmdb}>
+            <img src="/tmdb.svg" width="85" height="11" alt="TMDB" />
+          </a>
+          Denne siden bruker TMDB og TMDB-API-ene, men er ikke godkjent eller sertifisert av TMDB.
+        </span>
+      </li>
+    </ul>
+
+    <h2 class={styles.heading}>Kildekode</h2>
+    <p>Koden ligger åpent på <a href="https://github.com/tommyno/kinoprogram">GitHub</a>.</p>
+  </article>
+
+  <Footer noTopButton />
+</Base>
