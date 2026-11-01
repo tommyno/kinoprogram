@@ -25,11 +25,8 @@ const { noTopButton = false } = Astro.props;
     <img src="/favicon.svg" width="40" height="40" alt="Til forsiden" />
   </a>
   <div class={styles.text}>
-    <p class={styles.tagline}>Alle kinoer og filmer i Oslo samlet på én side.</p>
-    <span>Programdata fra <a href="https://www.filmweb.no">Filmweb</a> og <a href="https://www.cinemateket.no">Cinemateket</a>. Ratinger og trailere fra <a href="https://www.themoviedb.org">TMDB</a>.</span>
-    <span>Fork på <a href="https://github.com/tommyno/kinoprogram">GitHub</a></span>
-    <!-- TMDB's terms ask for this notice wherever their data is used -->
-    <p class={styles.notice}>Denne siden bruker TMDB og TMDB-API-ene, men er ikke godkjent eller sertifisert av TMDB.</p>
+    <p>Alle kinoer og filmer i Oslo samlet på én side.</p>
+    <a href="/om" class={styles.about}>Om nettstedet</a>
   </div>
   <InstallApp />
 </footer>

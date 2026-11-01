@@ -35,14 +35,11 @@
   flex: 1;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
   gap: 8px 24px;
 }
 
-.tagline {
-  flex-basis: 100%;
-}
-
-.notice {
-  flex-basis: 100%;
+.about {
+  margin-left: auto;
 }
