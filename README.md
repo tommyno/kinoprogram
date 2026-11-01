@@ -16,4 +16,4 @@ The website is built from publicly available data:
 
 - **Filmweb** (`movieinfoqs.filmweb.no/graphql`): showings with times and ticket links, and for each film the poster, synopsis, length, age rating and production year.
 - **Cinemateket** (`cinemateket.no/cinemateket-webcal.ics`): showings with times, screen, description and a link to the event.
-- **TMDB** (`api.themoviedb.org`): user scores and trailers for the film pages.
+- **TMDB** (`api.themoviedb.org`): user scores and trailers for the film pages, and posters for films whose source has none, such as Cinemateket's.

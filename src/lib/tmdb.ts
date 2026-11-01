@@ -2,11 +2,15 @@ import { z } from 'zod';
 import { USER_AGENT, withRetry } from './http.ts';
 import type { Film } from './program.ts';
 
-// The films' user score and trailer, found by title and year. Needs a read access token from themoviedb.org
+// The films' user score and trailer, and a poster for films without one, found by title and year. Needs a read access
+// token from themoviedb.org
 const API = 'https://api.themoviedb.org/3';
 const MOVIE_URL = 'https://www.themoviedb.org/movie/';
-// A score from a handful of votes says little, and new films often have none yet
-const MIN_VOTES = 20;
+const IMAGE_URL = 'https://image.tmdb.org/t/p/';
+// TMDB's fixed poster widths, short of the original
+const POSTER_WIDTHS = [185, 342, 500, 780];
+// A score from a vote or two says little, and new films often have none yet
+const MIN_VOTES = 5;
 // Requests at a time; TMDB allows about 40 a second
 const CONCURRENCY = 8;
 
@@ -19,6 +23,7 @@ export const SearchResult = z.object({
   vote_average: z.number(),
   vote_count: z.number(),
   popularity: z.number(),
+  poster_path: z.string().nullable(),
 });
 export type SearchResult = z.infer<typeof SearchResult>;
 
@@ -34,7 +39,7 @@ export type Video = z.infer<typeof Video>;
 const SearchData = z.object({ results: z.array(SearchResult) });
 const VideosData = z.object({ results: z.array(Video) });
 
-export type TmdbFilm = Pick<Film, 'rating' | 'trailer'>;
+export type TmdbFilm = Partial<Pick<Film, 'rating' | 'trailer' | 'posterUrl' | 'posterSrcSet' | 'posterLarge'>>;
 
 function normalize(title: string): string {
   return title.toLocaleLowerCase('nb').replace(/\s+/g, ' ').trim();
@@ -43,21 +48,30 @@ function normalize(title: string): string {
 /**
  * The most popular result with one of the film's titles, first released within a year of the film's year. Many titles
  * are shared by small films the same year ("Dune", "Fatherland"), and the search's year also takes in re-releases.
+ * Without a year (Cinemateket), a classic can share its title with a remake ("Suspiria", "Nosferatu"), so the most voted
+ * result is only taken when no other comes close.
  */
-export function findMatch(results: SearchResult[], titles: string[], year: number): SearchResult | undefined {
+export function findMatch(results: SearchResult[], titles: string[], year: number | null): SearchResult | undefined {
   const wanted = new Set(titles.map(normalize));
-  return results
-    .filter(
-      (r) =>
-        (wanted.has(normalize(r.title)) || wanted.has(normalize(r.original_title))) &&
-        Math.abs(Number(r.release_date?.slice(0, 4)) - year) <= 1,
-    )
-    .sort((a, b) => b.popularity - a.popularity)[0];
+  const same = results.filter((r) => wanted.has(normalize(r.title)) || wanted.has(normalize(r.original_title)));
+  if (year) {
+    return same
+      .filter((r) => Math.abs(Number(r.release_date?.slice(0, 4)) - year) <= 1)
+      .sort((a, b) => b.popularity - a.popularity)[0];
+  }
+  // The same film can come from searches in both languages
+  const [first, second] = [...new Map(same.map((r) => [r.id, r])).values()].sort((a, b) => b.vote_count - a.vote_count);
+  return second && second.vote_count * 10 >= first.vote_count ? undefined : first;
 }
 
 export function tmdbRating(result: SearchResult): TmdbFilm['rating'] {
   if (result.vote_count < MIN_VOTES) return undefined;
   return { value: Math.round(result.vote_average * 10) / 10, votes: result.vote_count, url: MOVIE_URL + result.id };
+}
+
+export function tmdbPoster(path: string): Pick<Film, 'posterUrl' | 'posterSrcSet' | 'posterLarge'> {
+  const srcSet = POSTER_WIDTHS.map((w) => `${IMAGE_URL}w${w}${path} ${w}w`).join(', ');
+  return { posterUrl: `${IMAGE_URL}w342${path}`, posterSrcSet: srcSet, posterLarge: { srcSet, width: 780 } };
 }
 
 /** A trailer on YouTube: Norwegian before English, official before not. */
@@ -87,21 +101,35 @@ export function searchTitles(film: Pick<Film, 'title' | 'originalTitle'>): strin
  * film without a Norwegian title is listed under its original one ("ドライブ・マイ・カー"), and a Norwegian title can hide
  * the English one we search for ("Fatherland"). Each search runs without the year first, since Filmweb's year can be a
  * year off ("Dune" 2020), and then in the year, for titles too common to show up on the first page otherwise ("Butterfly").
+ * Without a year, all searches are weighed together, so a title shared in one language isn't taken from the other.
  */
-async function lookUp(film: Film, token: string): Promise<TmdbFilm | null> {
-  const titles = searchTitles(film);
+async function search(film: Film, titles: string[], token: string): Promise<SearchResult | undefined> {
+  const queries = [...new Set(titles)];
+  const languages = ['en-US', 'nb-NO'];
+  if (!film.year) {
+    const results: SearchResult[] = [];
+    for (const params of queries.flatMap((query) => languages.map((language) => ({ query, language })))) {
+      results.push(...(await get('/search/movie', params, SearchData, token)).results);
+    }
+    return findMatch(results, titles, null);
+  }
   const year = String(film.year);
-  const searches: Record<string, string>[] = [...new Set(titles)].flatMap((query) =>
-    ['en-US', 'nb-NO'].flatMap((language): Record<string, string>[] => [{ query, language }, { query, language, year }]),
+  const searches = queries.flatMap((query) =>
+    languages.flatMap((language): Record<string, string>[] => [{ query, language }, { query, language, year }]),
   );
   for (const params of searches) {
-    const search = await get('/search/movie', params, SearchData, token);
-    const match = findMatch(search.results, titles, film.year!);
-    if (!match) continue;
-    const videos = await get(`/movie/${match.id}/videos`, { include_video_language: 'no,nb,en' }, VideosData, token);
-    return { rating: tmdbRating(match), trailer: pickTrailer(videos.results) };
+    const match = findMatch((await get('/search/movie', params, SearchData, token)).results, titles, film.year);
+    if (match) return match;
   }
-  return null;
+}
+
+/** Only films whose source has no poster of its own get TMDB's: Cinemateket's, which show a logo, and the odd Filmweb film. */
+async function lookUp(film: Film, token: string): Promise<TmdbFilm | null> {
+  const match = await search(film, searchTitles(film), token);
+  if (!match) return null;
+  const videos = await get(`/movie/${match.id}/videos`, { include_video_language: 'no,nb,en' }, VideosData, token);
+  const poster = !film.posterSrcSet && match.poster_path ? tmdbPoster(match.poster_path) : {};
+  return { rating: tmdbRating(match), trailer: pickTrailer(videos.results), ...poster };
 }
 
 /** Runs the task on every item, a few at a time. The first error stops the rest and is thrown. */
@@ -121,11 +149,10 @@ async function eachLimited<T>(items: T[], task: (item: T) => Promise<void>): Pro
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 }
 
-/** Looks up every film with a year, in about two requests each. Films TMDB doesn't have are left out. */
+/** Looks up every film, in about two requests each. Films TMDB doesn't have are left out. */
 export async function fetchTmdb(films: Record<string, Film>, token: string): Promise<Record<string, TmdbFilm>> {
   const found: Record<string, TmdbFilm> = {};
-  const ids = Object.keys(films).filter((id) => films[id].year);
-  await eachLimited(ids, async (id) => {
+  await eachLimited(Object.keys(films), async (id) => {
     const film = await lookUp(films[id], token);
     if (film) found[id] = film;
   });

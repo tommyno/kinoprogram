@@ -5,7 +5,7 @@ import { osloDateTime, programSlot } from './time.ts';
 // Cinemateket isn't in Filmweb. Its calendar feed holds the next 100 screenings (about three weeks).
 const FEED_URL = 'https://www.cinemateket.no/cinemateket-webcal.ics';
 export const CINEMA = 'Cinemateket';
-// The feed has no images, so every Cinemateket film gets the same logo poster
+// The feed has no images, so a Cinemateket film gets the logo as poster unless TMDB has the film
 const POSTER = '/posters/cinemateket.svg';
 
 export type CinemateketEvent = {
@@ -84,7 +84,7 @@ export function cinemateketProgram(events: CinemateketEvent[]): Program {
     const filmId = `CINEMATEKET:${event.url.split('/').filter(Boolean).pop()}`;
     films[filmId] ??= {
       title: event.title,
-      // The feed has no year, so these films aren't looked up at TMDB
+      // The feed has no year, so TMDB is searched by title alone
       originalTitle: null,
       year: null,
       // Filmweb often lists the same film, so the prefix keeps the two pages apart

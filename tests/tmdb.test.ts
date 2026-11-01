@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { findMatch, pickTrailer, searchTitles, tmdbRating, type SearchResult, type Video } from '../src/lib/tmdb.ts';
+import { findMatch, pickTrailer, searchTitles, tmdbPoster, tmdbRating, type SearchResult, type Video } from '../src/lib/tmdb.ts';
 
 function result(overrides: Partial<SearchResult>): SearchResult {
-  return { id: 1, title: 'Film', original_title: 'Film', release_date: '2026-09-25', vote_average: 7.661, vote_count: 93, popularity: 1, ...overrides };
+  return { id: 1, title: 'Film', original_title: 'Film', release_date: '2026-09-25', vote_average: 7.661, vote_count: 93, popularity: 1, poster_path: null, ...overrides };
 }
 
 function video(overrides: Partial<Video>): Video {
@@ -36,6 +36,24 @@ describe('findMatch', () => {
     expect(findMatch([result({ release_date: '1984-12-14' })], ['Film'], 2020)).toBeUndefined();
     expect(findMatch([result({ release_date: '' })], ['Film'], 2026)).toBeUndefined();
   });
+
+  it('without a year, takes the most voted result only when no other comes close', () => {
+    const classic = result({ id: 1, title: 'Funny Face', release_date: '1957-02-13', vote_count: 764 });
+    expect(findMatch([result({ id: 2, title: 'Funny Face', vote_count: 15 }), classic], ['Funny Face'], null)?.id).toBe(1);
+    expect(findMatch([classic, result({ id: 2, title: 'Funny Face', vote_count: 500 })], ['Funny Face'], null)).toBeUndefined();
+    expect(findMatch([result({ title: 'Deep Water' })], ['Water'], null)).toBeUndefined();
+    // The same film from both languages' searches
+    expect(findMatch([classic, { ...classic, title: 'Funny Face' }], ['Funny Face'], null)?.id).toBe(1);
+  });
+});
+
+describe('tmdbPoster', () => {
+  it("offers TMDB's fixed widths", () => {
+    const poster = tmdbPoster('/abc.jpg');
+    expect(poster.posterUrl).toBe('https://image.tmdb.org/t/p/w342/abc.jpg');
+    expect(poster.posterSrcSet).toContain('https://image.tmdb.org/t/p/w780/abc.jpg 780w');
+    expect(poster.posterLarge?.width).toBe(780);
+  });
 });
 
 describe('tmdbRating', () => {
@@ -43,8 +61,9 @@ describe('tmdbRating', () => {
     expect(tmdbRating(result({ id: 1465063 }))).toEqual({ value: 7.7, votes: 93, url: 'https://www.themoviedb.org/movie/1465063' });
   });
 
-  it('leaves out scores with fewer than 20 votes', () => {
-    expect(tmdbRating(result({ vote_count: 19 }))).toBeUndefined();
+  it('leaves out scores with fewer than 5 votes', () => {
+    expect(tmdbRating(result({ vote_count: 4 }))).toBeUndefined();
+    expect(tmdbRating(result({ vote_count: 5 }))).toBeDefined();
   });
 });
 
