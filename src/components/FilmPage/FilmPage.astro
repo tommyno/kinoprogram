@@ -62,10 +62,10 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
       days.map(([day, list], index) => {
         const label = dayLabel(day, today);
         return (
-          <section class={styles.day} data-stagger style={`--i: ${index}`}>
+          <section class={styles.day} data-stagger style={`--i: ${index}`} data-film-day={day}>
             <h2 class={styles.dayHeading}>
-              <span class={styles.dayLabel}>{label}</span>
-              {label !== formatDay(day) && <span class={styles.date}>{formatDay(day)}</span>}
+              <span class={styles.dayLabel} data-day-label>{label}</span>
+              <span class={styles.date} hidden={label === formatDay(day)} data-date>{formatDay(day)}</span>
             </h2>
             <div class={styles.times}>
               {list.map((s) => (
@@ -86,7 +86,20 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
 </Base>
 
 <script>
-  import { markPast } from '@lib/time.ts';
+  import { dayLabel, formatDay, markPast, programNow } from '@lib/time.ts';
+
+  // The days are labelled at build time; in case Oslo has passed midnight since, drop the days that are over and label the rest again
+  const today = programNow().day;
+  for (const section of document.querySelectorAll<HTMLElement>('[data-film-day]')) {
+    const day = section.dataset.filmDay!;
+    if (day < today) {
+      section.remove();
+      continue;
+    }
+    const label = dayLabel(day, today);
+    section.querySelector('[data-day-label]')!.textContent = label;
+    section.querySelector<HTMLElement>('[data-date]')!.hidden = label === formatDay(day);
+  }
 
   // Started showings grey out as the clock passes them, as in the program
   const links = [...document.querySelectorAll<HTMLElement>('[data-minutes]')];

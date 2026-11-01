@@ -21,6 +21,7 @@ const description = `Hva går på kino i Oslo ${label}? Alle filmene og tidene f
 ---
 
 <Base title={`Kinoprogram for Oslo ${label}`} description={description}>
+  <slot name="head" slot="head" />
   <Header picker={{ day, label, today, lastDay }} />
   <Program films={films} showings={showings} />
   <Footer />

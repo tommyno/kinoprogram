@@ -1,6 +1,15 @@
 ---
 import ProgramPage from '@components/ProgramPage/ProgramPage.astro';
 import { programNow } from '@lib/time.ts';
+
+const day = programNow().day;
 ---
 
-<ProgramPage day={programNow().day} />
+<ProgramPage day={day}>
+  {/* The page is built for one day; once Oslo has passed midnight before the next build, open today's own page instead */}
+  <script slot="head" is:inline define:vars={{ day }}>
+    // sv-SE writes dates as 2026-11-01
+    const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Oslo' }).format(new Date());
+    if (today !== day) location.replace(`/${today}${location.search}`);
+  </script>
+</ProgramPage>

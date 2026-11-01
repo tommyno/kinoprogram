@@ -29,6 +29,8 @@ const image = new URL('/og.png', Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- First in the head, so a page that sends the visitor on does it before anything loads -->
+    <slot name="head" />
     <Font cssVariable="--font-inter" preload />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -79,11 +81,15 @@ const image = new URL('/og.png', Astro.site);
 </html>
 
 <script>
-  const build = document.querySelector<HTMLMetaElement>('meta[name="build"]')?.content;
+  import { programNow } from '@lib/time.ts';
 
-  // An installed app resumes without reloading; when it comes back into view, load the latest build if there is one
+  const build = document.querySelector<HTMLMetaElement>('meta[name="build"]')?.content;
+  const loadedOn = programNow().day;
+
+  // An installed app resumes without reloading; when it comes back into view on a new day, or with a newer build out, reload
   document.addEventListener('visibilitychange', async () => {
     if (document.visibilityState !== 'visible') return;
+    if (programNow().day !== loadedOn) return location.reload();
     try {
       const response = await fetch('/version.txt', { cache: 'no-store' });
       if (response.ok && (await response.text()) !== build) location.reload();

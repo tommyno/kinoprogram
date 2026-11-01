@@ -36,7 +36,6 @@ const { picker } = Astro.props;
             value={picker.day}
             min={picker.today}
             max={picker.lastDay}
-            data-today={picker.today}
             data-date-picker
           />
         </span>
@@ -46,7 +45,20 @@ const { picker } = Astro.props;
 </header>
 
 <script>
+  import { dayLabel, programNow } from '@lib/time.ts';
+
   const input = document.querySelector<HTMLInputElement>('[data-date-picker]');
+  const button = document.querySelector<HTMLElement>('[data-date-button]');
+
+  // "i dag" and "i morgen" are the build's; label the day again from today's date, in case Oslo has passed midnight since
+  if (input && button) {
+    const today = programNow().day;
+    const label = dayLabel(input.value, today);
+    button.querySelector('span')!.textContent = label;
+    button.setAttribute('aria-label', `${label}, velg dato`);
+    document.title = `Kinoprogram for Oslo ${label}`;
+    input.min = today;
+  }
 
   // Desktop browsers only open the calendar from its icon; open it from anywhere on the label
   function openPicker() {
@@ -56,11 +68,11 @@ const { picker } = Astro.props;
   }
 
   input?.addEventListener('click', openPicker);
-  document.querySelector('[data-date-button]')?.addEventListener('click', openPicker);
+  button?.addEventListener('click', openPicker);
 
   input?.addEventListener('change', () => {
     if (!input.value) return;
-    const path = input.value === input.dataset.today ? '/' : `/${input.value}`;
+    const path = input.value === programNow().day ? '/' : `/${input.value}`;
     location.href = path + location.search;
   });
 </script>

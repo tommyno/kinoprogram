@@ -4,8 +4,8 @@ name: Rebuild
 
 on:
   schedule:
-    # Every six hours at an off-peak minute (UTC). The 23:37 run lands just after midnight
-    # in Oslo in winter (01:37 in summer) and switches "i dag" to the new date
+    # Every six hours at an off-peak minute (UTC). The pages move "i dag" to the new date
+    # in the browser at midnight, so a build only brings in new showings
     - cron: '37 5,11,17,23 * * *'
   workflow_dispatch:
 
