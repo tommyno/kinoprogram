@@ -1,4 +1,4 @@
-import { USER_AGENT } from './http.ts';
+import { USER_AGENT, withRetry } from './http.ts';
 import { slugify, type Film, type Program, type Showing } from './program.ts';
 import { osloDateTime, programSlot } from './time.ts';
 
@@ -20,12 +20,14 @@ export type CinemateketEvent = {
   url: string;
 };
 
-export async function fetchCinemateketFeed(): Promise<string> {
-  const res = await fetch(FEED_URL, { headers: { 'user-agent': USER_AGENT } });
-  if (!res.ok) {
-    throw new Error(`Cinemateket svarte ${res.status} ${res.statusText}`);
-  }
-  return res.text();
+export function fetchCinemateketFeed(): Promise<string> {
+  return withRetry('Cinemateket', async () => {
+    const res = await fetch(FEED_URL, { headers: { 'user-agent': USER_AGENT } });
+    if (!res.ok) {
+      throw new Error(`Cinemateket svarte ${res.status} ${res.statusText}`);
+    }
+    return res.text();
+  });
 }
 
 function unescapeText(value: string): string {

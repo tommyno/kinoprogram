@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { USER_AGENT } from './http.ts';
+import { USER_AGENT, withRetry } from './http.ts';
 import { slugify, type Film, type Program, type Showing } from './program.ts';
 import { programSlot } from './time.ts';
 
@@ -81,8 +81,8 @@ async function query<T>(query: string, variables: Record<string, unknown>, schem
 /** Fetches the full program for a city: two requests, run one after the other. */
 export async function fetchSnapshot(location: string = LOCATION): Promise<FilmwebSnapshot> {
   const fetchedAt = new Date().toISOString();
-  const shows = await query(SHOWS_QUERY, { location }, ShowsData);
-  const movies = await query(MOVIES_QUERY, { location }, MoviesData);
+  const shows = await withRetry('Filmweb', () => query(SHOWS_QUERY, { location }, ShowsData));
+  const movies = await withRetry('Filmweb', () => query(MOVIES_QUERY, { location }, MoviesData));
   return {
     fetchedAt,
     shows: shows.showQuery.getShows,

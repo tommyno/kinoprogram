@@ -30,7 +30,7 @@ A static Astro site that is rebuilt on a schedule; the program is fetched from F
 - Sources: Filmweb's GraphQL API (`movieinfoqs.filmweb.no/graphql`, two requests per build) for ten cinemas, and Cinemateket's calendar feed (`cinemateket.no/cinemateket-webcal.ics`, one request, about three weeks ahead). If Cinemateket fails, the site builds without it.
 - `pnpm dev`, `pnpm build` and Vercel all fetch live data. Locally the responses are cached in `.cache/` for an hour.
 - The tests run on saved copies of real responses in `tests/fixtures/` (refresh them with `pnpm fixture`). `pnpm build` runs the tests first, so a failing test stops the deploy.
-- If there are no showings today, the build fails and the previous deploy stays up.
+- A failed request to either source is tried again twice. If there are no showings today, the build fails and the previous deploy stays up.
 
 ```
 src/lib/program.ts      the data model (films and showings per day) and merging the sources
