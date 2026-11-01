@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Kinoprogram for Oslo",
   "short_name": "Kinoprogram",
-  "description": "Alle filmene og tidene fra alle kinoene i Oslo, samlet på én side.",
+  "description": "Alle kinoer og filmer i Oslo samlet på én side.",
   "lang": "nb",
   "start_url": "/",
   "scope": "/",

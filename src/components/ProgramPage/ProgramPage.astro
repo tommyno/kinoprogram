@@ -17,10 +17,9 @@ const lastDay = Object.keys(program.days).at(-1) ?? today;
 const showings = program.days[day] ?? [];
 const films = Object.fromEntries(showings.map((s) => [s.filmId, program.films[s.filmId]]));
 const label = dayLabel(day, today);
-const description = `Hva går på kino i Oslo ${label}? Alle filmene og tidene fra alle kinoene i byen, samlet på én side.`;
 ---
 
-<Base title={`Kinoprogram for Oslo ${label}`} description={description}>
+<Base title={`Kinoprogram for Oslo ${label}`}>
   <slot name="head" slot="head" />
   <Header picker={{ day, label, today, lastDay }} />
   <Program films={films} showings={showings} />
