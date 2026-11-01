@@ -38,8 +38,8 @@ const groups = [...Map.groupBy(showings, (s) => s.filmId)].sort(([a], [b]) => co
 
           <div class={styles.times}>
             {list.map((s, i) => (
-              <ShowingLink showing={s} title={film.title} class={styles.row} hidden={i >= COLLAPSED_COUNT}>
-                <span class={styles.time}>{s.time}</span>
+              <ShowingLink showing={s} text={[s.time, s.cinema]} context={film.title} class={styles.row} hidden={i >= COLLAPSED_COUNT}>
+                <span class={styles.time}>{s.time}</span>{' '}
                 <span class={styles.where}>{s.cinema}</span>
               </ShowingLink>
             ))}

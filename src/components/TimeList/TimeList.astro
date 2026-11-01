@@ -20,10 +20,10 @@ const { films, showings } = Astro.props;
         <h2 class={styles.hourLabel}>{hour}:00</h2>
         <div class={styles.rows}>
           {list.map((s) => (
-            <ShowingLink showing={s} title={films[s.filmId].title} class={styles.row}>
-              <span class={styles.time}>{s.time}</span>
+            <ShowingLink showing={s} text={[s.time, films[s.filmId].title, s.cinema]} class={styles.row}>
+              <span class={styles.time}>{s.time}</span>{' '}
               <span class={styles.text}>
-                <span class={styles.title}>{films[s.filmId].title}</span>
+                <span class={styles.title}>{films[s.filmId].title}</span>{' '}
                 <span class={styles.where}>{s.cinema}</span>
               </span>
             </ShowingLink>

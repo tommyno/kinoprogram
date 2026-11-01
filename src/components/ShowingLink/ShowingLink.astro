@@ -4,12 +4,16 @@ import type { Showing } from '@lib/program.ts';
 
 type Props = {
   showing: Showing;
-  title: string;
+  /** The link's visible text in order. The label starts with it, so voice control finds the link by what it says. */
+  text: string[];
+  /** What the link leaves out, such as the film or the cinema; added after the visible text. */
+  context?: string;
   class: string;
   hidden?: boolean;
 };
 
-const { showing, title, class: className, hidden } = Astro.props;
+const { showing, text, context, class: className, hidden } = Astro.props;
+const label = [text.filter(Boolean).join(' '), context].filter(Boolean).join(', ');
 ---
 
 <a
@@ -17,7 +21,7 @@ const { showing, title, class: className, hidden } = Astro.props;
   title="Kjøp billett"
   target="_blank"
   rel="noopener"
-  aria-label={`${title}, ${showing.time}, ${showing.cinema}`}
+  aria-label={label}
   data-day={showing.day}
   data-minutes={showing.minutes}
   class={className}

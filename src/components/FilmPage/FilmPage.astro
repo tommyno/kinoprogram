@@ -69,9 +69,9 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
             </h2>
             <div class={styles.times}>
               {list.map((s) => (
-                <ShowingLink showing={s} title={film.title} class={styles.row}>
-                  <span class={styles.time}>{s.time}</span>
-                  <span class={styles.where}>{s.cinema}</span>
+                <ShowingLink showing={s} text={[s.time, s.cinema, s.screen]} context={film.title} class={styles.row}>
+                  <span class={styles.time}>{s.time}</span>{' '}
+                  <span class={styles.where}>{s.cinema}</span>{' '}
                   <span class={styles.screen}>{s.screen}</span>
                 </ShowingLink>
               ))}
