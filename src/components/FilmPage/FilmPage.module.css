@@ -58,6 +58,12 @@
   border-radius: var(--radius);
 }
 
+/* A faint edge on the dark backdrop instead of the grey line from the program, without the light placeholder showing through it */
+.poster img {
+  border-color: rgb(255 255 255 / 0.12);
+  background-clip: padding-box;
+}
+
 button.poster {
   cursor: zoom-in;
 }
