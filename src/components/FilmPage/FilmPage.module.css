@@ -311,10 +311,11 @@ button.poster {
 }
 
 @media (min-width: 700px) {
+  /* The poster is as wide as the day names below, so the text lines up with the times */
   .header {
     display: flex;
     align-items: flex-end;
-    gap: 32px;
+    gap: 24px;
   }
 
   /* The text sits at the poster's foot, but the poster stays at the top when opened text grows past it */
@@ -323,7 +324,7 @@ button.poster {
   }
 
   .poster:not([data-expanded]) {
-    width: 180px;
+    width: 200px;
   }
 
   /* A full-width poster would be far taller than the screen; the text narrows to stay beside it */
