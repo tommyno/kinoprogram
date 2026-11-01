@@ -16,6 +16,9 @@ const MIN_VOTES = 5;
 const CONCURRENCY = 8;
 // Actors on the film page, in billing order
 const CAST = 3;
+// How long a lookup is reused. A match only brings a newer score; a miss is tried sooner, in case TMDB adds the film
+const MATCH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const MISS_TTL_MS = 2 * 24 * 60 * 60 * 1000;
 
 export const SearchResult = z.object({
   id: z.number(),
@@ -52,6 +55,9 @@ const MovieData = z.object({ videos: z.object({ results: z.array(Video) }), cred
 export type TmdbFilm = Partial<
   Pick<Film, 'rating' | 'trailer' | 'directors' | 'cast' | 'posterUrl' | 'posterSrcSet' | 'posterLarge'>
 >;
+
+/** Earlier lookups by lookupKey, found or not, with when they were made. */
+export type TmdbCache = Record<string, { at: number; film: TmdbFilm | null }>;
 
 function normalize(title: string): string {
   return title.toLocaleLowerCase('nb').replace(/\s+/g, ' ').trim();
@@ -144,7 +150,11 @@ async function search(titles: string[], year: number | null, token: string): Pro
   }
 }
 
-/** Only films whose source has no poster of its own get TMDB's: Cinemateket's, which show a logo, and the odd Filmweb film. */
+/** What the lookup searches for, so films with the same titles and year share one. */
+export function lookupKey(film: Pick<Film, 'title' | 'originalTitle' | 'year'>): string {
+  return JSON.stringify([...searchTitles(film), film.year]);
+}
+
 async function lookUp(film: Film, token: string): Promise<TmdbFilm | null> {
   const match = await search(searchTitles(film), film.year, token);
   if (!match) return null;
@@ -154,7 +164,7 @@ async function lookUp(film: Film, token: string): Promise<TmdbFilm | null> {
     MovieData,
     token,
   );
-  const poster = !film.posterSrcSet && match.poster_path ? tmdbPoster(match.poster_path) : {};
+  const poster = match.poster_path ? tmdbPoster(match.poster_path) : {};
   return { rating: tmdbRating(match), trailer: pickTrailer(movie.videos.results), ...pickCredits(movie.credits), ...poster };
 }
 
@@ -175,12 +185,34 @@ async function eachLimited<T>(items: T[], task: (item: T) => Promise<void>): Pro
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 }
 
-/** Looks up every film, in about two requests each. Films TMDB doesn't have are left out. */
-export async function fetchTmdb(films: Record<string, Film>, token: string): Promise<Record<string, TmdbFilm>> {
-  const found: Record<string, TmdbFilm> = {};
-  await eachLimited(Object.keys(films), async (id) => {
-    const film = await lookUp(films[id], token);
-    if (film) found[id] = film;
+/**
+ * Looks up the films the cache has no recent lookup for, in about two requests each. Films TMDB doesn't have are left
+ * out. The new cache only keeps the films in the program, so it doesn't grow with films long gone.
+ */
+export async function fetchTmdb(
+  films: Record<string, Film>,
+  token: string,
+  cache: TmdbCache,
+  now = Date.now(),
+): Promise<{ films: Record<string, TmdbFilm>; cache: TmdbCache; lookedUp: number }> {
+  const next: TmdbCache = {};
+  const stale: Film[] = [];
+  for (const [key, film] of new Map(Object.values(films).map((film) => [lookupKey(film), film]))) {
+    const entry = cache[key];
+    if (entry && now - entry.at < (entry.film ? MATCH_TTL_MS : MISS_TTL_MS)) next[key] = entry;
+    else stale.push(film);
+  }
+  await eachLimited(stale, async (film) => {
+    next[lookupKey(film)] = { at: now, film: await lookUp(film, token) };
   });
-  return found;
+
+  const found: Record<string, TmdbFilm> = {};
+  for (const [id, film] of Object.entries(films)) {
+    const tmdb = next[lookupKey(film)].film;
+    if (!tmdb) continue;
+    // Only films whose source has no poster of its own get TMDB's: Cinemateket's, which show a logo, and the odd Filmweb film
+    const { posterUrl, posterSrcSet, posterLarge, ...details } = tmdb;
+    found[id] = film.posterSrcSet ? details : tmdb;
+  }
+  return { films: found, cache: next, lookedUp: stale.length };
 }

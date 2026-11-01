@@ -1,5 +1,17 @@
-import { describe, expect, it } from 'vitest';
-import { findMatch, pickCredits, pickTrailer, searchTitles, tmdbPoster, tmdbRating, type SearchResult, type Video } from '../src/lib/tmdb.ts';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { Film } from '../src/lib/program.ts';
+import {
+  fetchTmdb,
+  findMatch,
+  lookupKey,
+  pickCredits,
+  pickTrailer,
+  searchTitles,
+  tmdbPoster,
+  tmdbRating,
+  type SearchResult,
+  type Video,
+} from '../src/lib/tmdb.ts';
 
 function result(overrides: Partial<SearchResult>): SearchResult {
   return { id: 1, title: 'Film', original_title: 'Film', release_date: '2026-09-25', vote_average: 7.661, vote_count: 93, popularity: 1, poster_path: null, ...overrides };
@@ -7,6 +19,10 @@ function result(overrides: Partial<SearchResult>): SearchResult {
 
 function video(overrides: Partial<Video>): Video {
   return { key: 'abc', site: 'YouTube', type: 'Trailer', official: true, iso_639_1: 'en', ...overrides };
+}
+
+function film(overrides: Partial<Film>): Film {
+  return { title: 'Film', originalTitle: null, year: 2026, slug: 'film', minutes: null, ageRating: null, synopsis: null, posterUrl: null, pageUrl: '', ...overrides };
 }
 
 describe('searchTitles', () => {
@@ -94,5 +110,52 @@ describe('pickTrailer', () => {
 
   it('skips teasers, clips and videos outside YouTube', () => {
     expect(pickTrailer([video({ type: 'Teaser' }), video({ type: 'Clip' }), video({ site: 'Vimeo' })])).toBeUndefined();
+  });
+});
+
+describe('fetchTmdb', () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const now = 100 * DAY;
+  const poster = tmdbPoster('/abc.jpg');
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('reuses recent lookups without asking TMDB, and leaves out films no longer in the program', async () => {
+    const fetch = vi.fn();
+    vi.stubGlobal('fetch', fetch);
+    const films = { a: film({ title: 'Dune' }), b: film({ title: 'Ukjent' }) };
+    const cache = {
+      [lookupKey(films.a)]: { at: now - 6 * DAY, film: { trailer: 'abc', ...poster } },
+      [lookupKey(films.b)]: { at: now - DAY, film: null },
+      [lookupKey(film({ title: 'Borte' }))]: { at: now - DAY, film: { trailer: 'old' } },
+    };
+    const result = await fetchTmdb(films, 'token', cache, now);
+    expect(fetch).not.toHaveBeenCalled();
+    expect(result.lookedUp).toBe(0);
+    expect(result.films).toEqual({ a: { trailer: 'abc', ...poster } });
+    expect(Object.keys(result.cache)).toEqual([lookupKey(films.a), lookupKey(films.b)]);
+  });
+
+  it("keeps the source's own poster", async () => {
+    vi.stubGlobal('fetch', vi.fn());
+    const films = { a: film({ posterSrcSet: 'own.jpg 500w' }) };
+    const cache = { [lookupKey(films.a)]: { at: now, film: { trailer: 'abc', ...poster } } };
+    expect((await fetchTmdb(films, 'token', cache, now)).films).toEqual({ a: { trailer: 'abc' } });
+  });
+
+  it('looks up a miss again sooner than a match', async () => {
+    const fetch = vi.fn(async () => Response.json({ results: [] }));
+    vi.stubGlobal('fetch', fetch);
+    const films = { a: film({ title: 'Dune' }), b: film({ title: 'Ukjent' }) };
+    const cache = {
+      [lookupKey(films.a)]: { at: now - 3 * DAY, film: { trailer: 'abc' } },
+      [lookupKey(films.b)]: { at: now - 3 * DAY, film: null },
+    };
+    const result = await fetchTmdb(films, 'token', cache, now);
+    expect(result.lookedUp).toBe(1);
+    expect(fetch).toHaveBeenCalled();
+    expect(result.cache[lookupKey(films.b)]).toEqual({ at: now, film: null });
   });
 });

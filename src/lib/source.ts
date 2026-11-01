@@ -5,10 +5,12 @@ import { FilmwebSnapshot, fetchSnapshot, filmwebProgram } from './filmweb.ts';
 import { errorMessage } from './http.ts';
 import { mergePrograms, type Film, type Program } from './program.ts';
 import { programNow } from './time.ts';
-import { fetchTmdb, type TmdbFilm } from './tmdb.ts';
+import { fetchTmdb, type TmdbCache, type TmdbFilm } from './tmdb.ts';
 
 const CACHE_DIR = '.cache';
 const CACHE_TTL_MS = 60 * 60 * 1000;
+// Unlike .cache, kept between Vercel builds, which restore node_modules. Bump the number when TmdbFilm changes
+const TMDB_CACHE = 'node_modules/.cache/oslokinoprogram/tmdb-1.json';
 
 async function isFresh(file: string): Promise<boolean> {
   try {
@@ -43,6 +45,14 @@ async function loadCinemateket(): Promise<Program | null> {
   }
 }
 
+async function readTmdbCache(): Promise<TmdbCache> {
+  try {
+    return JSON.parse(await readFile(TMDB_CACHE, 'utf8'));
+  } catch {
+    return {};
+  }
+}
+
 /** TMDB is a bonus too: without a token, or if it fails, the films go without a score and trailer. */
 async function loadTmdb(films: Record<string, Film>): Promise<Record<string, TmdbFilm>> {
   // Astro reads .env into import.meta.env, and Vercel's variables too; the dev server leaves process.env without it
@@ -52,7 +62,11 @@ async function loadTmdb(films: Record<string, Film>): Promise<Record<string, Tmd
     return {};
   }
   try {
-    return JSON.parse(await cachedText('tmdb.json', async () => JSON.stringify(await fetchTmdb(films, token))));
+    const result = await fetchTmdb(films, token, await readTmdbCache());
+    console.log(`TMDB: slo opp ${result.lookedUp} av ${Object.keys(result.cache).length} filmer, resten fra mellomlageret`);
+    await mkdir(dirname(TMDB_CACHE), { recursive: true });
+    await writeFile(TMDB_CACHE, JSON.stringify(result.cache));
+    return result.films;
   } catch (error) {
     console.warn(`Hopper over TMDB: ${errorMessage(error)}`);
     return {};
@@ -74,10 +88,7 @@ export function getProgram(): Promise<Program> {
     const [filmweb, cinemateket] = await Promise.all([loadFilmweb(), loadCinemateket()]);
     const result = mergePrograms(cinemateket ? [filmweb, cinemateket] : [filmweb]);
     assertPlausible(result, programNow().day);
-    // A cached lookup can hold films that are no longer in the program
-    for (const [id, film] of Object.entries(await loadTmdb(result.films))) {
-      if (result.films[id]) Object.assign(result.films[id], film);
-    }
+    for (const [id, film] of Object.entries(await loadTmdb(result.films))) Object.assign(result.films[id], film);
     return result;
   })();
   return program;
