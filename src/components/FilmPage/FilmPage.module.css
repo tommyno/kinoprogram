@@ -209,6 +209,20 @@ button.poster {
   border-color: var(--ink);
 }
 
+/* The showing picked in the program */
+.row[data-chosen] {
+  /* Some air below it when the page scrolls it into view */
+  scroll-margin-bottom: 24px;
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.row[data-chosen] .where,
+.row[data-chosen] .screen {
+  color: inherit;
+}
+
 .time {
   font-size: 13px;
   font-weight: 700;

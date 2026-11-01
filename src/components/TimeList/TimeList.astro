@@ -1,5 +1,5 @@
 ---
-import type { Film, Showing } from '@lib/program.ts';
+import { showingPath, type Film, type Showing } from '@lib/program.ts';
 import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
 import styles from './TimeList.module.css';
 
@@ -20,7 +20,7 @@ const { films, showings } = Astro.props;
         <h2 class={styles.hourLabel}>{hour}:00</h2>
         <div class={styles.rows}>
           {list.map((s) => (
-            <ShowingLink showing={s} text={[s.time, films[s.filmId].title, s.cinema]} class={styles.row}>
+            <ShowingLink showing={s} text={[s.time, films[s.filmId].title, s.cinema]} href={showingPath(films[s.filmId], s)} class={styles.row}>
               <span class={styles.time}>{s.time}</span>{' '}
               <span class={styles.text}>
                 <span class={styles.title}>{films[s.filmId].title}</span>{' '}

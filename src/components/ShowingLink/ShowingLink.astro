@@ -1,5 +1,5 @@
 ---
-// A showing's ticket link. markPast in time.ts marks it once the showing has started
+// A showing's link, to its ticket sale unless given another href. markPast in time.ts marks it once the showing has started
 import type { Showing } from '@lib/program.ts';
 
 type Props = {
@@ -10,20 +10,26 @@ type Props = {
   context?: string;
   class: string;
   hidden?: boolean;
+  /** Where the link goes instead of the ticket sale, such as the film page (see showingPath). */
+  href?: string;
+  /** On the film page: the showing's name, which a showingPath link marks (see showingAnchor). */
+  anchor?: string;
 };
 
-const { showing, text, context, class: className, hidden } = Astro.props;
+const { showing, text, context, class: className, hidden, href, anchor } = Astro.props;
 const label = [text.filter(Boolean).join(' '), context].filter(Boolean).join(', ');
+const toTickets = !href;
 ---
 
 <a
-  href={showing.bookingUrl}
-  title="Kjøp billett"
-  target="_blank"
-  rel="noopener"
+  href={href ?? showing.bookingUrl}
+  title={toTickets ? 'Kjøp billett' : 'Se alle visninger'}
+  target={toTickets ? '_blank' : undefined}
+  rel={toTickets ? 'noopener' : undefined}
   aria-label={label}
   data-day={showing.day}
   data-minutes={showing.minutes}
+  data-showing={anchor}
   class={className}
   hidden={hidden}
 >

@@ -1,5 +1,5 @@
 ---
-import { collator, filmPath, type Film, type Showing } from '@lib/program.ts';
+import { collator, showingPath, type Film, type Showing } from '@lib/program.ts';
 import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
 import styles from './CinemaColumns.module.css';
 
@@ -18,19 +18,11 @@ const cinemas = [...Map.groupBy(showings, (s) => s.cinema)].sort(([a], [b]) => c
       <section class={styles.cinema} data-stagger style={`--i: ${index}`}>
         <h2 class={styles.name}>{cinema}</h2>
         {list.map((s) => (
-          <div class={styles.row}>
-            <span class={styles.time}>{s.time}</span>
-            {/* Its ::after covers the row, so the whole row opens the film page; the ticket link sits above it */}
-            <a href={filmPath(films[s.filmId])} title="Se alle visninger" class={styles.title}>
-              {films[s.filmId].title}
-            </a>
-            <ShowingLink showing={s} text={['Billett']} context={`${s.time} ${films[s.filmId].title}, ${s.cinema}`} class={styles.ticket}>
-              Billett
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
-              </svg>
-            </ShowingLink>
-          </div>
+          <ShowingLink showing={s} text={[s.time, films[s.filmId].title, s.screen]} context={s.cinema} href={showingPath(films[s.filmId], s)} class={styles.row}>
+            <span class={styles.time}>{s.time}</span>{' '}
+            <span class={styles.title}>{films[s.filmId].title}</span>{' '}
+            <span class={styles.screen}>{s.screen}</span>
+          </ShowingLink>
         ))}
       </section>
     ))

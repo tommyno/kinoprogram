@@ -3,7 +3,7 @@ import Base from '@layouts/Base.astro';
 import Footer from '@components/Footer/Footer.astro';
 import Poster from '@components/Poster/Poster.astro';
 import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
-import { filmDays, filmMeta } from '@lib/program.ts';
+import { filmDays, filmMeta, showingAnchor } from '@lib/program.ts';
 import { getProgram } from '@lib/source.ts';
 import { dayLabel, formatDay, programNow } from '@lib/time.ts';
 import styles from './FilmPage.module.css';
@@ -98,7 +98,7 @@ const rating = film.rating?.value.toLocaleString('nb-NO', { minimumFractionDigit
             </h2>
             <div class={styles.times}>
               {list.map((s) => (
-                <ShowingLink showing={s} text={[s.time, s.cinema, s.screen]} context={film.title} class={styles.row}>
+                <ShowingLink showing={s} text={[s.time, s.cinema, s.screen]} context={film.title} anchor={showingAnchor(s)} class={styles.row}>
                   <span class={styles.time}>{s.time}</span>{' '}
                   <span class={styles.where}>{s.cinema}</span>{' '}
                   <span class={styles.screen}>{s.screen}</span>
@@ -134,6 +134,14 @@ const rating = film.rating?.value.toLocaleString('nb-NO', { minimumFractionDigit
   const links = [...document.querySelectorAll<HTMLElement>('[data-minutes]')];
   markPast(links);
   setInterval(() => markPast(links), 60_000);
+
+  // Coming from a time in the program (see showingPath), mark that showing and scroll only as far as needed to show it
+  const chosen = links.find((link) => link.dataset.showing === location.hash.slice(1));
+  if (chosen) {
+    chosen.toggleAttribute('data-chosen', true);
+    // Instant, as the page should open there rather than glide there (html scrolls smoothly)
+    chosen.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+  }
 
   // Coming from the program, go back in history instead, so it opens at the same date, sort and scroll position
   const back = document.querySelector<HTMLAnchorElement>('[data-back]')!;

@@ -67,6 +67,16 @@ export function filmPath(film: Film): string {
   return `/film/${film.slug}`;
 }
 
+/** Names a showing among its film's showings: "2026-11-01-1830-odeon-oslo-sal-4". */
+export function showingAnchor(showing: Showing): string {
+  return slugify([showing.day, showing.time.replace(':', ''), showing.cinema, showing.screen].join(' '));
+}
+
+/** The film page with this showing marked (see FilmPage). */
+export function showingPath(film: Film, showing: Showing): string {
+  return `${filmPath(film)}#${showingAnchor(showing)}`;
+}
+
 /** A film's showings per day, from the given day on. */
 export function filmDays(program: Program, filmId: string, from: string): [string, Showing[]][] {
   return Object.entries(program.days)
