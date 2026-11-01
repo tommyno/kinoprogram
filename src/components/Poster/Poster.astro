@@ -8,14 +8,16 @@ type Props = {
   sizes: string;
   /** Larger versions than the film's own srcset, where the page needs them. */
   srcset?: string;
+  /** Loads at once and first, for posters in view when the page opens. */
+  eager?: boolean;
 };
 
-const { film, sizes, srcset = film.posterSrcSet } = Astro.props;
+const { film, sizes, srcset = film.posterSrcSet, eager = false } = Astro.props;
 ---
 
 {
   film.posterUrl ? (
-    <img class={styles.poster} src={film.posterUrl} srcset={srcset} sizes={sizes} width="400" height="600" loading="lazy" alt="" />
+    <img class={styles.poster} src={film.posterUrl} srcset={srcset} sizes={sizes} width="400" height="600" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} alt="" />
   ) : (
     <div class={`${styles.poster} ${styles.placeholder}`}>
       <svg viewBox="0 0 100 150" preserveAspectRatio="none" aria-hidden="true">

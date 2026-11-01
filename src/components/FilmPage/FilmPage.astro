@@ -36,11 +36,11 @@ const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? '
           aria-label="Vis plakaten stor"
           data-poster
         >
-          <Poster film={film} srcset={film.posterLarge.srcSet} sizes="(min-width: 700px) 160px, 104px" />
+          <Poster film={film} srcset={film.posterLarge.srcSet} sizes="(min-width: 700px) 160px, 104px" eager />
         </button>
       ) : (
         <div class={styles.poster} data-poster>
-          <Poster film={film} sizes="(min-width: 700px) 160px, 104px" />
+          <Poster film={film} sizes="(min-width: 700px) 160px, 104px" eager />
         </div>
       )
     }
