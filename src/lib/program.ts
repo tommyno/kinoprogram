@@ -23,6 +23,15 @@ export type Film = {
   rating?: { value: number; votes: number; url: string };
   /** YouTube id of the film's trailer at TMDB. */
   trailer?: string;
+  /** From TMDB, as are the leading actors. */
+  directors?: Person[];
+  cast?: Person[];
+};
+
+/** Someone who made or plays in a film, with their page at TMDB. */
+export type Person = {
+  name: string;
+  url: string;
 };
 
 export type Showing = {

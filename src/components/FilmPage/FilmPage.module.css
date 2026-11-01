@@ -70,6 +70,19 @@ button.poster {
   mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
 }
 
+/* Director and cast, a line each */
+.credits {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.credits a {
+  text-underline-offset: 3px;
+}
+
 .title {
   font-size: clamp(28px, 5vw, 48px);
   font-weight: 800;

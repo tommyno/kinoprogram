@@ -1,11 +1,12 @@
 import { z } from 'zod';
 import { USER_AGENT, withRetry } from './http.ts';
-import type { Film } from './program.ts';
+import type { Film, Person } from './program.ts';
 
-// The films' user score and trailer, and a poster for films without one, found by title and year. Needs a read access
+// The films' user score, trailer, director and cast, and a poster for films without one, found by title and year. Needs a read access
 // token from themoviedb.org
 const API = 'https://api.themoviedb.org/3';
 const MOVIE_URL = 'https://www.themoviedb.org/movie/';
+const PERSON_URL = 'https://www.themoviedb.org/person/';
 const IMAGE_URL = 'https://image.tmdb.org/t/p/';
 // TMDB's fixed poster widths, short of the original
 const POSTER_WIDTHS = [185, 342, 500, 780];
@@ -13,6 +14,8 @@ const POSTER_WIDTHS = [185, 342, 500, 780];
 const MIN_VOTES = 5;
 // Requests at a time; TMDB allows about 40 a second
 const CONCURRENCY = 8;
+// Actors on the film page, in billing order
+const CAST = 3;
 
 export const SearchResult = z.object({
   id: z.number(),
@@ -37,9 +40,18 @@ export const Video = z.object({
 export type Video = z.infer<typeof Video>;
 
 const SearchData = z.object({ results: z.array(SearchResult) });
-const VideosData = z.object({ results: z.array(Video) });
+export const Credits = z.object({
+  cast: z.array(z.object({ id: z.number(), name: z.string(), order: z.number() })),
+  crew: z.array(z.object({ id: z.number(), name: z.string(), job: z.string() })),
+});
+export type Credits = z.infer<typeof Credits>;
 
-export type TmdbFilm = Partial<Pick<Film, 'rating' | 'trailer' | 'posterUrl' | 'posterSrcSet' | 'posterLarge'>>;
+// The film with its videos and credits appended, in one request
+const MovieData = z.object({ videos: z.object({ results: z.array(Video) }), credits: Credits });
+
+export type TmdbFilm = Partial<
+  Pick<Film, 'rating' | 'trailer' | 'directors' | 'cast' | 'posterUrl' | 'posterSrcSet' | 'posterLarge'>
+>;
 
 function normalize(title: string): string {
   return title.toLocaleLowerCase('nb').replace(/\s+/g, ' ').trim();
@@ -78,6 +90,21 @@ export function tmdbPoster(path: string): Pick<Film, 'posterUrl' | 'posterSrcSet
 export function pickTrailer(videos: Video[]): string | undefined {
   const rank = (v: Video) => (v.iso_639_1 === 'no' || v.iso_639_1 === 'nb' ? 0 : 2) + (v.official ? 0 : 1);
   return videos.filter((v) => v.site === 'YouTube' && v.type === 'Trailer').sort((a, b) => rank(a) - rank(b))[0]?.key;
+}
+
+function person(credit: { id: number; name: string }): Person {
+  return { name: credit.name, url: PERSON_URL + credit.id };
+}
+
+/** The directors, and the leading actors as TMDB bills them, each with their page at TMDB. */
+export function pickCredits(credits: Credits): Pick<Film, 'directors' | 'cast'> {
+  return {
+    directors: credits.crew.filter((c) => c.job === 'Director').map(person),
+    cast: credits.cast
+      .sort((a, b) => a.order - b.order)
+      .slice(0, CAST)
+      .map(person),
+  };
 }
 
 function get<T>(path: string, params: Record<string, string>, schema: z.ZodType<T>, token: string): Promise<T> {
@@ -127,9 +154,14 @@ async function search(film: Film, titles: string[], token: string): Promise<Sear
 async function lookUp(film: Film, token: string): Promise<TmdbFilm | null> {
   const match = await search(film, searchTitles(film), token);
   if (!match) return null;
-  const videos = await get(`/movie/${match.id}/videos`, { include_video_language: 'no,nb,en' }, VideosData, token);
+  const movie = await get(
+    `/movie/${match.id}`,
+    { append_to_response: 'videos,credits', include_video_language: 'no,nb,en' },
+    MovieData,
+    token,
+  );
   const poster = !film.posterSrcSet && match.poster_path ? tmdbPoster(match.poster_path) : {};
-  return { rating: tmdbRating(match), trailer: pickTrailer(videos.results), ...poster };
+  return { rating: tmdbRating(match), trailer: pickTrailer(movie.videos.results), ...pickCredits(movie.credits), ...poster };
 }
 
 /** Runs the task on every item, a few at a time. The first error stops the rest and is thrown. */

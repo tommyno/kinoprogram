@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { findMatch, pickTrailer, searchTitles, tmdbPoster, tmdbRating, type SearchResult, type Video } from '../src/lib/tmdb.ts';
+import { findMatch, pickCredits, pickTrailer, searchTitles, tmdbPoster, tmdbRating, type SearchResult, type Video } from '../src/lib/tmdb.ts';
 
 function result(overrides: Partial<SearchResult>): SearchResult {
   return { id: 1, title: 'Film', original_title: 'Film', release_date: '2026-09-25', vote_average: 7.661, vote_count: 93, popularity: 1, poster_path: null, ...overrides };
@@ -64,6 +64,25 @@ describe('tmdbRating', () => {
   it('leaves out scores with fewer than 5 votes', () => {
     expect(tmdbRating(result({ vote_count: 4 }))).toBeUndefined();
     expect(tmdbRating(result({ vote_count: 5 }))).toBeDefined();
+  });
+});
+
+describe('pickCredits', () => {
+  it('takes every director and the first three actors by billing', () => {
+    const credits = {
+      crew: [
+        { id: 1, name: 'Daniel Kwan', job: 'Director' },
+        { id: 2, name: 'Daniel Scheinert', job: 'Director' },
+        { id: 3, name: 'Larkin Seiple', job: 'Director of Photography' },
+      ],
+      cast: [3, 0, 2, 1].map((order) => ({ id: 10 + order, name: `Actor ${order}`, order })),
+    };
+    const { directors, cast } = pickCredits(credits);
+    expect(directors).toEqual([
+      { name: 'Daniel Kwan', url: 'https://www.themoviedb.org/person/1' },
+      { name: 'Daniel Scheinert', url: 'https://www.themoviedb.org/person/2' },
+    ]);
+    expect(cast?.map((p) => p.name)).toEqual(['Actor 0', 'Actor 1', 'Actor 2']);
   });
 });
 
