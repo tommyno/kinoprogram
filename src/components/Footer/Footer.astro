@@ -21,9 +21,14 @@ const { noTopButton = false } = Astro.props;
   )
 }
 <footer class={styles.footer}>
-  <p class={styles.tagline}>Alle kinoer og filmer i Oslo samlet på én side.</p>
-  <span>Programdata fra <a href="https://www.filmweb.no">Filmweb</a> og <a href="https://www.cinemateket.no">Cinemateket</a></span>
-  <span>Fork på <a href="https://github.com/tommyno/kinoprogram">GitHub</a></span>
+  <a href="/" class={styles.logo}>
+    <img src="/favicon.svg" width="40" height="40" alt="Til forsiden" />
+  </a>
+  <div class={styles.text}>
+    <p class={styles.tagline}>Alle kinoer og filmer i Oslo samlet på én side.</p>
+    <span>Programdata fra <a href="https://www.filmweb.no">Filmweb</a> og <a href="https://www.cinemateket.no">Cinemateket</a></span>
+    <span>Fork på <a href="https://github.com/tommyno/kinoprogram">GitHub</a></span>
+  </div>
   <InstallApp />
 </footer>
 
