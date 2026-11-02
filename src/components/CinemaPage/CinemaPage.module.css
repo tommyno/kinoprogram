@@ -101,12 +101,14 @@
   letter-spacing: -0.01em;
 }
 
-/* dayLabel gives "i dag" and "søndag 1. november"; a heading starts with a capital */
-.dayLabel {
+/* dayLabel and formatDay give "i dag" and "søndag 1. november"; both start with a capital here */
+.dayLabel,
+.date {
   display: inline-block;
 }
 
-.dayLabel::first-letter {
+.dayLabel::first-letter,
+.date::first-letter {
   text-transform: uppercase;
 }
 
