@@ -1,0 +1,112 @@
+---
+import Base from '@layouts/Base.astro';
+import Footer from '@components/Footer/Footer.astro';
+import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
+import { CINEMAS } from '@lib/cinemas.ts';
+import { cinemaDays, showingPath } from '@lib/program.ts';
+import { getProgram } from '@lib/source.ts';
+import { dayLabel, formatDay, programNow } from '@lib/time.ts';
+import styles from './CinemaPage.module.css';
+
+type Props = {
+  name: string;
+};
+
+const { name } = Astro.props;
+const program = await getProgram();
+const today = programNow().day;
+const cinema = CINEMAS.find((c) => c.name === name);
+const days = cinemaDays(program, name, today);
+// "deichman.no", as the button names the cinema's site
+const host = cinema && new URL(cinema.url).hostname.replace(/^www\./, '');
+// With the name, so Google Maps finds the cinema itself rather than just the street address
+const mapUrl = cinema && `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${cinema.address}`)}`;
+---
+
+<Base title={`${name} – Kinoprogram for Oslo`} description={`Alle visningene på ${name}, dag for dag.`}>
+  <a href="/" class={styles.back} data-back>← Kinoprogram for Oslo</a>
+
+  <header class={styles.header}>
+    <div class={styles.titleBlock}>
+      <h1 class={styles.title}>{name}</h1>
+      {
+        cinema && (
+          <p class={styles.address}>
+            <a href={mapUrl} target="_blank" rel="noopener">{cinema.address}</a>
+          </p>
+        )
+      }
+    </div>
+    {cinema?.about && <p class={styles.about}>{cinema.about}</p>}
+    {
+      cinema && (
+        <a href={cinema.url} class={styles.source} target="_blank" rel="noopener">
+          {host}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
+          </svg>
+        </a>
+      )
+    }
+  </header>
+
+  {
+    days.length === 0 ? (
+      <p class={styles.empty}>Ingen visninger nå.</p>
+    ) : (
+      <div class={styles.columns}>
+        {days.map(([day, list], index) => {
+          const label = dayLabel(day, today);
+          return (
+            <section class={styles.day} data-stagger style={`--i: ${index}`} data-cinema-day={day}>
+              <h2 class={styles.dayHeading}>
+                <span class={styles.dayLabel} data-day-label>{label}</span>
+                <span class={styles.date} hidden={label === formatDay(day)} data-date>{formatDay(day)}</span>
+              </h2>
+              {list.map((s) => (
+                <ShowingLink showing={s} text={[s.time, program.films[s.filmId].title, s.screen]} context={name} href={showingPath(program.films[s.filmId], s)} class={styles.row}>
+                  <span class={styles.time}>{s.time}</span>{' '}
+                  <span class={styles.filmTitle}>{program.films[s.filmId].title}</span>{' '}
+                  <span class={styles.screen}>{s.screen}</span>
+                </ShowingLink>
+              ))}
+            </section>
+          );
+        })}
+      </div>
+    )
+  }
+
+  <Footer />
+</Base>
+
+<script>
+  import { dayLabel, formatDay, markPast, programNow } from '@lib/time.ts';
+
+  // The days are labelled at build time; in case Oslo has passed midnight since, drop the days that are over and label the rest again
+  const today = programNow().day;
+  for (const section of document.querySelectorAll<HTMLElement>('[data-cinema-day]')) {
+    const day = section.dataset.cinemaDay!;
+    if (day < today) {
+      section.remove();
+      continue;
+    }
+    const label = dayLabel(day, today);
+    section.querySelector('[data-day-label]')!.textContent = label;
+    section.querySelector<HTMLElement>('[data-date]')!.hidden = label === formatDay(day);
+  }
+
+  // Started showings grey out as the clock passes them, as in the program
+  const links = [...document.querySelectorAll<HTMLElement>('[data-minutes]')];
+  markPast(links);
+  setInterval(() => markPast(links), 60_000);
+
+  // Coming from the program, go back in history instead, so it opens at the same date, sort and scroll position
+  const back = document.querySelector<HTMLAnchorElement>('[data-back]')!;
+  back.addEventListener('click', (event) => {
+    const fromProgram = document.referrer.startsWith(location.origin) && history.length > 1;
+    if (!fromProgram || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    event.preventDefault();
+    history.back();
+  });
+</script>

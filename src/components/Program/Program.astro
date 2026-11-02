@@ -9,9 +9,11 @@ import styles from './Program.module.css';
 type Props = {
   films: Record<string, Film>;
   showings: Showing[];
+  /** For the Kino tab: the cinemas with nothing on this day, and when they next show films. */
+  later: { cinema: string; day: string }[];
 };
 
-const { films, showings } = Astro.props;
+const { films, showings, later } = Astro.props;
 ---
 
 <div class={styles.program} data-program>
@@ -29,7 +31,7 @@ const { films, showings } = Astro.props;
           <TimeList films={films} showings={showings} />
         </div>
         <div role="tabpanel" id="view-kino" aria-labelledby="tab-kino" data-view="kino" hidden>
-          <CinemaColumns films={films} showings={showings} />
+          <CinemaColumns films={films} showings={showings} later={later} />
         </div>
       </>
     )

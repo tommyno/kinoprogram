@@ -111,6 +111,14 @@ export function filmDays(program: Program, filmId: string, from: string): [strin
     .filter(([, list]) => list.length > 0);
 }
 
+/** A cinema's showings per day, from the given day on. */
+export function cinemaDays(program: Program, cinema: string, from: string): [string, Showing[]][] {
+  return Object.entries(program.days)
+    .filter(([day]) => day >= from)
+    .map(([day, list]): [string, Showing[]] => [day, list.filter((s) => s.cinema === cinema)])
+    .filter(([, list]) => list.length > 0);
+}
+
 /** "1 t 50 min · 12 år", or whichever of the two is known. */
 export function filmMeta(film: Film): string {
   return [formatDuration(film.minutes), film.ageRating].filter(Boolean).join(' · ');

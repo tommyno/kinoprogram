@@ -1,0 +1,18 @@
+---
+import CinemaPage from '@components/CinemaPage/CinemaPage.astro';
+import { cinemaNames } from '@lib/cinemas.ts';
+import { slugify } from '@lib/program.ts';
+import { getProgram } from '@lib/source.ts';
+
+// One page for every cinema, also those with nothing on now, as the about page links to them all
+export async function getStaticPaths() {
+  return cinemaNames(await getProgram()).map((name) => ({
+    params: { slug: slugify(name) },
+    props: { name },
+  }));
+}
+
+const { name } = Astro.props;
+---
+
+<CinemaPage name={name} />

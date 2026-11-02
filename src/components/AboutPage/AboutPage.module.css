@@ -42,6 +42,18 @@
   padding-left: 20px;
 }
 
+/* Short names, so they share the width */
+.cinemas {
+  columns: 3 180px;
+  column-gap: 24px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.cinemas li {
+  margin-bottom: 8px;
+}
+
 .credit {
   display: flex;
   flex-wrap: wrap;

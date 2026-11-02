@@ -26,6 +26,13 @@ const labelFormat = new Intl.DateTimeFormat('nb-NO', {
   month: 'long',
 });
 
+const shortFormat = new Intl.DateTimeFormat('nb-NO', {
+  timeZone: 'UTC',
+  weekday: 'short',
+  day: 'numeric',
+  month: 'short',
+});
+
 function toMinutes(time: string): number {
   return Number(time.slice(0, 2)) * 60 + Number(time.slice(3, 5));
 }
@@ -73,6 +80,11 @@ export function markPast(links: HTMLElement[]): void {
 /** "2026-11-01" → "søndag 1. november". */
 export function formatDay(day: string): string {
   return labelFormat.format(new Date(`${day}T12:00:00Z`));
+}
+
+/** "2026-11-04" → "ons. 4. nov.". */
+export function formatShortDay(day: string): string {
+  return shortFormat.format(new Date(`${day}T12:00:00Z`));
 }
 
 /** "i dag", "i morgen" or e.g. "lørdag 31. oktober". */

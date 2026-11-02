@@ -1,8 +1,12 @@
 ---
 import Base from '@layouts/Base.astro';
 import Footer from '@components/Footer/Footer.astro';
+import { CINEMAS, cinemaPath } from '@lib/cinemas.ts';
+import { collator } from '@lib/program.ts';
 import { SOURCES } from '@lib/sources/index.ts';
 import styles from './AboutPage.module.css';
+
+const cinemas = CINEMAS.map((c) => c.name).sort((a, b) => collator.compare(a, b));
 
 // "Filmweb, Cinemateket og Deichman", each name a link
 const names = new Intl.ListFormat('nb', { type: 'conjunction' });
@@ -16,6 +20,11 @@ const sources = names.formatToParts(SOURCES.map((s) => s.name)).map((part) => (p
   <article class={styles.about}>
     <h1 class={styles.title}>Om siden</h1>
     <p>Alle kinoer og filmer i Oslo samlet på én side.</p>
+
+    <h2 class={styles.heading}>Kinoene</h2>
+    <ul class={styles.cinemas}>
+      {cinemas.map((name) => <li><a href={cinemaPath(name)}>{name}</a></li>)}
+    </ul>
 
     <h2 class={styles.heading}>Hvor dataene kommer fra</h2>
     <ul class={styles.list}>

@@ -19,6 +19,41 @@
   letter-spacing: -0.01em;
 }
 
+.nameLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.nameLink:hover {
+  text-decoration: underline;
+}
+
+/* Below the cinemas showing films, as a quieter list of those that aren't */
+.laterHeading {
+  margin: 0 0 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-strong);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.laterRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  border-bottom: 1px solid var(--line-soft);
+  text-decoration: none;
+}
+
+.laterRow:hover .title {
+  text-decoration: underline;
+}
+
 .row {
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr) auto;
