@@ -25,11 +25,11 @@ const sources = listParts(SOURCES);
     <p>{CINEMAS.map(({ name }, i) => <>{i > 0 && ', '}<a href={cinemaPath(name)}>{name}</a></>)}</p>
 
     <h2 class={styles.heading}>Datakilder</h2>
-    <p>Programmet hentes fra {sources.map((part) => (typeof part === 'string' ? part : <a href={part.homepage}>{part.name}</a>))}.</p>
-    <p>Trailere, regi, skuespillere og noen plakater hentes fra <a href="https://www.themoviedb.org">TMDB</a>.</p>
+    <p>Programmet hentes fra {sources.map((part) => (typeof part === 'string' ? part : <a href={part.homepage} rel="noreferrer">{part.name}</a>))}.</p>
+    <p>Trailere, regi, skuespillere og noen plakater hentes fra <a href="https://www.themoviedb.org" rel="noreferrer">TMDB</a>.</p>
 
     <h2 class={styles.heading}>Kildekode</h2>
-    <p>Koden ligger åpent på <a href="https://github.com/tommyno/kinoprogram">GitHub</a>.</p>
+    <p>Koden ligger åpent på <a href="https://github.com/tommyno/kinoprogram" rel="noreferrer">GitHub</a>.</p>
 
     <h2 class={styles.heading}>Kontakt</h2>
     <p>
@@ -39,7 +39,7 @@ const sources = listParts(SOURCES);
     <h2 class={styles.heading}>Kreditering</h2>
     <!-- TMDB's terms ask for their logo, unchanged and smaller than ours, and this notice -->
     <p class={styles.credit}>
-      <a href="https://www.themoviedb.org" class={styles.tmdb}>
+      <a href="https://www.themoviedb.org" class={styles.tmdb} rel="noreferrer">
         <img src="/tmdb.svg" width="85" height="11" alt="TMDB" />
       </a>
       Dette nettstedet bruker TMDB og TMDB-API-ene, men er ikke godkjent eller sertifisert av TMDB.
