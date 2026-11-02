@@ -1,9 +1,10 @@
 import { z } from 'zod';
-import { fetchOk } from './http.ts';
-import { slugify, type Film, type Program, type Showing } from './program.ts';
-import { programSlot } from './time.ts';
+import { fetchOk } from '../http.ts';
+import { slugify, type Film, type Program, type Showing, type Source } from '../program.ts';
+import { programSlot } from '../time.ts';
 
 // Filmweb's public site backend (undocumented). One call returns every show in a city.
+const NAME = 'Filmweb';
 const ENDPOINT = 'https://movieinfoqs.filmweb.no/graphql';
 export const LOCATION = 'Oslo';
 const FILM_URL = 'https://www.filmweb.no/film/';
@@ -69,7 +70,7 @@ const ShowsData = z.object({ showQuery: z.object({ getShows: z.array(RawShow) })
 const MoviesData = z.object({ movieQuery: z.object({ getCurrentMovies: z.array(RawMovie) }) });
 
 async function query<T>(query: string, variables: Record<string, unknown>, schema: z.ZodType<T>): Promise<T> {
-  const res = await fetchOk('Filmweb', ENDPOINT, {
+  const res = await fetchOk(NAME, ENDPOINT, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ query, variables }),
@@ -181,6 +182,7 @@ export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
       posterSrcSet: poster ? srcSet(poster, POSTER_WIDTHS) : undefined,
       posterLarge: poster ? largePoster(poster) : undefined,
       pageUrl: FILM_URL + filmId,
+      source: NAME,
     };
 
     const slot = programSlot(show.showStart);
@@ -196,3 +198,13 @@ export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
 
   return { films, days };
 }
+
+export const filmweb: Source = {
+  name: NAME,
+  homepage: 'https://www.filmweb.no',
+  file: 'filmweb-oslo.json',
+  // Nearly every cinema in Oslo is in it
+  required: true,
+  fetch: async () => JSON.stringify(await fetchSnapshot()),
+  program: (raw) => filmwebProgram(FilmwebSnapshot.parse(JSON.parse(raw))),
+};

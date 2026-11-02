@@ -1,9 +1,8 @@
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
-import { cinemateketProgram, fetchCinemateketFeed, parseFeed } from './cinemateket.ts';
-import { FilmwebSnapshot, fetchSnapshot, filmwebProgram } from './filmweb.ts';
 import { errorMessage } from './http.ts';
-import { mergePrograms, type Film, type Program } from './program.ts';
+import { mergePrograms, type Film, type Program, type Source } from './program.ts';
+import { SOURCES } from './sources/index.ts';
 import { programNow } from './time.ts';
 import { fetchTmdb, type TmdbCache, type TmdbFilm } from './tmdb.ts';
 
@@ -30,17 +29,13 @@ async function cachedText(name: string, fetchText: () => Promise<string>): Promi
   return text;
 }
 
-async function loadFilmweb(): Promise<Program> {
-  const text = await cachedText('filmweb-oslo.json', async () => JSON.stringify(await fetchSnapshot()));
-  return filmwebProgram(FilmwebSnapshot.parse(JSON.parse(text)));
-}
-
-/** Cinemateket is a bonus: if its feed fails, the site still builds from Filmweb alone. */
-async function loadCinemateket(): Promise<Program | null> {
+/** A source's program. Only a required source can fail the build; any other is left out, and the site builds without it. */
+async function loadSource(source: Source): Promise<Program | null> {
   try {
-    return cinemateketProgram(parseFeed(await cachedText('cinemateket.ics', fetchCinemateketFeed)));
+    return source.program(await cachedText(source.file, source.fetch));
   } catch (error) {
-    console.warn(`Hopper over Cinemateket: ${errorMessage(error)}`);
+    if (source.required) throw error;
+    console.warn(`Hopper over ${source.name}: ${errorMessage(error)}`);
     return null;
   }
 }
@@ -85,8 +80,8 @@ let program: Promise<Program> | undefined;
 /** The validated program, loaded once per build however many pages ask for it. */
 export function getProgram(): Promise<Program> {
   program ??= (async () => {
-    const [filmweb, cinemateket] = await Promise.all([loadFilmweb(), loadCinemateket()]);
-    const result = mergePrograms(cinemateket ? [filmweb, cinemateket] : [filmweb]);
+    const programs = await Promise.all(SOURCES.map(loadSource));
+    const result = mergePrograms(programs.filter((p) => p !== null));
     assertPlausible(result, programNow().day);
     for (const [id, film] of Object.entries(await loadTmdb(result.films))) Object.assign(result.films[id], film);
     return result;

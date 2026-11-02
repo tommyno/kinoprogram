@@ -22,7 +22,7 @@ function video(overrides: Partial<Video>): Video {
 }
 
 function film(overrides: Partial<Film>): Film {
-  return { title: 'Film', originalTitle: null, year: 2026, slug: 'film', minutes: null, ageRating: null, synopsis: null, posterUrl: null, pageUrl: '', ...overrides };
+  return { title: 'Film', originalTitle: null, year: 2026, slug: 'film', minutes: null, ageRating: null, synopsis: null, posterUrl: null, pageUrl: '', source: 'Filmweb', ...overrides };
 }
 
 describe('searchTitles', () => {

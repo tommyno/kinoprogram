@@ -1,10 +1,11 @@
-import { fetchOk } from './http.ts';
-import { slugify, type Film, type Program, type Showing } from './program.ts';
-import { osloDateTime, programSlot } from './time.ts';
+import { fetchOk } from '../http.ts';
+import { slugify, type Film, type Program, type Showing, type Source } from '../program.ts';
+import { osloDateTime, programSlot } from '../time.ts';
 
 // Cinemateket isn't in Filmweb. Its calendar feed holds the next 100 screenings (about three weeks).
 const FEED_URL = 'https://www.cinemateket.no/cinemateket-webcal.ics';
 export const CINEMA = 'Cinemateket';
+const NAME = CINEMA;
 // The feed has no images, so a Cinemateket film gets the logo as poster unless TMDB has the film
 const POSTER = '/posters/cinemateket.svg';
 
@@ -19,10 +20,6 @@ export type CinemateketEvent = {
   screen: string;
   url: string;
 };
-
-export async function fetchCinemateketFeed(): Promise<string> {
-  return (await fetchOk('Cinemateket', FEED_URL)).text();
-}
 
 function unescapeText(value: string): string {
   return value.replace(/\\n/gi, '\n').replace(/\\([,;\\])/g, '$1').trim();
@@ -88,6 +85,7 @@ export function cinemateketProgram(events: CinemateketEvent[]): Program {
       synopsis: event.description || null,
       posterUrl: POSTER,
       pageUrl: event.url,
+      source: NAME,
     };
     const slot = programSlot(event.start);
     (days[slot.day] ??= []).push({
@@ -102,3 +100,11 @@ export function cinemateketProgram(events: CinemateketEvent[]): Program {
 
   return { films, days };
 }
+
+export const cinemateket: Source = {
+  name: NAME,
+  homepage: 'https://www.cinemateket.no',
+  file: 'cinemateket.ics',
+  fetch: async () => (await fetchOk(NAME, FEED_URL)).text(),
+  program: (raw) => cinemateketProgram(parseFeed(raw)),
+};

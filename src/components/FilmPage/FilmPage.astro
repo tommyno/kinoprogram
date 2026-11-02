@@ -18,12 +18,10 @@ const today = programNow().day;
 const film = program.films[filmId];
 const days = filmDays(program, filmId, today);
 const meta = filmMeta(film);
-// pageUrl is the film's page at Filmweb, or at Cinemateket for its own screenings
-const sourceName = new URL(film.pageUrl).hostname.endsWith('cinemateket.no') ? 'Cinemateket' : 'Filmweb';
 // "7,7"
 const rating = film.rating?.value.toLocaleString('nb-NO', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const links = [
-  { href: film.pageUrl, text: sourceName },
+  { href: film.pageUrl, text: film.source },
   ...(film.rating
     ? [{ href: film.rating.url, text: `TMDB ${rating}`, label: `TMDB ${rating} av 10, ${film.rating.votes} stemmer` }]
     : []),

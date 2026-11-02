@@ -17,8 +17,10 @@ export type Film = {
   posterSrcSet?: string;
   /** Versions up to the poster's own width, for the film page where a click opens it to full width. */
   posterLarge?: { srcSet: string; width: number };
-  /** The film's page at the source: Filmweb, or Cinemateket for its own screenings. */
+  /** The film's page at the source it comes from. */
   pageUrl: string;
+  /** That source's name, for the link to pageUrl: "Filmweb". */
+  source: string;
   /** TMDB's user score, when enough have voted. */
   rating?: { value: number; votes: number; url: string };
   /** YouTube id of the film's trailer at TMDB. */
@@ -55,6 +57,21 @@ export type Program = {
   films: Record<string, Film>;
   /** Showings per day. */
   days: Record<string, Showing[]>;
+};
+
+/** Somewhere the program is fetched from, each in its own file in src/lib/sources. */
+export type Source = {
+  /** "Deichman", as the site and the build log name it. */
+  name: string;
+  /** The source's own site, for the about page. */
+  homepage: string;
+  /** File name for the raw response, kept in .cache between local builds and in tests/fixtures: "deichman.json". */
+  file: string;
+  /** Without it the site isn't built; any other source is left out when it fails. */
+  required?: boolean;
+  /** The raw response, as text. */
+  fetch: () => Promise<string>;
+  program: (raw: string) => Program;
 };
 
 export const collator = new Intl.Collator('nb');

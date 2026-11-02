@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { CINEMA, cinemateketProgram, parseFeed } from '../src/lib/cinemateket.ts';
+import { CINEMA, cinemateketProgram, parseFeed } from '../src/lib/sources/cinemateket.ts';
 import { mergePrograms, type Program } from '../src/lib/program.ts';
 
 const FEED = [
@@ -73,6 +73,7 @@ describe('cinemateketProgram', () => {
         synopsis: 'Clio Barnards hybrid, om dramatikeren Andrea Dunbar.',
         posterUrl: '/posters/cinemateket.svg',
         pageUrl: 'https://www.cinemateket.no/filmer/the-arbor',
+        source: 'Cinemateket',
       },
     });
     expect(program.days['2026-10-29'][0]).toMatchObject({
@@ -91,7 +92,7 @@ describe('cinemateketProgram', () => {
 describe('mergePrograms', () => {
   it('combines films and days from both sources, sorted by start', () => {
     const filmweb: Program = {
-      films: { EDI1: { title: 'Annen film', originalTitle: null, year: null, slug: 'annen-film', minutes: 90, ageRating: null, synopsis: null, posterUrl: null, pageUrl: '' } },
+      films: { EDI1: { title: 'Annen film', originalTitle: null, year: null, slug: 'annen-film', minutes: 90, ageRating: null, synopsis: null, posterUrl: null, pageUrl: '', source: 'Filmweb' } },
       days: {
         '2026-10-29': [
           { key: 'a', filmId: 'EDI1', cinema: 'Saga', screen: 'Sal 1', day: '2026-10-29', time: '20:00', minutes: 1200, bookingUrl: '' },
