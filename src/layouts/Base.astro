@@ -97,4 +97,12 @@ const image = new URL('/og.png', Astro.site);
       if (response.ok && (await response.text()) !== build) location.reload();
     } catch {}
   });
+
+  // A back link (data-back), coming from the program, goes back in history instead, so it opens at the same date, sort and scroll position
+  document.querySelector<HTMLAnchorElement>('[data-back]')?.addEventListener('click', (event) => {
+    const fromProgram = document.referrer.startsWith(location.origin) && history.length > 1;
+    if (!fromProgram || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    event.preventDefault();
+    history.back();
+  });
 </script>

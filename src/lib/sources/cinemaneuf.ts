@@ -3,11 +3,10 @@ import { slugify, type Film, type Program, type Showing, type Source } from '../
 import { programNow, programSlot } from '../time.ts';
 
 // The student film club at Chateau Neuf. Its site reads the semester's program from a spreadsheet, one row per screening.
-const NAME = 'Cinema Neuf';
+export const CINEMA = 'Cinema Neuf';
 const SITE = 'https://cinemaneuf.no';
 // Screenings have no pages or ticket links of their own; the program page links to the tickets
 const PROGRAM_URL = `${SITE}/html/program.html`;
-export const CINEMA = NAME;
 
 export type NeufScreening = {
   /** Oslo local time, "2026-11-05T19:00:00". */
@@ -62,7 +61,7 @@ export function cinemaNeufProgram(screenings: NeufScreening[]): Program {
       // The spreadsheet has no posters, so the film gets TMDB's or none
       posterUrl: null,
       pageUrl: PROGRAM_URL,
-      source: NAME,
+      source: CINEMA,
     };
     const slot = programSlot(screening.start);
     (days[slot.day] ??= []).push({
@@ -80,9 +79,9 @@ export function cinemaNeufProgram(screenings: NeufScreening[]): Program {
 }
 
 export const cinemaNeuf: Source = {
-  name: NAME,
+  name: CINEMA,
   homepage: SITE,
   file: 'cinemaneuf.tsv',
-  fetch: async () => (await fetchOk(NAME, programFileUrl())).text(),
+  fetch: async () => (await fetchOk(CINEMA, programFileUrl())).text(),
   program: (raw) => cinemaNeufProgram(parseProgram(raw)),
 };

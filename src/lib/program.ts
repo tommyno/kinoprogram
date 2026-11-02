@@ -103,20 +103,20 @@ export function showingPath(film: Film, showing: Showing): string {
   return `${filmPath(film)}#${showingAnchor(showing)}`;
 }
 
-/** A film's showings per day, from the given day on. */
-export function filmDays(program: Program, filmId: string, from: string): [string, Showing[]][] {
+/** The chosen showings per day, from the given day on, such as a film's or a cinema's. */
+export function showingDays(program: Program, from: string, keep: (s: Showing) => boolean): [string, Showing[]][] {
   return Object.entries(program.days)
     .filter(([day]) => day >= from)
-    .map(([day, list]): [string, Showing[]] => [day, list.filter((s) => s.filmId === filmId)])
+    .map(([day, list]): [string, Showing[]] => [day, list.filter(keep)])
     .filter(([, list]) => list.length > 0);
 }
 
-/** A cinema's showings per day, from the given day on. */
-export function cinemaDays(program: Program, cinema: string, from: string): [string, Showing[]][] {
-  return Object.entries(program.days)
-    .filter(([day]) => day >= from)
-    .map(([day, list]): [string, Showing[]] => [day, list.filter((s) => s.cinema === cinema)])
-    .filter(([, list]) => list.length > 0);
+const listFormat = new Intl.ListFormat('nb', { type: 'conjunction' });
+
+/** "Ingrid Bergman, Liv Ullmann og Lena Nyman", as the items and the commas and "og" between them, so each can be a link. */
+export function listParts<T extends { name: string }>(items: T[]): (T | string)[] {
+  let i = 0;
+  return listFormat.formatToParts(items.map((item) => item.name)).map((part) => (part.type === 'element' ? items[i++] : part.value));
 }
 
 /** "1 t 50 min · 12 år", or whichever of the two is known. */

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { fetchOk } from '../http.ts';
 import { slugify, type Film, type Program, type Showing, type Source } from '../program.ts';
-import { osloDateTime, programSlot } from '../time.ts';
+import { minutesBetween, osloDateTime, programSlot } from '../time.ts';
 
 // The library's ticket shop (Hoopla) lists everything Deichman Bjørvika holds. One call returns every upcoming event.
 const NAME = 'Deichman';
@@ -44,10 +44,6 @@ export function shortScreen(location: string): string {
   );
 }
 
-function minutesBetween(start: string, end: string | null): number | null {
-  return end ? Math.round((Date.parse(end) - Date.parse(start)) / 60_000) || null : null;
-}
-
 /** The library's film screenings as a program. Tickets are free, but must be booked on the event's page. */
 export function deichmanProgram(events: RawEvent[]): Program {
   const films: Record<string, Film> = {};
@@ -64,7 +60,7 @@ export function deichmanProgram(events: RawEvent[]): Program {
       year: null,
       // Like Cinemateket's, so a film Filmweb also lists keeps its own page
       slug: `deichman-${slugify(title)}`,
-      minutes: minutesBetween(event.start, event.end),
+      minutes: event.end ? minutesBetween(new Date(event.start), new Date(event.end)) : null,
       ageRating: null,
       synopsis: null,
       // The events have stills, not posters, so the film gets TMDB's poster or none

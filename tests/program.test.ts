@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { FilmwebSnapshot, filmwebProgram, shortScreen, type RawShow } from '../src/lib/sources/filmweb.ts';
-import { filmDays, mergePrograms, slugify, upcomingFilms } from '../src/lib/program.ts';
+import { mergePrograms, showingDays, slugify, upcomingFilms } from '../src/lib/program.ts';
 import { assertPlausible } from '../src/lib/source.ts';
 import { programNow } from '../src/lib/time.ts';
 
@@ -198,7 +198,7 @@ describe('slugify', () => {
   });
 });
 
-describe('filmDays', () => {
+describe('showingDays', () => {
   const result = mergePrograms([
     programOf([
       show({ showStart: '2026-10-29T18:00:00', ticketSaleUrl: 'https://example.test/past' }),
@@ -209,7 +209,7 @@ describe('filmDays', () => {
   ]);
 
   it("lists only the film's days, from the given day on", () => {
-    const days = filmDays(result, 'EDI1', '2026-10-30');
+    const days = showingDays(result, '2026-10-30', (s) => s.filmId === 'EDI1');
     expect(days.map(([day]) => day)).toEqual(['2026-10-30', '2026-11-02']);
     expect(days.flatMap(([, list]) => list).every((s) => s.filmId === 'EDI1')).toBe(true);
   });

@@ -4,10 +4,9 @@ import { osloDateTime, programSlot } from '../time.ts';
 
 // Oslo Filmrullklubb: analog screenings in Laben at Kulturhuset, about once a month. Each screening is a post on the
 // club's WordPress site, and the feed holds the latest ten.
-const NAME = 'Oslo Filmrullklubb';
+export const CINEMA = 'Oslo Filmrullklubb';
 const SITE = 'https://www.oslofilmrullklubb.no';
 const FEED_URL = `${SITE}/feed/`;
-export const CINEMA = NAME;
 // "The Executioner’s Song (1982) tirsdag 10. november"
 const TITLE = /^(.+?)\s*\((\d{4})\)\s+(?:\p{L}+dag\s+)?(\d{1,2})\.\s*(\p{L}+)$/u;
 const MONTHS = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
@@ -57,8 +56,9 @@ function paragraphs(html: string): string[] {
  */
 export function parsePost(post: FilmrullPost): { title: string; year: number; start: string; synopsis: string } | null {
   const m = post.title.match(TITLE);
-  const month = MONTHS.indexOf(m?.[4].toLowerCase() ?? '');
-  if (!m || month < 0) return null;
+  if (!m) return null;
+  const month = MONTHS.indexOf(m[4].toLowerCase());
+  if (month < 0) return null;
   const published = osloDateTime(new Date(post.pubDate));
   const day = m[3].padStart(2, '0');
   const mm = String(month + 1).padStart(2, '0');
@@ -90,7 +90,7 @@ export function filmrullProgram(posts: FilmrullPost[]): Program {
       // The posts have no posters, so the film gets TMDB's or none
       posterUrl: null,
       pageUrl: post.link,
-      source: NAME,
+      source: CINEMA,
     };
     const slot = programSlot(screening.start);
     (days[slot.day] ??= []).push({
@@ -109,9 +109,9 @@ export function filmrullProgram(posts: FilmrullPost[]): Program {
 }
 
 export const osloFilmrullklubb: Source = {
-  name: NAME,
+  name: CINEMA,
   homepage: SITE,
   file: 'oslofilmrullklubb.xml',
-  fetch: async () => (await fetchOk(NAME, FEED_URL)).text(),
+  fetch: async () => (await fetchOk(CINEMA, FEED_URL)).text(),
   program: (raw) => filmrullProgram(parseFeed(raw)),
 };

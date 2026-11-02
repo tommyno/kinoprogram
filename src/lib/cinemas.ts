@@ -1,4 +1,9 @@
 import { collator, slugify, type Program } from './program.ts';
+import { CINEMA as CINEMA_NEUF } from './sources/cinemaneuf.ts';
+import { CINEMA as CINEMATEKET } from './sources/cinemateket.ts';
+import { CINEMA as DEICHMAN } from './sources/deichman.ts';
+import { CINEMA as OSLO_FILMRULLKLUBB } from './sources/oslofilmrullklubb.ts';
+import { CINEMA as REVIER } from './sources/revier.ts';
 
 /** A cinema with its own page on this site, /kino/{slug}. */
 export type Cinema = {
@@ -12,18 +17,18 @@ export type Cinema = {
   about?: string;
 };
 
-// Every cinema the sources cover. One that turns up in the program without being listed here still gets a page, with only its name
+// Every cinema the sources cover, A–Å. One that turns up in the program without being listed here still gets a page, with only its name
 export const CINEMAS: Cinema[] = [
   {
-    name: 'Cinema Neuf',
+    name: CINEMA_NEUF,
     url: 'https://cinemaneuf.no',
     address: 'Slemdalsveien 15, 0369 Oslo',
     about: 'Studentfilmklubb på Chateau Neuf.',
   },
-  { name: 'Cinemateket', url: 'https://www.cinemateket.no', address: 'Dronningens gate 16, 0152 Oslo' },
+  { name: CINEMATEKET, url: 'https://www.cinemateket.no', address: 'Dronningens gate 16, 0152 Oslo' },
   { name: 'Colosseum', url: 'https://www.nfkino.no/kino/colosseum', address: 'Fridtjof Nansens vei 6, 0369 Oslo' },
   {
-    name: 'Deichman Bjørvika',
+    name: DEICHMAN,
     url: 'https://deichman.no/bibliotekene/bj%C3%B8rvika',
     address: 'Anne-Cath. Vestlys plass 1, 0150 Oslo',
     about: 'Filmvisninger på hovedbiblioteket. Gratis, men billett må bestilles.',
@@ -33,16 +38,16 @@ export const CINEMAS: Cinema[] = [
   { name: 'Kunstnernes Hus Kino', url: 'https://kunstnerneshus.no/program/kino', address: 'Wergelandsveien 17, 0167 Oslo' },
   { name: 'ODEON Oslo', url: 'https://www.odeonkino.no/oslo/kino/odeon-oslo/', address: 'Vitaminveien 27, 0485 Oslo' },
   {
-    name: 'Revier Film Club',
-    url: 'https://www.revier.no/events/filmklubb',
-    address: 'Kongens gate 5, 0153 Oslo',
-    about: 'Filmklubb på hotellet Revier. Gratis visninger.',
-  },
-  {
-    name: 'Oslo Filmrullklubb',
+    name: OSLO_FILMRULLKLUBB,
     url: 'https://www.oslofilmrullklubb.no',
     address: 'Youngs gate 6, 0181 Oslo',
     about: 'Analog filmklubb i Laben på Kulturhuset. Medlemskap i Norsk Filmklubbforbund og billett ordnes i døra.',
+  },
+  {
+    name: REVIER,
+    url: 'https://www.revier.no/events/filmklubb',
+    address: 'Kongens gate 5, 0153 Oslo',
+    about: 'Filmklubb på hotellet Revier. Gratis visninger.',
   },
   { name: 'Ringen', url: 'https://www.nfkino.no/kino/ringen', address: 'Sannergata 6D, 0557 Oslo' },
   { name: 'Saga', url: 'https://www.nfkino.no/kino/saga', address: 'Stortingsgata 28, 0161 Oslo' },

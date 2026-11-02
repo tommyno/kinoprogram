@@ -3,7 +3,7 @@ import Base from '@layouts/Base.astro';
 import Footer from '@components/Footer/Footer.astro';
 import Poster from '@components/Poster/Poster.astro';
 import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
-import { filmDays, filmMeta, showingAnchor, type Person } from '@lib/program.ts';
+import { filmMeta, listParts, showingAnchor, showingDays, type Person } from '@lib/program.ts';
 import { getProgram } from '@lib/source.ts';
 import { dayLabel, formatDay, programNow } from '@lib/time.ts';
 import styles from './FilmPage.module.css';
@@ -16,7 +16,7 @@ const { filmId } = Astro.props;
 const program = await getProgram();
 const today = programNow().day;
 const film = program.films[filmId];
-const days = filmDays(program, filmId, today);
+const days = showingDays(program, today, (s) => s.filmId === filmId);
 const meta = filmMeta(film);
 // "7,7"
 const rating = film.rating?.value.toLocaleString('nb-NO', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -29,12 +29,6 @@ const links = [
 const credits: [string, Person[]][] = [];
 if (film.directors?.length) credits.push(['Regi', film.directors]);
 if (film.cast?.length) credits.push(['Med', film.cast]);
-// "Ingrid Bergman, Liv Ullmann og Lena Nyman", each name a link
-const names = new Intl.ListFormat('nb', { type: 'conjunction' });
-function nameList(people: Person[]): (Person | string)[] {
-  let i = 0;
-  return names.formatToParts(people.map((p) => p.name)).map((part) => (part.type === 'element' ? people[i++] : part.value));
-}
 ---
 
 <Base title={`${film.title} – Kinoprogram for Oslo`} description={`Alle visningene av ${film.title} på kino i Oslo, dag for dag.`}>
@@ -77,7 +71,7 @@ function nameList(people: Person[]): (Person | string)[] {
                 {credits.map(([label, people]) => (
                   <span>
                     {label}:{' '}
-                    {nameList(people).map((p) =>
+                    {listParts(people).map((p) =>
                       typeof p === 'string' ? p : <a href={p.url} target="_blank" rel="noopener">{p.name}</a>,
                     )}
                   </span>
@@ -120,7 +114,7 @@ function nameList(people: Person[]): (Person | string)[] {
       days.map(([day, list], index) => {
         const label = dayLabel(day, today);
         return (
-          <section class={styles.day} data-stagger style={`--i: ${index}`} data-film-day={day}>
+          <section class={styles.day} data-stagger style={`--i: ${index}`} data-day-section={day}>
             <h2 class={styles.dayHeading}>
               <span class={styles.dayLabel} data-day-label>{label}</span>
               <span class={styles.date} hidden={label === formatDay(day)} data-date>{formatDay(day)}</span>
@@ -144,20 +138,9 @@ function nameList(people: Person[]): (Person | string)[] {
 </Base>
 
 <script>
-  import { dayLabel, formatDay, markPast, programNow } from '@lib/time.ts';
+  import { markPast, relabelDays } from '@lib/time.ts';
 
-  // The days are labelled at build time; in case Oslo has passed midnight since, drop the days that are over and label the rest again
-  const today = programNow().day;
-  for (const section of document.querySelectorAll<HTMLElement>('[data-film-day]')) {
-    const day = section.dataset.filmDay!;
-    if (day < today) {
-      section.remove();
-      continue;
-    }
-    const label = dayLabel(day, today);
-    section.querySelector('[data-day-label]')!.textContent = label;
-    section.querySelector<HTMLElement>('[data-date]')!.hidden = label === formatDay(day);
-  }
+  relabelDays();
 
   // Started showings grey out as the clock passes them, as in the program
   const links = [...document.querySelectorAll<HTMLElement>('[data-minutes]')];
@@ -171,15 +154,6 @@ function nameList(people: Person[]): (Person | string)[] {
     // Instant, as the page should open there rather than glide there (html scrolls smoothly)
     chosen.scrollIntoView({ block: 'nearest', behavior: 'instant' });
   }
-
-  // Coming from the program, go back in history instead, so it opens at the same date, sort and scroll position
-  const back = document.querySelector<HTMLAnchorElement>('[data-back]')!;
-  back.addEventListener('click', (event) => {
-    const fromProgram = document.referrer.startsWith(location.origin) && history.length > 1;
-    if (!fromProgram || event.metaKey || event.ctrlKey || event.shiftKey) return;
-    event.preventDefault();
-    history.back();
-  });
 
   // A click opens the poster to the page width, or its own width if that is smaller, and closes it again
   const poster = document.querySelector<HTMLElement>('button[data-poster]');

@@ -3,7 +3,7 @@ import Base from '@layouts/Base.astro';
 import Footer from '@components/Footer/Footer.astro';
 import ShowingLink from '@components/ShowingLink/ShowingLink.astro';
 import { CINEMAS } from '@lib/cinemas.ts';
-import { cinemaDays, showingPath } from '@lib/program.ts';
+import { showingDays, showingPath } from '@lib/program.ts';
 import { getProgram } from '@lib/source.ts';
 import { dayLabel, formatDay, programNow } from '@lib/time.ts';
 import styles from './CinemaPage.module.css';
@@ -16,7 +16,7 @@ const { name } = Astro.props;
 const program = await getProgram();
 const today = programNow().day;
 const cinema = CINEMAS.find((c) => c.name === name);
-const days = cinemaDays(program, name, today);
+const days = showingDays(program, today, (s) => s.cinema === name);
 // "deichman.no", as the button names the cinema's site
 const host = cinema && new URL(cinema.url).hostname.replace(/^www\./, '');
 // With the name, so Google Maps finds the cinema itself rather than just the street address
@@ -58,7 +58,7 @@ const mapUrl = cinema && `https://www.google.com/maps/search/?api=1&query=${enco
         {days.map(([day, list], index) => {
           const label = dayLabel(day, today);
           return (
-            <section class={styles.day} data-stagger style={`--i: ${index}`} data-cinema-day={day}>
+            <section class={styles.day} data-stagger style={`--i: ${index}`} data-day-section={day}>
               <h2 class={styles.dayHeading}>
                 <span class={styles.dayLabel} data-day-label>{label}</span>
                 <span class={styles.date} hidden={label === formatDay(day)} data-date>{formatDay(day)}</span>
@@ -81,32 +81,12 @@ const mapUrl = cinema && `https://www.google.com/maps/search/?api=1&query=${enco
 </Base>
 
 <script>
-  import { dayLabel, formatDay, markPast, programNow } from '@lib/time.ts';
+  import { markPast, relabelDays } from '@lib/time.ts';
 
-  // The days are labelled at build time; in case Oslo has passed midnight since, drop the days that are over and label the rest again
-  const today = programNow().day;
-  for (const section of document.querySelectorAll<HTMLElement>('[data-cinema-day]')) {
-    const day = section.dataset.cinemaDay!;
-    if (day < today) {
-      section.remove();
-      continue;
-    }
-    const label = dayLabel(day, today);
-    section.querySelector('[data-day-label]')!.textContent = label;
-    section.querySelector<HTMLElement>('[data-date]')!.hidden = label === formatDay(day);
-  }
+  relabelDays();
 
   // Started showings grey out as the clock passes them, as in the program
   const links = [...document.querySelectorAll<HTMLElement>('[data-minutes]')];
   markPast(links);
   setInterval(() => markPast(links), 60_000);
-
-  // Coming from the program, go back in history instead, so it opens at the same date, sort and scroll position
-  const back = document.querySelector<HTMLAnchorElement>('[data-back]')!;
-  back.addEventListener('click', (event) => {
-    const fromProgram = document.referrer.startsWith(location.origin) && history.length > 1;
-    if (!fromProgram || event.metaKey || event.ctrlKey || event.shiftKey) return;
-    event.preventDefault();
-    history.back();
-  });
 </script>
