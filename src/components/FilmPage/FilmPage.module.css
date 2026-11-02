@@ -9,6 +9,8 @@
   margin-top: -32px;
   padding: 16px 0 32px;
   color: var(--bg);
+  /* The poster's shadow stops at the foot of the band instead of greying the page under it; the backdrop still runs out to the sides */
+  overflow-y: clip;
 }
 
 /* Dark enough under white text even for a white poster; ink while the poster loads or when there is none */
@@ -51,17 +53,20 @@
   gap: 16px;
 }
 
+/* Lies on the backdrop like a printed poster: square corners and a soft shadow */
 .poster {
   flex: none;
   width: 104px;
   padding: 0;
-  border-radius: var(--radius);
+  box-shadow:
+    0 2px 4px rgb(0 0 0 / 0.35),
+    0 12px 24px rgb(0 0 0 / 0.35),
+    0 30px 60px rgb(0 0 0 / 0.3);
 }
 
-/* A faint edge on the dark backdrop instead of the grey line from the program, without the light placeholder showing through it */
 .poster img {
-  border-color: rgb(255 255 255 / 0.12);
-  background-clip: padding-box;
+  border: 0;
+  border-radius: 0;
 }
 
 button.poster {
