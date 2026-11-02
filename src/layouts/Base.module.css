@@ -1,5 +1,7 @@
 .page {
   max-width: var(--max-width);
+  /* At least the window's height, so the footer sits at the bottom on short pages */
+  min-height: 100dvh;
   margin: 0 auto;
   padding: 32px var(--gutter) 48px;
   display: flex;
