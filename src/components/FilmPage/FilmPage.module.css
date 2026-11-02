@@ -200,17 +200,21 @@ button.poster {
   display: block;
 }
 
-/* Filled by the script with YouTube's player when the button is pressed */
+/* A dark band across the whole window, right under the header, opened by the trailer button; on phones the video runs edge to edge */
 .trailer {
-  width: 100%;
-  max-width: 960px;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border-radius: var(--radius);
+  /* Up to the header, past the page's gap */
+  margin: -24px calc(50% - 50vw) 0;
   background: var(--ink);
 }
 
-.trailer iframe {
+/* Filled by the script with YouTube's player */
+.player {
+  max-width: 960px;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+}
+
+.player iframe {
   display: block;
   width: 100%;
   height: 100%;
@@ -349,6 +353,10 @@ button.poster {
 
   .actions > * {
     flex: none;
+  }
+
+  .trailer {
+    padding: 24px var(--gutter);
   }
 
   /* The day name lines up with the first row of times */

@@ -107,7 +107,13 @@ if (film.cast?.length) credits.push(['Med', film.cast]);
     </header>
   </div>
 
-  {film.trailer && <div id="trailer" class={styles.trailer} hidden></div>}
+  {
+    film.trailer && (
+      <div id="trailer" class={styles.trailer} hidden>
+        <div class={styles.player} data-player></div>
+      </div>
+    )
+  }
 
   <div>
     {
@@ -171,13 +177,14 @@ if (film.cast?.length) credits.push(['Med', film.cast]);
   // Nothing loads from YouTube until the visitor asks for the trailer; closing it removes the player, which stops it
   const trailerButton = document.querySelector<HTMLButtonElement>('[data-trailer-button]');
   if (trailerButton) {
-    const player = document.getElementById('trailer')!;
+    const trailer = document.getElementById('trailer')!;
+    const player = trailer.querySelector('[data-player]')!;
     trailerButton.addEventListener('click', () => {
       const open = trailerButton.getAttribute('aria-expanded') !== 'true';
       trailerButton.setAttribute('aria-expanded', String(open));
       trailerButton.querySelector('[data-label]')!.textContent = open ? 'Lukk trailer' : 'Se trailer';
       player.replaceChildren();
-      player.hidden = !open;
+      trailer.hidden = !open;
       if (!open) return;
       const iframe = document.createElement('iframe');
       iframe.src = `https://www.youtube-nocookie.com/embed/${trailerButton.dataset.trailerButton}?autoplay=1`;
@@ -187,6 +194,8 @@ if (film.cast?.length) credits.push(['Med', film.cast]);
       // YouTube refuses to play embeds that don't say which site they are on (error 153)
       iframe.referrerPolicy = 'strict-origin-when-cross-origin';
       player.append(iframe);
+      // On phones the band can open below the fold
+      trailer.scrollIntoView({ block: 'nearest' });
     });
   }
 
