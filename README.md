@@ -20,4 +20,5 @@ The website is built from publicly available data:
 - **Cinemateket** (`cinemateket.no/cinemateket-webcal.ics`): showings with times, screen, description and a link to the event.
 - **Cinema Neuf** (`cinemaneuf.no/semesters/…/Program_….tsv`): the student film club's semester program, with times, year, length and a link to the program page.
 - **Deichman** (`deichman.hoopla.no/api/public/v3.0/organizations/915950447/events`): the library's film screenings at Bjørvika, with times, screen and a link to the free tickets.
+- **Revier** (`eventbrite.com/o/revier-117564493841`): Revier Film Club's free screenings, read from the organizer page on Eventbrite, with times and a link to each event.
 - **TMDB** (`api.themoviedb.org`): user scores, trailers, directors and cast for the film pages, and posters for films whose source has none, such as Cinemateket's.
