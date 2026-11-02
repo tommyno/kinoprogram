@@ -1,10 +1,10 @@
 # Kinoprogram for Oslo
 
-**→ [kinoprogram.vercel.app](https://kinoprogram.vercel.app)**
+**→ [kinoprogram.net](https://kinoprogram.net)**
 
 Every cinema in Oslo and what's showing, on one page.
 
-[![Kinoprogram for Oslo](.github/screenshot.png)](https://kinoprogram.vercel.app)
+[![Kinoprogram for Oslo](.github/screenshot.png)](https://kinoprogram.net)
 
 ## Development
 
