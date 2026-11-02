@@ -5,6 +5,7 @@ import { CINEMA as DEICHMAN } from './sources/deichman.ts';
 import { CINEMA as OSLO_FILMRULLKLUBB } from './sources/oslofilmrullklubb.ts';
 import { CINEMA as REVIER } from './sources/revier.ts';
 import { CINEMA as SOMMERRO } from './sources/sommerro.ts';
+import { CINEMA as WEIRD_AND_WONDERFUL } from './sources/weirdandwonderful.ts';
 
 /** A cinema with its own page on this site, /kino/{slug}. */
 export type Cinema = {
@@ -61,6 +62,12 @@ export const CINEMAS: Cinema[] = [
   { name: 'Symra', url: 'https://www.nfkino.no/kino/symra', address: 'Cecilie Thoresens vei 23, 1153 Oslo' },
   { name: 'Vega Kino', url: 'https://www.vegascene.no', address: 'Hausmanns gate 28, 0182 Oslo' },
   { name: 'Vika', url: 'https://www.nfkino.no/kino/vika', address: 'Ruseløkkveien 14, 0251 Oslo' },
+  {
+    name: WEIRD_AND_WONDERFUL,
+    url: 'https://wwcinema.no',
+    address: 'Arnljot Gellines vei 41 B, 0657 Oslo',
+    about: 'Filmklubb på Kruttverket kafé på Kroloftet.',
+  },
 ];
 
 /** The cinema's own page on this site. */
