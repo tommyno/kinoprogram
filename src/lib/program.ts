@@ -12,10 +12,11 @@ export type Film = {
   ageRating: string | null;
   /** A few lines about the film, with line breaks kept. */
   synopsis: string | null;
+  /** The source's poster, until the build replaces it with a small copy of its own. */
   posterUrl: string | null;
-  /** Resized versions of the poster, when the source offers them. */
-  posterSrcSet?: string;
-  /** Versions up to the poster's own width, for the film page where a click opens it to full width. */
+  /** The source poster's size, for one the build downloads; Cinemateket's logo has none. */
+  posterSize?: { width: number; height: number };
+  /** The small copy and a large one, for the film page where a click opens it to full width. */
   posterLarge?: { srcSet: string; width: number };
   /** The film's page at the source it comes from. */
   pageUrl: string;
@@ -167,4 +168,11 @@ export function mergePrograms(programs: Program[]): Program {
     );
   }
   return { films, days };
+}
+
+/** Throws when there is nothing to show today, so the build fails and Vercel keeps the previous deploy. */
+export function assertPlausible(program: Program, today: string): void {
+  if (!program.days[today]?.length) {
+    throw new Error(`Programdataene ser feil ut: ingen visninger ${today}.`);
+  }
 }

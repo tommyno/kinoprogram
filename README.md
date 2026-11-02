@@ -8,7 +8,7 @@ Every cinema in Oslo and what's showing, on one page.
 
 ## Development
 
-A static Astro site that is rebuilt several times a day with the latest program. The data is fetched when the site is built, not when a page loads, to limit traffic to the data sources.
+A static Astro site that is rebuilt several times a day with the latest program. The data is fetched when the site is built, not when a page loads, to limit traffic to the data sources. So are the posters, which the site serves itself; Astro keeps them between builds in `node_modules/.astro`.
 
 Each source is a file in `src/lib/sources`, listed in `src/lib/sources/index.ts`. `pnpm fixture` saves a fresh response from each of them in `tests/fixtures`.
 

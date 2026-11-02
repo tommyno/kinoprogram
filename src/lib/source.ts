@@ -1,15 +1,16 @@
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { errorMessage } from './http.ts';
-import { mergePrograms, type Film, type Program, type Source } from './program.ts';
+import { assertPlausible, mergePrograms, type Film, type Program, type Source } from './program.ts';
 import { SOURCES } from './sources/index.ts';
+import { localizePosters } from './posters.ts';
 import { programNow } from './time.ts';
 import { fetchTmdb, type TmdbCache, type TmdbFilm } from './tmdb.ts';
 
 const CACHE_DIR = '.cache';
 const CACHE_TTL_MS = 60 * 60 * 1000;
 // Unlike .cache, kept between Vercel builds, which restore node_modules. Bump the number when TmdbFilm changes
-const TMDB_CACHE = 'node_modules/.cache/oslokinoprogram/tmdb-1.json';
+const TMDB_CACHE = 'node_modules/.cache/oslokinoprogram/tmdb-2.json';
 
 async function isFresh(file: string): Promise<boolean> {
   try {
@@ -68,13 +69,6 @@ async function loadTmdb(films: Record<string, Film>): Promise<Record<string, Tmd
   }
 }
 
-/** Throws when there is nothing to show today, so the build fails and Vercel keeps the previous deploy. */
-export function assertPlausible(program: Program, today: string): void {
-  if (!program.days[today]?.length) {
-    throw new Error(`Programdataene ser feil ut: ingen visninger ${today}.`);
-  }
-}
-
 let program: Promise<Program> | undefined;
 
 /** The validated program, loaded once per build however many pages ask for it. */
@@ -84,6 +78,7 @@ export function getProgram(): Promise<Program> {
     const result = mergePrograms(programs.filter((p) => p !== null));
     assertPlausible(result, programNow().day);
     for (const [id, film] of Object.entries(await loadTmdb(result.films))) Object.assign(result.films[id], film);
+    await localizePosters(result.films);
     return result;
   })();
   return program;

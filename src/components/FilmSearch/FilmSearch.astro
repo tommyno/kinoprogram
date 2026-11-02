@@ -36,7 +36,7 @@ const { films } = Astro.props;
         const meta = filmMeta(film);
         return (
           <a href={filmPath(film)} class={styles.card} data-title={film.title} data-stagger style={`--i: ${index}`}>
-            <Poster film={film} sizes="(min-width: 1000px) 200px, 45vw" eager={index < 4} />
+            <Poster film={film} eager={index < 4} />
             <span class={styles.heading}>
               <span class={styles.title}>{film.title}</span>
               {meta && <span class={styles.meta}>{meta}</span>}

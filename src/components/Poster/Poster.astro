@@ -5,14 +5,14 @@ import styles from './Poster.module.css';
 
 type Props = {
   film: Film;
-  sizes: string;
-  /** Larger versions than the film's own srcset, where the page needs them. */
+  /** Larger versions than the small copy, where the page needs them. */
   srcset?: string;
+  sizes?: string;
   /** Loads at once and first, for posters in view when the page opens. */
   eager?: boolean;
 };
 
-const { film, sizes, srcset = film.posterSrcSet, eager = false } = Astro.props;
+const { film, srcset, sizes, eager = false } = Astro.props;
 ---
 
 {

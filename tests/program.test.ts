@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { FilmwebSnapshot, filmwebProgram, shortScreen, type RawShow } from '../src/lib/sources/filmweb.ts';
-import { mergePrograms, showingDays, slugify, upcomingFilms } from '../src/lib/program.ts';
-import { assertPlausible } from '../src/lib/source.ts';
+import { assertPlausible, mergePrograms, showingDays, slugify, upcomingFilms } from '../src/lib/program.ts';
 import { programNow } from '../src/lib/time.ts';
 
 const fixture = FilmwebSnapshot.parse(JSON.parse(readFileSync('tests/fixtures/filmweb-oslo.json', 'utf8')));
@@ -60,7 +59,7 @@ describe('filmwebProgram', () => {
     expect(s.key).toBe('Saga|Saga 1|2026-10-30T18:00:00|EDI1');
   });
 
-  it('builds films with Filmweb links and resized posters', () => {
+  it('builds films with Filmweb links', () => {
     const result = programOf(
       [show({})],
       [
@@ -83,15 +82,13 @@ describe('filmwebProgram', () => {
       minutes: 100,
       ageRating: '12 år',
       synopsis: 'Om filmen.',
-      posterUrl: 'https://cdn.sanity.io/p.jpg?w=320&auto=format',
       pageUrl: 'https://www.filmweb.no/film/EDI1',
     });
-    expect(result.films.EDI1.posterSrcSet).toContain('https://cdn.sanity.io/p.jpg?w=640&auto=format 640w');
-    // No size in the file name, so no large versions
-    expect(result.films.EDI1.posterLarge).toBeUndefined();
+    // No size in the file name, so it can't be resized
+    expect(result.films.EDI1.posterUrl).toBeNull();
   });
 
-  it('offers large posters up to the size in the file name', () => {
+  it('gives the poster the size in its file name', () => {
     const result = programOf(
       [show({})],
       [
@@ -108,11 +105,10 @@ describe('filmwebProgram', () => {
         },
       ],
     );
-    const large = result.films.EDI1.posterLarge!;
-    expect(large.width).toBe(1128);
-    expect(large.srcSet).toContain('https://cdn.sanity.io/p-1128x1670.jpg?auto=format&w=960&auto=format 960w');
-    expect(large.srcSet).toMatch(/w=1128&auto=format 1128w$/);
-    expect(large.srcSet).not.toContain('1280w');
+    expect(result.films.EDI1).toMatchObject({
+      posterUrl: 'https://cdn.sanity.io/p-1128x1670.jpg?auto=format',
+      posterSize: { width: 1128, height: 1670 },
+    });
   });
 
   it('keeps the original title and year for the TMDB search', () => {

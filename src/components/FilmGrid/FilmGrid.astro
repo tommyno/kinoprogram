@@ -25,7 +25,7 @@ const groups = [...Map.groupBy(showings, (s) => s.filmId)].sort(([a], [b]) => co
       return (
         <article class={styles.card} data-card data-stagger style={`--i: ${index}`}>
           <a href={filmPath(film)} title="Se alle visninger" tabindex="-1" aria-hidden="true">
-            <Poster film={film} sizes="(min-width: 1000px) 200px, 45vw" eager={index < 4} />
+            <Poster film={film} eager={index < 4} />
           </a>
           <div class={styles.heading}>
             <h2 class={styles.title}>

@@ -64,11 +64,11 @@ describe('findMatch', () => {
 });
 
 describe('tmdbPoster', () => {
-  it("offers TMDB's fixed widths", () => {
-    const poster = tmdbPoster('/abc.jpg');
-    expect(poster.posterUrl).toBe('https://image.tmdb.org/t/p/w342/abc.jpg');
-    expect(poster.posterSrcSet).toContain('https://image.tmdb.org/t/p/w780/abc.jpg 780w');
-    expect(poster.posterLarge?.width).toBe(780);
+  it("takes TMDB's largest fixed width", () => {
+    expect(tmdbPoster('/abc.jpg')).toEqual({
+      posterUrl: 'https://image.tmdb.org/t/p/w780/abc.jpg',
+      posterSize: { width: 780, height: 1170 },
+    });
   });
 });
 
@@ -142,7 +142,7 @@ describe('fetchTmdb', () => {
 
   it("keeps the source's own poster", async () => {
     vi.stubGlobal('fetch', vi.fn());
-    const films = { a: film({ posterSrcSet: 'own.jpg 500w' }) };
+    const films = { a: film({ posterUrl: 'own.jpg', posterSize: { width: 500, height: 750 } }) };
     const cache = { [lookupKey(films.a)]: { at: now, film: { trailer: 'abc', ...poster } } };
     expect((await fetchTmdb(films, 'token', cache, now)).films).toEqual({ a: { trailer: 'abc' } });
   });

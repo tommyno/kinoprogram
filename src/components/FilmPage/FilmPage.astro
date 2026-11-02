@@ -54,7 +54,7 @@ if (film.cast?.length) credits.push(['Med', film.cast]);
           </button>
         ) : (
           <div class={styles.poster} data-poster>
-            <Poster film={film} sizes="(min-width: 700px) 200px, 104px" eager />
+            <Poster film={film} eager />
           </div>
         )
       }

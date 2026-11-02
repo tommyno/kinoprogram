@@ -8,9 +8,6 @@ const NAME = 'Filmweb';
 const ENDPOINT = 'https://movieinfoqs.filmweb.no/graphql';
 export const LOCATION = 'Oslo';
 const FILM_URL = 'https://www.filmweb.no/film/';
-// Posters live on Sanity's CDN, which resizes by query string
-const POSTER_WIDTHS = [200, 320, 480, 640];
-const LARGE_POSTER_WIDTHS = [...POSTER_WIDTHS, 960, 1280, 1920];
 
 // The shows and the films they are of, in one request
 const PROGRAM_QUERY = `query Program($location: String) {
@@ -134,19 +131,11 @@ function filmYear(movie: RawMovie | undefined, title: string): number | null {
   return years.map(Number).find((year) => year > 1887) ?? null;
 }
 
-function posterSrc(url: string, width: number): string {
-  return `${url}${url.includes('?') ? '&' : '?'}w=${width}&auto=format`;
-}
-
-function srcSet(url: string, widths: number[]): string {
-  return widths.map((w) => `${posterSrc(url, w)} ${w}w`).join(', ');
-}
-
-/** The CDN scales images up too, so the large versions stop at the size in the file name, as in "…-1128x1670.jpg". */
-function largePoster(url: string): Film['posterLarge'] {
-  const width = Number(url.match(/-(\d+)x\d+\.\w+(\?|$)/)?.[1]);
-  if (!width) return undefined;
-  return { srcSet: srcSet(url, [...LARGE_POSTER_WIDTHS.filter((w) => w < width), width]), width };
+/** The poster on Sanity's CDN, with the size in its file name, as in "…-1128x1670.jpg". Without one it can't be resized. */
+function poster(url: string | null): Pick<Film, 'posterUrl' | 'posterSize'> {
+  const size = url?.match(/-(\d+)x(\d+)\.\w+(\?|$)/);
+  if (!url || !size) return { posterUrl: null };
+  return { posterUrl: url, posterSize: { width: Number(size[1]), height: Number(size[2]) } };
 }
 
 export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
@@ -166,7 +155,6 @@ export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
 
     const filmId = show.movieMainVersionId;
     const movie = movies.get(filmId);
-    const poster = orNull(movie?.sanityImagePosterUrl);
     const title = show.movieTitle.trim();
     films[filmId] ??= {
       title,
@@ -177,9 +165,7 @@ export function filmwebProgram(snapshot: FilmwebSnapshot): Program {
       ageRating: ageRating(show.rating) ?? ageRating(movie?.rating ?? null),
       // Many films have only the long body text, no ingress
       synopsis: plainText(movie?.synopsisIngress) ?? plainText(movie?.synopsisBodyText),
-      posterUrl: poster && posterSrc(poster, 320),
-      posterSrcSet: poster ? srcSet(poster, POSTER_WIDTHS) : undefined,
-      posterLarge: poster ? largePoster(poster) : undefined,
+      ...poster(orNull(movie?.sanityImagePosterUrl)),
       pageUrl: FILM_URL + filmId,
       source: NAME,
     };

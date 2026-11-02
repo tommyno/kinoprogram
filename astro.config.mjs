@@ -10,6 +10,8 @@ export default defineConfig({
   server: { port: 3000 },
   // Fetches a page on hover or tap, so it is ready by the time the click lands
   prefetch: { prefetchAll: true },
+  // Posters from these are downloaded at build and served from the site; see src/lib/posters.ts
+  image: { domains: ['cdn.sanity.io', 'image.tmdb.org'] },
   // Self-hosted at build time, preloaded, with a metric-matched fallback so text doesn't jump
   fonts: [
     {

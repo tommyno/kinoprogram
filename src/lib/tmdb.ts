@@ -8,8 +8,8 @@ const API = 'https://api.themoviedb.org/3';
 const MOVIE_URL = 'https://www.themoviedb.org/movie/';
 const PERSON_URL = 'https://www.themoviedb.org/person/';
 const IMAGE_URL = 'https://image.tmdb.org/t/p/';
-// TMDB's fixed poster widths, short of the original
-const POSTER_WIDTHS = [185, 342, 500, 780];
+// TMDB's largest fixed poster width, short of the original. Its posters are 2:3
+const POSTER_WIDTH = 780;
 // A score from a vote or two says little, and new films often have none yet
 const MIN_VOTES = 5;
 // Requests at a time; TMDB allows about 40 a second
@@ -53,7 +53,7 @@ export type Credits = z.infer<typeof Credits>;
 const MovieData = z.object({ videos: z.object({ results: z.array(Video) }), credits: Credits });
 
 export type TmdbFilm = Partial<
-  Pick<Film, 'rating' | 'trailer' | 'directors' | 'cast' | 'posterUrl' | 'posterSrcSet' | 'posterLarge'>
+  Pick<Film, 'rating' | 'trailer' | 'directors' | 'cast' | 'posterUrl' | 'posterSize'>
 >;
 
 /** Earlier lookups by lookupKey, found or not, with when they were made. */
@@ -87,9 +87,8 @@ export function tmdbRating(result: SearchResult): TmdbFilm['rating'] {
   return { value: Math.round(result.vote_average * 10) / 10, votes: result.vote_count, url: MOVIE_URL + result.id };
 }
 
-export function tmdbPoster(path: string): Pick<Film, 'posterUrl' | 'posterSrcSet' | 'posterLarge'> {
-  const srcSet = POSTER_WIDTHS.map((w) => `${IMAGE_URL}w${w}${path} ${w}w`).join(', ');
-  return { posterUrl: `${IMAGE_URL}w342${path}`, posterSrcSet: srcSet, posterLarge: { srcSet, width: 780 } };
+export function tmdbPoster(path: string): Pick<Film, 'posterUrl' | 'posterSize'> {
+  return { posterUrl: `${IMAGE_URL}w${POSTER_WIDTH}${path}`, posterSize: { width: POSTER_WIDTH, height: POSTER_WIDTH * 1.5 } };
 }
 
 /** A trailer on YouTube: Norwegian before English, official before not. */
@@ -224,8 +223,8 @@ export async function fetchTmdb(
     const tmdb = next[lookupKey(film)]?.film;
     if (!tmdb) continue;
     // Only films whose source has no poster of its own get TMDB's: Cinemateket's, which show a logo, and the odd Filmweb film
-    const { posterUrl, posterSrcSet, posterLarge, ...details } = tmdb;
-    found[id] = film.posterSrcSet ? details : tmdb;
+    const { posterUrl, posterSize, ...details } = tmdb;
+    found[id] = film.posterSize ? details : tmdb;
   }
   return { films: found, cache: next, lookedUp };
 }

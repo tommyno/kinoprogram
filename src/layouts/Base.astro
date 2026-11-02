@@ -32,8 +32,6 @@ const image = new URL('/og.png', Astro.site);
     <!-- First in the head, so a page that sends the visitor on does it before anything loads -->
     <slot name="head" />
     <Font cssVariable="--font-inter" preload />
-    <!-- Filmweb's posters come from here -->
-    <link rel="preconnect" href="https://cdn.sanity.io" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
