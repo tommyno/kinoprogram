@@ -38,6 +38,12 @@ export const CINEMAS: Cinema[] = [
     address: 'Kongens gate 5, 0153 Oslo',
     about: 'Filmklubb på hotellet Revier. Gratis visninger.',
   },
+  {
+    name: 'Oslo Filmrullklubb',
+    url: 'https://www.oslofilmrullklubb.no',
+    address: 'Youngs gate 6, 0181 Oslo',
+    about: 'Analog filmklubb i Laben på Kulturhuset. Medlemskap i Norsk Filmklubbforbund og billett ordnes i døra.',
+  },
   { name: 'Ringen', url: 'https://www.nfkino.no/kino/ringen', address: 'Sannergata 6D, 0557 Oslo' },
   { name: 'Saga', url: 'https://www.nfkino.no/kino/saga', address: 'Stortingsgata 28, 0161 Oslo' },
   { name: 'Symra', url: 'https://www.nfkino.no/kino/symra', address: 'Cecilie Thoresens vei 23, 1153 Oslo' },
