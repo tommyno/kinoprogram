@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { fetchOk } from './http.ts';
+import { errorMessage, fetchOk } from './http.ts';
 import type { Film, Person } from './program.ts';
 
 // The films' user score, trailer, director and cast, and a poster for films without one, found by title and year. Needs a read access
@@ -16,9 +16,8 @@ const MIN_VOTES = 5;
 const CONCURRENCY = 8;
 // Actors on the film page, in billing order
 const CAST = 3;
-// How long a lookup is reused. A match only brings a newer score; a miss is tried sooner, in case TMDB adds the film
-const MATCH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
-const MISS_TTL_MS = 2 * 24 * 60 * 60 * 1000;
+// How long a lookup, found or not, is reused. Looking up again only brings a newer score, or a film TMDB has added since
+const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
 export const SearchResult = z.object({
   id: z.number(),
@@ -42,7 +41,7 @@ export const Video = z.object({
 });
 export type Video = z.infer<typeof Video>;
 
-const SearchData = z.object({ results: z.array(SearchResult) });
+const SearchData = z.object({ results: z.array(SearchResult), total_pages: z.number() });
 export const Credits = z.object({
   cast: z.array(z.object({ id: z.number(), name: z.string(), order: z.number() })),
   crew: z.array(z.object({ id: z.number(), name: z.string(), job: z.string() })),
@@ -128,8 +127,9 @@ export function searchTitles(film: Pick<Film, 'title' | 'originalTitle'>): strin
  * Searches for the original title first, then the Norwegian one. Results come in English before Norwegian, since a
  * film without a Norwegian title is listed under its original one ("ドライブ・マイ・カー"), and a Norwegian title can hide
  * the English one we search for ("Fatherland"). Each search runs without the year first, since Filmweb's year can be a
- * year off ("Dune" 2020), and then in the year, for titles too common to show up on the first page otherwise ("Butterfly").
- * Without a year, all searches are weighed together, so a title shared in one language isn't taken from the other.
+ * year off ("Dune" 2020), and then, when there is more than one page of results, in the year, for titles too common to
+ * show up on the first page otherwise ("Butterfly"). Without a year, all searches are weighed together, so a title shared
+ * in one language isn't taken from the other.
  */
 async function search(titles: string[], year: number | null, token: string): Promise<SearchResult | undefined> {
   const queries = [...new Set(titles)];
@@ -141,12 +141,16 @@ async function search(titles: string[], year: number | null, token: string): Pro
     }
     return findMatch(results, titles, null);
   }
-  const searches = queries.flatMap((query) =>
-    languages.flatMap((language): Record<string, string>[] => [{ query, language }, { query, language, year: String(year) }]),
-  );
-  for (const params of searches) {
-    const match = findMatch((await get('/search/movie', params, SearchData, token)).results, titles, year);
-    if (match) return match;
+  for (const query of queries) {
+    for (const language of languages) {
+      const all = await get('/search/movie', { query, language }, SearchData, token);
+      let match = findMatch(all.results, titles, year);
+      if (!match && all.total_pages > 1) {
+        const inYear = await get('/search/movie', { query, language, year: String(year) }, SearchData, token);
+        match = findMatch(inYear.results, titles, year);
+      }
+      if (match) return match;
+    }
   }
 }
 
@@ -168,7 +172,7 @@ async function lookUp(film: Film, token: string): Promise<TmdbFilm | null> {
   return { rating: tmdbRating(match), trailer: pickTrailer(movie.videos.results), ...pickCredits(movie.credits), ...poster };
 }
 
-/** Runs the task on every item, a few at a time. The first error stops the rest and is thrown. */
+/** Runs the task on every item, a few at a time. The first error stops the rest and is thrown, once those already started are done. */
 async function eachLimited<T>(items: T[], task: (item: T) => Promise<void>): Promise<void> {
   let next = 0;
   let failed = false;
@@ -182,12 +186,15 @@ async function eachLimited<T>(items: T[], task: (item: T) => Promise<void>): Pro
       }
     }
   };
-  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  const failure = (await Promise.allSettled(Array.from({ length: CONCURRENCY }, worker))).find((r) => r.status === 'rejected');
+  if (failure) throw failure.reason;
 }
 
 /**
  * Looks up the films the cache has no recent lookup for, in about two requests each. Films TMDB doesn't have are left
- * out. The new cache only keeps the films in the program, so it doesn't grow with films long gone.
+ * out. The new cache keeps every recent lookup, also of films missing from this program, such as when a source fails for
+ * a build, and drops older ones so it doesn't grow with films long gone. When a lookup fails, the rest are left for the
+ * next build, and the ones made so far are kept.
  */
 export async function fetchTmdb(
   films: Record<string, Film>,
@@ -195,24 +202,27 @@ export async function fetchTmdb(
   cache: TmdbCache,
   now = Date.now(),
 ): Promise<{ films: Record<string, TmdbFilm>; cache: TmdbCache; lookedUp: number }> {
-  const next: TmdbCache = {};
-  const stale: Film[] = [];
-  for (const [key, film] of new Map(Object.values(films).map((film) => [lookupKey(film), film]))) {
-    const entry = cache[key];
-    if (entry && now - entry.at < (entry.film ? MATCH_TTL_MS : MISS_TTL_MS)) next[key] = entry;
-    else stale.push(film);
+  const next: TmdbCache = Object.fromEntries(Object.entries(cache).filter(([, entry]) => now - entry.at < CACHE_TTL_MS));
+  const stale = [...new Map(Object.values(films).map((film) => [lookupKey(film), film]))]
+    .filter(([key]) => !next[key])
+    .map(([, film]) => film);
+  let lookedUp = 0;
+  try {
+    await eachLimited(stale, async (film) => {
+      next[lookupKey(film)] = { at: now, film: await lookUp(film, token) };
+      lookedUp++;
+    });
+  } catch (error) {
+    console.warn(`TMDB: hopper over resten av oppslagene: ${errorMessage(error)}`);
   }
-  await eachLimited(stale, async (film) => {
-    next[lookupKey(film)] = { at: now, film: await lookUp(film, token) };
-  });
 
   const found: Record<string, TmdbFilm> = {};
   for (const [id, film] of Object.entries(films)) {
-    const tmdb = next[lookupKey(film)].film;
+    const tmdb = next[lookupKey(film)]?.film;
     if (!tmdb) continue;
     // Only films whose source has no poster of its own get TMDB's: Cinemateket's, which show a logo, and the odd Filmweb film
     const { posterUrl, posterSrcSet, posterLarge, ...details } = tmdb;
     found[id] = film.posterSrcSet ? details : tmdb;
   }
-  return { films: found, cache: next, lookedUp: stale.length };
+  return { films: found, cache: next, lookedUp };
 }

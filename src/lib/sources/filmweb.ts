@@ -12,16 +12,14 @@ const FILM_URL = 'https://www.filmweb.no/film/';
 const POSTER_WIDTHS = [200, 320, 480, 640];
 const LARGE_POSTER_WIDTHS = [...POSTER_WIDTHS, 960, 1280, 1920];
 
-const SHOWS_QUERY = `query Shows($location: String) {
+// The shows and the films they are of, in one request
+const PROGRAM_QUERY = `query Program($location: String) {
   showQuery {
     getShows(location: $location) {
       movieMainVersionId movieVersionId movieTitle theaterName screenName
       showStart ticketSaleUrl lengthInMinutes rating
     }
   }
-}`;
-
-const MOVIES_QUERY = `query Movies($location: String) {
   movieQuery {
     getCurrentMovies(location: $location) {
       mainVersionId titleOriginal productionYear premiere lengthInMinutes rating
@@ -66,8 +64,10 @@ export const FilmwebSnapshot = z.object({
 });
 export type FilmwebSnapshot = z.infer<typeof FilmwebSnapshot>;
 
-const ShowsData = z.object({ showQuery: z.object({ getShows: z.array(RawShow) }) });
-const MoviesData = z.object({ movieQuery: z.object({ getCurrentMovies: z.array(RawMovie) }) });
+const ProgramData = z.object({
+  showQuery: z.object({ getShows: z.array(RawShow) }),
+  movieQuery: z.object({ getCurrentMovies: z.array(RawMovie) }),
+});
 
 async function query<T>(query: string, variables: Record<string, unknown>, schema: z.ZodType<T>): Promise<T> {
   const res = await fetchOk(NAME, ENDPOINT, {
@@ -82,15 +82,14 @@ async function query<T>(query: string, variables: Record<string, unknown>, schem
   return schema.parse(body.data);
 }
 
-/** Fetches the full program for a city: two requests, run one after the other. */
+/** Fetches the full program for a city in one request. */
 export async function fetchSnapshot(location: string = LOCATION): Promise<FilmwebSnapshot> {
   const fetchedAt = new Date().toISOString();
-  const shows = await query(SHOWS_QUERY, { location }, ShowsData);
-  const movies = await query(MOVIES_QUERY, { location }, MoviesData);
+  const data = await query(PROGRAM_QUERY, { location }, ProgramData);
   return {
     fetchedAt,
-    shows: shows.showQuery.getShows,
-    movies: movies.movieQuery.getCurrentMovies,
+    shows: data.showQuery.getShows,
+    movies: data.movieQuery.getCurrentMovies,
   };
 }
 

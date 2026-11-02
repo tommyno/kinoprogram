@@ -120,22 +120,24 @@ describe('fetchTmdb', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
-  it('reuses recent lookups without asking TMDB, and leaves out films no longer in the program', async () => {
+  it('reuses recent lookups without asking TMDB, and keeps those of films no longer in the program', async () => {
     const fetch = vi.fn();
     vi.stubGlobal('fetch', fetch);
     const films = { a: film({ title: 'Dune' }), b: film({ title: 'Ukjent' }) };
     const cache = {
-      [lookupKey(films.a)]: { at: now - 6 * DAY, film: { trailer: 'abc', ...poster } },
+      [lookupKey(films.a)]: { at: now - 29 * DAY, film: { trailer: 'abc', ...poster } },
       [lookupKey(films.b)]: { at: now - DAY, film: null },
       [lookupKey(film({ title: 'Borte' }))]: { at: now - DAY, film: { trailer: 'old' } },
+      [lookupKey(film({ title: 'Gammel' }))]: { at: now - 31 * DAY, film: { trailer: 'old' } },
     };
     const result = await fetchTmdb(films, 'token', cache, now);
     expect(fetch).not.toHaveBeenCalled();
     expect(result.lookedUp).toBe(0);
     expect(result.films).toEqual({ a: { trailer: 'abc', ...poster } });
-    expect(Object.keys(result.cache)).toEqual([lookupKey(films.a), lookupKey(films.b)]);
+    expect(Object.keys(result.cache)).toEqual([lookupKey(films.a), lookupKey(films.b), lookupKey(film({ title: 'Borte' }))]);
   });
 
   it("keeps the source's own poster", async () => {
@@ -145,17 +147,40 @@ describe('fetchTmdb', () => {
     expect((await fetchTmdb(films, 'token', cache, now)).films).toEqual({ a: { trailer: 'abc' } });
   });
 
-  it('looks up a miss again sooner than a match', async () => {
-    const fetch = vi.fn(async () => Response.json({ results: [] }));
+  it('looks up a film again after 30 days', async () => {
+    const fetch = vi.fn(async () => Response.json({ results: [], total_pages: 1 }));
     vi.stubGlobal('fetch', fetch);
-    const films = { a: film({ title: 'Dune' }), b: film({ title: 'Ukjent' }) };
-    const cache = {
-      [lookupKey(films.a)]: { at: now - 3 * DAY, film: { trailer: 'abc' } },
-      [lookupKey(films.b)]: { at: now - 3 * DAY, film: null },
-    };
+    const films = { a: film({ title: 'Dune' }) };
+    const cache = { [lookupKey(films.a)]: { at: now - 30 * DAY, film: { trailer: 'abc' } } };
     const result = await fetchTmdb(films, 'token', cache, now);
     expect(result.lookedUp).toBe(1);
-    expect(fetch).toHaveBeenCalled();
-    expect(result.cache[lookupKey(films.b)]).toEqual({ at: now, film: null });
+    expect(result.cache[lookupKey(films.a)]).toEqual({ at: now, film: null });
+  });
+
+  it('searches in the year only when there is more than one page of results', async () => {
+    const pages = vi.fn(async () => Response.json({ results: [], total_pages: 1 }));
+    vi.stubGlobal('fetch', pages);
+    await fetchTmdb({ a: film({ title: 'Ukjent' }) }, 'token', {}, now);
+    // English and Norwegian, without the year
+    expect(pages).toHaveBeenCalledTimes(2);
+
+    const many = vi.fn(async () => Response.json({ results: [], total_pages: 3 }));
+    vi.stubGlobal('fetch', many);
+    await fetchTmdb({ a: film({ title: 'Butterfly' }) }, 'token', {}, now);
+    expect(many).toHaveBeenCalledTimes(4);
+  });
+
+  it('keeps the lookups made before one fails', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) =>
+        url.includes('Feil') ? new Response('', { status: 401 }) : Response.json({ results: [], total_pages: 1 }),
+      ),
+    );
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const films = { a: film({ title: 'Ukjent' }), b: film({ title: 'Feil' }) };
+    const result = await fetchTmdb(films, 'token', {}, now);
+    expect(result.cache).toEqual({ [lookupKey(films.a)]: { at: now, film: null } });
+    expect(result.lookedUp).toBe(1);
   });
 });
