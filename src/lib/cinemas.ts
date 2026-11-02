@@ -4,6 +4,7 @@ import { CINEMA as CINEMATEKET } from './sources/cinemateket.ts';
 import { CINEMA as DEICHMAN } from './sources/deichman.ts';
 import { CINEMA as OSLO_FILMRULLKLUBB } from './sources/oslofilmrullklubb.ts';
 import { CINEMA as REVIER } from './sources/revier.ts';
+import { CINEMA as SOMMERRO } from './sources/sommerro.ts';
 
 /** A cinema with its own page on this site, /kino/{slug}. */
 export type Cinema = {
@@ -51,6 +52,12 @@ export const CINEMAS: Cinema[] = [
   },
   { name: 'Ringen', url: 'https://www.nfkino.no/kino/ringen', address: 'Sannergata 6D, 0557 Oslo' },
   { name: 'Saga', url: 'https://www.nfkino.no/kino/saga', address: 'Stortingsgata 28, 0161 Oslo' },
+  {
+    name: SOMMERRO,
+    url: 'https://www.sommerrohouse.com/kultur/filmopplevelser/',
+    address: 'Sommerrogata 1, 0255 Oslo',
+    about: 'Filmrom på hotellet Sommerro. Visningene selges som forhåndsbetalte pakker med middag, brunsj eller afternoon tea.',
+  },
   { name: 'Symra', url: 'https://www.nfkino.no/kino/symra', address: 'Cecilie Thoresens vei 23, 1153 Oslo' },
   { name: 'Vega Kino', url: 'https://www.vegascene.no', address: 'Hausmanns gate 28, 0182 Oslo' },
   { name: 'Vika', url: 'https://www.nfkino.no/kino/vika', address: 'Ruseløkkveien 14, 0251 Oslo' },

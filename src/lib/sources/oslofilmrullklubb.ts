@@ -1,3 +1,4 @@
+import { decodeEntities } from '../html.ts';
 import { fetchOk } from '../http.ts';
 import { slugify, type Film, type Program, type Showing, type Source } from '../program.ts';
 import { osloDateTime, programSlot } from '../time.ts';
@@ -22,15 +23,6 @@ export type FilmrullPost = {
   content: string;
 };
 
-function decode(text: string): string {
-  return text
-    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
-    .replaceAll('&quot;', '"')
-    .replaceAll('&lt;', '<')
-    .replaceAll('&gt;', '>')
-    .replaceAll('&amp;', '&');
-}
-
 function field(item: string, name: string): string {
   const value = item.match(new RegExp(`<${name}>(.*?)</${name}>`, 's'))?.[1] ?? '';
   return value.replace(/^<!\[CDATA\[(.*)\]\]>$/s, '$1').trim();
@@ -38,7 +30,7 @@ function field(item: string, name: string): string {
 
 export function parseFeed(xml: string): FilmrullPost[] {
   return [...xml.matchAll(/<item>(.*?)<\/item>/gs)].map(([, item]) => ({
-    title: decode(field(item, 'title')),
+    title: decodeEntities(field(item, 'title')),
     link: field(item, 'link'),
     pubDate: field(item, 'pubDate'),
     content: field(item, 'content:encoded'),
@@ -47,7 +39,7 @@ export function parseFeed(xml: string): FilmrullPost[] {
 
 /** The post's paragraphs as plain text. */
 function paragraphs(html: string): string[] {
-  return [...html.matchAll(/<p[^>]*>(.*?)<\/p>/gs)].map(([, p]) => decode(p.replace(/<[^>]+>/g, '')).trim());
+  return [...html.matchAll(/<p[^>]*>(.*?)<\/p>/gs)].map(([, p]) => decodeEntities(p.replace(/<[^>]+>/g, '')).trim());
 }
 
 /**
