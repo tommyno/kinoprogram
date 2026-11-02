@@ -10,35 +10,38 @@ import styles from './AboutPage.module.css';
 const sources = listParts(SOURCES);
 ---
 
-<Base title="Om siden – Kinoprogram for Oslo" description="Hvor programmet, ratingene og trailerne på Kinoprogram for Oslo kommer fra.">
+<Base title="Om nettstedet – Kinoprogram for Oslo" description="Alle kinoer, filmklubber og filmer i Oslo på ett sted.">
   <a href="/" class={styles.back}>← Kinoprogram for Oslo</a>
 
   <article class={styles.about}>
-    <h1 class={styles.title}>Om siden</h1>
-    <p>Alle kinoer og filmer i Oslo samlet på én side.</p>
+    <h1 class={styles.title}>Om nettstedet</h1>
+    <p>Alle kinoer, filmklubber og filmer i Oslo på ett sted.</p>
+    <p>
+      Kinoprogram.net er et rent idealistisk prosjekt laget av filmentusiaster for andre filmentusiaster. Film er best på
+      kino, og målet er å få frem alt det som vises av filmer i Oslo.
+    </p>
 
-    <h2 class={styles.heading}>Kinoene</h2>
-    <ul class={styles.cinemas}>
-      {CINEMAS.map(({ name }) => <li><a href={cinemaPath(name)}>{name}</a></li>)}
-    </ul>
+    <h2 class={styles.heading}>Kino og filmklubb</h2>
+    <p>{CINEMAS.map(({ name }, i) => <>{i > 0 && ', '}<a href={cinemaPath(name)}>{name}</a></>)}</p>
 
-    <h2 class={styles.heading}>Hvor dataene kommer fra</h2>
-    <ul class={styles.list}>
-      <li>Programdata hentes fra åpne kilder på {sources.map((part) => (typeof part === 'string' ? part : <a href={part.homepage}>{part.name}</a>))}.</li>
-      <li>
-        Ratinger, trailere, regi, skuespillere og noen plakater hentes fra <a href="https://www.themoviedb.org">TMDB</a>.
-        <!-- TMDB's terms ask for their logo, unchanged and smaller than ours, and this notice -->
-        <span class={styles.credit}>
-          <a href="https://www.themoviedb.org" class={styles.tmdb}>
-            <img src="/tmdb.svg" width="85" height="11" alt="TMDB" />
-          </a>
-          Denne siden bruker TMDB og TMDB-API-ene, men er ikke godkjent eller sertifisert av TMDB.
-        </span>
-      </li>
-    </ul>
+    <h2 class={styles.heading}>Datakilder</h2>
+    <p>Programmet hentes fra {sources.map((part) => (typeof part === 'string' ? part : <a href={part.homepage}>{part.name}</a>))}.</p>
+    <p>Ratinger, trailere, regi, skuespillere og noen plakater hentes fra <a href="https://www.themoviedb.org">TMDB</a>.</p>
+    <!-- TMDB's terms ask for their logo, unchanged and smaller than ours, and this notice -->
+    <p class={styles.credit}>
+      <a href="https://www.themoviedb.org" class={styles.tmdb}>
+        <img src="/tmdb.svg" width="85" height="11" alt="TMDB" />
+      </a>
+      Dette nettstedet bruker TMDB og TMDB-API-ene, men er ikke godkjent eller sertifisert av TMDB.
+    </p>
 
     <h2 class={styles.heading}>Kildekode</h2>
     <p>Koden ligger åpent på <a href="https://github.com/tommyno/kinoprogram">GitHub</a>.</p>
+
+    <h2 class={styles.heading}>Kontakt</h2>
+    <p>
+      Spørsmål eller tips om flere filmklubber eller andre visningssteder i Oslo? Si fra til <a href="mailto:hei@kinoprogram.net">hei@kinoprogram.net</a>
+    </p>
   </article>
 
   <Footer />
