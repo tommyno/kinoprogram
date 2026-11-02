@@ -2,21 +2,18 @@ import { z } from 'zod';
 import { errorMessage, fetchOk } from './http.ts';
 import type { Film, Person } from './program.ts';
 
-// The films' user score, trailer, director and cast, and a poster for films without one, found by title and year. Needs a read access
+// The films' trailer, director and cast, and a poster for films without one, found by title and year. Needs a read access
 // token from themoviedb.org
 const API = 'https://api.themoviedb.org/3';
-const MOVIE_URL = 'https://www.themoviedb.org/movie/';
 const PERSON_URL = 'https://www.themoviedb.org/person/';
 const IMAGE_URL = 'https://image.tmdb.org/t/p/';
 // TMDB's largest fixed poster width, short of the original. Its posters are 2:3
 const POSTER_WIDTH = 780;
-// A score from a vote or two says little, and new films often have none yet
-const MIN_VOTES = 5;
 // Requests at a time; TMDB allows about 40 a second
 const CONCURRENCY = 8;
 // Actors on the film page, in billing order
 const CAST = 3;
-// How long a lookup is reused. A match only brings a newer score; a miss is tried sooner, in case TMDB adds the film
+// How long a lookup is reused. A match seldom changes; a miss is tried sooner, in case TMDB adds the film
 const MATCH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const MISS_TTL_MS = 2 * 24 * 60 * 60 * 1000;
 
@@ -26,7 +23,6 @@ export const SearchResult = z.object({
   original_title: z.string(),
   // "2026-09-25", or empty when unknown
   release_date: z.string().optional(),
-  vote_average: z.number(),
   vote_count: z.number(),
   popularity: z.number(),
   poster_path: z.string().nullable(),
@@ -53,7 +49,7 @@ export type Credits = z.infer<typeof Credits>;
 const MovieData = z.object({ videos: z.object({ results: z.array(Video) }), credits: Credits });
 
 export type TmdbFilm = Partial<
-  Pick<Film, 'rating' | 'trailer' | 'directors' | 'cast' | 'posterUrl' | 'posterSize'>
+  Pick<Film, 'trailer' | 'directors' | 'cast' | 'posterUrl' | 'posterSize'>
 >;
 
 /** Earlier lookups by lookupKey, found or not, with when they were made. */
@@ -80,11 +76,6 @@ export function findMatch(results: SearchResult[], titles: string[], year: numbe
   // The same film can come from searches in both languages
   const [first, second] = [...new Map(same.map((r) => [r.id, r])).values()].sort((a, b) => b.vote_count - a.vote_count);
   return second && second.vote_count * 10 >= first.vote_count ? undefined : first;
-}
-
-export function tmdbRating(result: SearchResult): TmdbFilm['rating'] {
-  if (result.vote_count < MIN_VOTES) return undefined;
-  return { value: Math.round(result.vote_average * 10) / 10, votes: result.vote_count, url: MOVIE_URL + result.id };
 }
 
 export function tmdbPoster(path: string): Pick<Film, 'posterUrl' | 'posterSize'> {
@@ -169,7 +160,7 @@ async function lookUp(film: Film, token: string): Promise<TmdbFilm | null> {
     token,
   );
   const poster = match.poster_path ? tmdbPoster(match.poster_path) : {};
-  return { rating: tmdbRating(match), trailer: pickTrailer(movie.videos.results), ...pickCredits(movie.credits), ...poster };
+  return { trailer: pickTrailer(movie.videos.results), ...pickCredits(movie.credits), ...poster };
 }
 
 /** Runs the task on every item, a few at a time. The first error stops the rest and is thrown, once those already started are done. */

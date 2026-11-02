@@ -18,14 +18,6 @@ const today = programNow().day;
 const film = program.films[filmId];
 const days = showingDays(program, today, (s) => s.filmId === filmId);
 const meta = filmMeta(film);
-// "7,7"
-const rating = film.rating?.value.toLocaleString('nb-NO', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-const links = [
-  { href: film.pageUrl, text: film.source },
-  ...(film.rating
-    ? [{ href: film.rating.url, text: `TMDB ${rating}`, label: `TMDB ${rating} av 10, ${film.rating.votes} stemmer` }]
-    : []),
-];
 const credits: [string, Person[]][] = [];
 if (film.directors?.length) credits.push(['Regi', film.directors]);
 if (film.cast?.length) credits.push(['Med', film.cast]);
@@ -93,14 +85,12 @@ if (film.cast?.length) credits.push(['Med', film.cast]);
                 </button>
               )
             }
-            {links.map((link) => (
-              <a href={link.href} class={styles.source} target="_blank" rel="noopener" aria-label={link.label}>
-                {link.text}
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
-                </svg>
-              </a>
-            ))}
+            <a href={film.pageUrl} class={styles.source} target="_blank" rel="noopener">
+              {film.source}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path>
+              </svg>
+            </a>
           </div>
         </div>
       </div>

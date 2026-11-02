@@ -8,13 +8,12 @@ import {
   pickTrailer,
   searchTitles,
   tmdbPoster,
-  tmdbRating,
   type SearchResult,
   type Video,
 } from '../src/lib/tmdb.ts';
 
 function result(overrides: Partial<SearchResult>): SearchResult {
-  return { id: 1, title: 'Film', original_title: 'Film', release_date: '2026-09-25', vote_average: 7.661, vote_count: 93, popularity: 1, poster_path: null, ...overrides };
+  return { id: 1, title: 'Film', original_title: 'Film', release_date: '2026-09-25', vote_count: 93, popularity: 1, poster_path: null, ...overrides };
 }
 
 function video(overrides: Partial<Video>): Video {
@@ -69,17 +68,6 @@ describe('tmdbPoster', () => {
       posterUrl: 'https://image.tmdb.org/t/p/w780/abc.jpg',
       posterSize: { width: 780, height: 1170 },
     });
-  });
-});
-
-describe('tmdbRating', () => {
-  it('rounds the score to one decimal and links to the film', () => {
-    expect(tmdbRating(result({ id: 1465063 }))).toEqual({ value: 7.7, votes: 93, url: 'https://www.themoviedb.org/movie/1465063' });
-  });
-
-  it('leaves out scores with fewer than 5 votes', () => {
-    expect(tmdbRating(result({ vote_count: 4 }))).toBeUndefined();
-    expect(tmdbRating(result({ vote_count: 5 }))).toBeDefined();
   });
 });
 

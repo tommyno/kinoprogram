@@ -53,7 +53,7 @@ async function readTmdbCache(): Promise<TmdbCache> {
   }
 }
 
-/** TMDB is a bonus too: without a token, or if it fails, the films go without a score and trailer. */
+/** TMDB is a bonus too: without a token, or if it fails, the films go without a trailer. */
 async function loadTmdb(films: Record<string, Film>): Promise<Record<string, TmdbFilm>> {
   // Astro reads .env into import.meta.env, and Vercel's variables too; the dev server leaves process.env without it
   const token = import.meta.env.TMDB_TOKEN;
@@ -68,7 +68,7 @@ async function loadTmdb(films: Record<string, Film>): Promise<Record<string, Tmd
     await writeFile(TMDB_CACHE, JSON.stringify(result.cache));
     return result.films;
   } catch (error) {
-    await notifySlack(`TMDB feilet, så filmene mangler score og trailer: ${errorMessage(error)}`);
+    await notifySlack(`TMDB feilet, så filmene mangler trailer: ${errorMessage(error)}`);
     console.warn(`Hopper over TMDB: ${errorMessage(error)}`);
     return {};
   }

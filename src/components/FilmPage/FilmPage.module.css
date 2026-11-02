@@ -141,7 +141,7 @@ button.poster {
   font-size: 13px;
 }
 
-/* The trailer, the film's page at the source and its TMDB score, as buttons of equal width on phones */
+/* The trailer and the film's page at the source, as buttons of equal width on phones */
 .actions {
   display: flex;
   flex-wrap: wrap;

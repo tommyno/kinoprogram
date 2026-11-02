@@ -22,8 +22,6 @@ export type Film = {
   pageUrl: string;
   /** That source's name, for the link to pageUrl: "Filmweb". */
   source: string;
-  /** TMDB's user score, when enough have voted. */
-  rating?: { value: number; votes: number; url: string };
   /** YouTube id of the film's trailer at TMDB. */
   trailer?: string;
   /** From TMDB, as are the leading actors. */
