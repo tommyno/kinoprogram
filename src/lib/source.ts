@@ -4,6 +4,7 @@ import { errorMessage } from './http.ts';
 import { assertPlausible, mergePrograms, type Film, type Program, type Source } from './program.ts';
 import { SOURCES } from './sources/index.ts';
 import { localizePosters } from './posters.ts';
+import { notifySlack } from './slack.ts';
 import { programNow } from './time.ts';
 import { fetchTmdb, type TmdbCache, type TmdbFilm } from './tmdb.ts';
 
@@ -35,6 +36,9 @@ async function loadSource(source: Source): Promise<Program | null> {
   try {
     return source.program(await cachedText(source.file, source.fetch));
   } catch (error) {
+    await notifySlack(
+      `${source.name} feilet${source.required ? ', så siden ble ikke bygget' : ' og er utelatt fra programmet'}: ${errorMessage(error)}`,
+    );
     if (source.required) throw error;
     console.warn(`Hopper over ${source.name}: ${errorMessage(error)}`);
     return null;
@@ -64,6 +68,7 @@ async function loadTmdb(films: Record<string, Film>): Promise<Record<string, Tmd
     await writeFile(TMDB_CACHE, JSON.stringify(result.cache));
     return result.films;
   } catch (error) {
+    await notifySlack(`TMDB feilet, så filmene mangler score og trailer: ${errorMessage(error)}`);
     console.warn(`Hopper over TMDB: ${errorMessage(error)}`);
     return {};
   }
