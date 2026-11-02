@@ -18,5 +18,6 @@ The website is built from publicly available data:
 
 - **Filmweb** (`movieinfoqs.filmweb.no/graphql`): showings with times and ticket links, and for each film the poster, synopsis, length, age rating and production year.
 - **Cinemateket** (`cinemateket.no/cinemateket-webcal.ics`): showings with times, screen, description and a link to the event.
+- **Cinema Neuf** (`cinemaneuf.no/semesters/…/Program_….tsv`): the student film club's semester program, with times, year, length and a link to the program page.
 - **Deichman** (`deichman.hoopla.no/api/public/v3.0/organizations/915950447/events`): the library's film screenings at Bjørvika, with times, screen and a link to the free tickets.
 - **TMDB** (`api.themoviedb.org`): user scores, trailers, directors and cast for the film pages, and posters for films whose source has none, such as Cinemateket's.
