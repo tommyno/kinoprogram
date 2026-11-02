@@ -16,8 +16,9 @@ const MIN_VOTES = 5;
 const CONCURRENCY = 8;
 // Actors on the film page, in billing order
 const CAST = 3;
-// How long a lookup, found or not, is reused. Looking up again only brings a newer score, or a film TMDB has added since
-const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+// How long a lookup is reused. A match only brings a newer score; a miss is tried sooner, in case TMDB adds the film
+const MATCH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const MISS_TTL_MS = 2 * 24 * 60 * 60 * 1000;
 
 export const SearchResult = z.object({
   id: z.number(),
@@ -202,7 +203,9 @@ export async function fetchTmdb(
   cache: TmdbCache,
   now = Date.now(),
 ): Promise<{ films: Record<string, TmdbFilm>; cache: TmdbCache; lookedUp: number }> {
-  const next: TmdbCache = Object.fromEntries(Object.entries(cache).filter(([, entry]) => now - entry.at < CACHE_TTL_MS));
+  const next: TmdbCache = Object.fromEntries(
+    Object.entries(cache).filter(([, entry]) => now - entry.at < (entry.film ? MATCH_TTL_MS : MISS_TTL_MS)),
+  );
   const stale = [...new Map(Object.values(films).map((film) => [lookupKey(film), film]))]
     .filter(([key]) => !next[key])
     .map(([, film]) => film);
