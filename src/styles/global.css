@@ -32,77 +32,14 @@ html {
     scroll-behavior: smooth;
   }
 
-  /* Pages cross-fade into each other in browsers that support it; elsewhere navigation is as before */
+  /* Pages cross-fade into each other in browsers that support it; short, so pictures loading after it matter less */
   @view-transition {
     navigation: auto;
   }
 
-  /* Onto a film page the pages nudge a little to the left while they fade; back to the program they nudge right */
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation-duration: 300ms;
-    animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
-  }
-
-  :root:active-view-transition-type(forward)::view-transition-old(root) {
-    animation-name: slide-to-left;
-  }
-
-  :root:active-view-transition-type(forward)::view-transition-new(root) {
-    animation-name: slide-from-right;
-  }
-
-  :root:active-view-transition-type(back)::view-transition-old(root) {
-    animation-name: slide-to-right;
-  }
-
-  :root:active-view-transition-type(back)::view-transition-new(root) {
-    animation-name: slide-from-left;
-  }
-}
-
-/* The old page is gone before the new one fades in, so the two never show through each other */
-@keyframes slide-from-right {
-  from {
-    opacity: 0;
-    transform: translateX(32px);
-  }
-
-  30% {
-    opacity: 0;
-  }
-}
-
-@keyframes slide-to-right {
-  30%,
-  to {
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(32px);
-  }
-}
-
-@keyframes slide-from-left {
-  from {
-    opacity: 0;
-    transform: translateX(-32px);
-  }
-
-  30% {
-    opacity: 0;
-  }
-}
-
-@keyframes slide-to-left {
-  30%,
-  to {
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(-32px);
+    animation-duration: 150ms;
   }
 }
 
