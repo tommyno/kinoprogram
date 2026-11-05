@@ -103,6 +103,8 @@ const { films, showings, later } = Astro.props;
   function selectSort(sort: string) {
     // Only slide when the user switches, not when the bar is first placed
     indicator.toggleAttribute('data-slide', true);
+    // Switching views fades the items in again, also on a page the visitor came back to
+    document.documentElement.removeAttribute('data-returned');
     showSort(sort);
     const url = new URL(location.href);
     if (sort === 'film') url.searchParams.delete('sorter');

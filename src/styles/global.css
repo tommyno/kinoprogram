@@ -31,16 +31,6 @@ html {
   html {
     scroll-behavior: smooth;
   }
-
-  /* Pages cross-fade into each other in browsers that support it; short, so pictures loading after it matter less */
-  @view-transition {
-    navigation: auto;
-  }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 150ms;
-  }
 }
 
 body {
@@ -84,9 +74,10 @@ button {
   display: none !important;
 }
 
-/* Items fade in one after another, replaying each time their view is unhidden; --i is the item's index */
+/* Items fade in one after another, replaying each time their view is unhidden; --i is the item's index. Not when the
+   visitor comes back to the page (data-returned, set in Base) */
 @media (prefers-reduced-motion: no-preference) {
-  [data-stagger] {
+  :root:not([data-returned]) [data-stagger] {
     animation: stagger-in 250ms ease-out backwards;
     animation-delay: calc(min(var(--i), 15) * 30ms);
   }

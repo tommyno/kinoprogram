@@ -31,6 +31,11 @@ const image = new URL('/og.png', Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- First in the head, so a page that sends the visitor on does it before anything loads -->
     <slot name="head" />
+    <!-- Inline in the head, so it is set before the page first renders -->
+    <script is:inline>
+      // Back and forward open the page as it was left, without the items fading in again (see data-stagger)
+      if (performance.getEntriesByType('navigation')[0]?.type === 'back_forward') document.documentElement.toggleAttribute('data-returned', true);
+    </script>
     <Font cssVariable="--font-inter" preload />
     <title>{title}</title>
     <meta name="description" content={description} />
