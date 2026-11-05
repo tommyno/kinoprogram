@@ -8,6 +8,7 @@ import styles from './AboutPage.module.css';
 
 // "Filmweb, Cinemateket og Deichman", each name a link
 const sources = listParts(SOURCES);
+// Side by side under "Kino" and "Filmklubb og annet"
 const cinemas = CINEMAS.filter((c) => !c.club);
 const clubs = CINEMAS.filter((c) => c.club);
 ---
@@ -31,23 +32,25 @@ const clubs = CINEMAS.filter((c) => c.club);
       </p>
     </div>
 
-    {
-      [
-        { heading: 'Kinoer', list: cinemas },
-        { heading: 'Filmklubber', list: clubs },
-      ].map(({ heading, list }) => (
-        <section class={styles.section}>
-          <h2 class={styles.heading}>{heading}</h2>
-          <ul class={styles.names}>
-            {list.map(({ name }) => (
-              <li>
-                <a href={cinemaPath(name)}>{name}</a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))
-    }
+    <div class={styles.columns}>
+      {
+        [
+          { heading: 'Kino', list: cinemas },
+          { heading: 'Filmklubb og annet', list: clubs },
+        ].map(({ heading, list }) => (
+          <section class={styles.section}>
+            <h2 class={styles.heading}>{heading}</h2>
+            <ul class={styles.names}>
+              {list.map(({ name }) => (
+                <li>
+                  <a href={cinemaPath(name)}>{name}</a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
 
     <section class={styles.section}>
       <h2 class={styles.heading}>Kontakt</h2>

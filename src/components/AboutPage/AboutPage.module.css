@@ -56,18 +56,28 @@
   gap: 12px;
 }
 
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
 .heading {
   font-size: 17px;
   font-weight: 700;
   line-height: 1.25;
 }
 
+/* The space goes between names, so a name that wraps on a phone stays one item */
 .names {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
   margin: 0;
   padding: 0;
   list-style: none;
   font-size: 17px;
-  line-height: 1.9;
+  line-height: 1.35;
 }
 
 /* Small print, as in the TMDB notice */

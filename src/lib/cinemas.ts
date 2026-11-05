@@ -18,7 +18,7 @@ export type Cinema = {
   address: string;
   /** A line or two for its page, such as that it is a film club. */
   about?: string;
-  /** A film club, listed apart from the cinemas on the About page. */
+  /** A film club or other venue that is not a cinema, listed under "Filmklubb og annet" on the About page. */
   club?: boolean;
 };
 
@@ -38,10 +38,16 @@ export const CINEMAS: Cinema[] = [
     url: 'https://deichman.no/bibliotekene/bj%C3%B8rvika',
     address: 'Anne-Cath. Vestlys plass 1, 0150 Oslo',
     about: 'Filmvisninger på hovedbiblioteket. Gratis, men billett må bestilles.',
+    club: true,
   },
   { name: 'Gimle', url: 'https://www.nfkino.no/kino/gimle', address: 'Bygdøy allé 39, 0265 Oslo' },
   { name: 'Klingenberg', url: 'https://www.nfkino.no/kino/klingenberg', address: 'Olav Vs gate 4, 0161 Oslo' },
-  { name: 'Kunstnernes Hus Kino', url: 'https://kunstnerneshus.no/program/kino', address: 'Wergelandsveien 17, 0167 Oslo' },
+  {
+    name: 'Kunstnernes Hus Kino',
+    url: 'https://kunstnerneshus.no/program/kino',
+    address: 'Wergelandsveien 17, 0167 Oslo',
+    club: true,
+  },
   { name: 'ODEON Oslo', url: 'https://www.odeonkino.no/oslo/kino/odeon-oslo/', address: 'Vitaminveien 27, 0485 Oslo' },
   {
     name: OSLO_FILMRULLKLUBB,
@@ -71,6 +77,7 @@ export const CINEMAS: Cinema[] = [
     url: 'https://www.sommerrohouse.com/kultur/filmopplevelser/',
     address: 'Sommerrogata 1, 0255 Oslo',
     about: 'Filmrom på hotellet Sommerro. Visningene selges som forhåndsbetalte pakker med middag, brunsj eller afternoon tea.',
+    club: true,
   },
   { name: 'Symra', url: 'https://www.nfkino.no/kino/symra', address: 'Cecilie Thoresens vei 23, 1153 Oslo' },
   { name: 'Vega Kino', url: 'https://www.vegascene.no', address: 'Hausmanns gate 28, 0182 Oslo' },
