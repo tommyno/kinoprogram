@@ -22,6 +22,7 @@ The website is built from publicly available data:
 - **Deichman** (`deichman.hoopla.no/api/public/v3.0/organizations/915950447/events`): the library's film screenings at Bjørvika, with times, screen and a link to the free tickets.
 - **Revier** (`eventbrite.com/o/revier-117564493841`): Revier Film Club's free screenings, read from the organizer page on Eventbrite, with times and a link to each event.
 - **Oslo Filmrullklubb** (`oslofilmrullklubb.no/feed/`): the analog film club's screenings at Kulturhuset, read from the posts in its RSS feed, with times, year, description and a link to each post.
+- **OsloMet Filmklubb** (`oslometfilmklubb.no/visninger/index.xml`): the student film club's screenings at P32, read from its RSS feed and each screening's page, with times, year, length, age rating, description and a link to each screening.
 - **Sommerro** (`sommerrohouse.com/kultur/filmopplevelser/`): the hotel's film evenings, read from its film page, with times (when the dinner, brunch or tea package starts), year, description and a link to each series' booking page.
 - **Weird and Wonderful Cinema** (`fienta.com/api/v1/public/events?organizer=8992`): the film club's screenings at Kruttverket on Kroloftet, read from Fienta's public API, with times, year, description and a link to each event's tickets.
 - **TMDB** (`api.themoviedb.org`): trailers, directors and cast for the film pages, and posters for films whose source has none, such as Cinemateket's.

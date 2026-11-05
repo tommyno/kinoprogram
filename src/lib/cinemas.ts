@@ -3,6 +3,7 @@ import { CINEMA as CINEMA_NEUF } from './sources/cinemaneuf.ts';
 import { CINEMA as CINEMATEKET } from './sources/cinemateket.ts';
 import { CINEMA as DEICHMAN } from './sources/deichman.ts';
 import { CINEMA as OSLO_FILMRULLKLUBB } from './sources/oslofilmrullklubb.ts';
+import { CINEMA as OSLOMET_FILMKLUBB } from './sources/oslometfilmklubb.ts';
 import { CINEMA as REVIER } from './sources/revier.ts';
 import { CINEMA as SOMMERRO } from './sources/sommerro.ts';
 import { CINEMA as WEIRD_AND_WONDERFUL } from './sources/weirdandwonderful.ts';
@@ -47,6 +48,13 @@ export const CINEMAS: Cinema[] = [
     url: 'https://www.oslofilmrullklubb.no',
     address: 'Youngs gate 6, 0181 Oslo',
     about: 'Analog filmklubb i Laben på Kulturhuset. Medlemskap i Norsk Filmklubbforbund og billett ordnes i døra.',
+    club: true,
+  },
+  {
+    name: OSLOMET_FILMKLUBB,
+    url: 'https://oslometfilmklubb.no',
+    address: 'Pilestredet 32, 0166 Oslo',
+    about: 'Studentfilmklubb i Lille Auditorium på OsloMet. Visningene krever medlemskap i Norsk Filmklubbforbund.',
     club: true,
   },
   {
