@@ -38,10 +38,6 @@
   color: var(--muted);
 }
 
-.address a {
-  text-underline-offset: 3px;
-}
-
 .about {
   max-width: 65ch;
   font-size: 15px;

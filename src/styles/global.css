@@ -52,6 +52,13 @@ p {
 
 a {
   color: inherit;
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+a:hover {
+  text-decoration-style: solid;
 }
 
 img {

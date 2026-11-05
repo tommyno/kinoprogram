@@ -90,10 +90,6 @@ button.poster {
   display: contents;
 }
 
-.heading a {
-  text-underline-offset: 3px;
-}
-
 .titleBlock {
   display: flex;
   flex-direction: column;
