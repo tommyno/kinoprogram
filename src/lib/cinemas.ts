@@ -17,6 +17,8 @@ export type Cinema = {
   address: string;
   /** A line or two for its page, such as that it is a film club. */
   about?: string;
+  /** A film club, listed apart from the cinemas on the About page. */
+  club?: boolean;
 };
 
 // Every cinema the sources cover, A–Å. One that turns up in the program without being listed here still gets a page, with only its name
@@ -26,6 +28,7 @@ export const CINEMAS: Cinema[] = [
     url: 'https://cinemaneuf.no',
     address: 'Slemdalsveien 15, 0369 Oslo',
     about: 'Studentfilmklubb på Chateau Neuf.',
+    club: true,
   },
   { name: CINEMATEKET, url: 'https://www.cinemateket.no', address: 'Dronningens gate 16, 0152 Oslo' },
   { name: 'Colosseum', url: 'https://www.nfkino.no/kino/colosseum', address: 'Fridtjof Nansens vei 6, 0369 Oslo' },
@@ -44,12 +47,14 @@ export const CINEMAS: Cinema[] = [
     url: 'https://www.oslofilmrullklubb.no',
     address: 'Youngs gate 6, 0181 Oslo',
     about: 'Analog filmklubb i Laben på Kulturhuset. Medlemskap i Norsk Filmklubbforbund og billett ordnes i døra.',
+    club: true,
   },
   {
     name: REVIER,
     url: 'https://www.revier.no/events/filmklubb',
     address: 'Kongens gate 5, 0153 Oslo',
     about: 'Filmklubb på hotellet Revier. Gratis visninger.',
+    club: true,
   },
   { name: 'Ringen', url: 'https://www.nfkino.no/kino/ringen', address: 'Sannergata 6D, 0557 Oslo' },
   { name: 'Saga', url: 'https://www.nfkino.no/kino/saga', address: 'Stortingsgata 28, 0161 Oslo' },
@@ -67,6 +72,7 @@ export const CINEMAS: Cinema[] = [
     url: 'https://wwcinema.no',
     address: 'Arnljot Gellines vei 41 B, 0657 Oslo',
     about: 'Filmklubb på Kruttverket kafé på Kroloftet.',
+    club: true,
   },
 ];
 

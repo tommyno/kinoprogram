@@ -8,42 +8,68 @@ import styles from './AboutPage.module.css';
 
 // "Filmweb, Cinemateket og Deichman", each name a link
 const sources = listParts(SOURCES);
+const cinemas = CINEMAS.filter((c) => !c.club);
+const clubs = CINEMAS.filter((c) => c.club);
 ---
 
-<Base title="Om nettstedet – Kinoprogram for Oslo" description="Alle kinoer, filmklubber og filmer i Oslo på ett sted.">
+<Base
+  title="Om nettstedet – Kinoprogram for Oslo"
+  description="Programmet til alle kinoene og filmklubbene i Oslo, samlet på ett sted og sortert dag for dag."
+>
   <a href="/" class={styles.back}>← Kinoprogram for Oslo</a>
 
   <article class={styles.about}>
-    <h1 class={styles.title}>Om nettstedet</h1>
-    <p>Alle kinoer, filmklubber og filmer i Oslo på ett sted.</p>
-    <p>
-      Kinoprogram.net er et rent idealistisk prosjekt laget av filmentusiaster for andre filmentusiaster. Film er best på
-      kino, og målet er å få frem alt det som vises av filmer i Oslo.
-    </p>
+    <header class={styles.header}>
+      <h1 class={styles.title}>Om Kinoprogram for Oslo</h1>
+      <p class={styles.lede}>Programmet til alle kinoene og filmklubbene i Oslo, samlet på ett sted og sortert dag for dag.</p>
+    </header>
 
-    <h2 class={styles.heading}>Visningssteder</h2>
-    <p>{CINEMAS.map(({ name }, i) => <>{i > 0 && ', '}<a href={cinemaPath(name)}>{name}</a></>)}</p>
+    <div class={styles.prose}>
+      <p>
+        Kinoprogram.net er et rent idealistisk prosjekt laget av filmentusiaster for andre filmentusiaster. Film er best på
+        kino, og målet er å få frem alt det som vises av filmer i Oslo.
+      </p>
+    </div>
 
-    <h2 class={styles.heading}>Datakilder</h2>
-    <p>Programmet hentes fra {sources.map((part) => (typeof part === 'string' ? part : <a href={part.homepage} rel="noreferrer">{part.name}</a>))}.</p>
-    <p>Trailere, regi, skuespillere og noen plakater hentes fra <a href="https://www.themoviedb.org" rel="noreferrer">TMDB</a>.</p>
+    {
+      [
+        { heading: 'Kinoer', list: cinemas },
+        { heading: 'Filmklubber', list: clubs },
+      ].map(({ heading, list }) => (
+        <section class={styles.section}>
+          <h2 class={styles.heading}>{heading}</h2>
+          <ul class={styles.names}>
+            {list.map(({ name }) => (
+              <li>
+                <a href={cinemaPath(name)}>{name}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
 
-    <h2 class={styles.heading}>Kildekode</h2>
-    <p>Koden ligger åpent på <a href="https://github.com/tommyno/kinoprogram" rel="noreferrer">GitHub</a>.</p>
+    <section class={styles.section}>
+      <h2 class={styles.heading}>Kontakt</h2>
+      <div class={styles.prose}>
+        <p>Har du tips om flere visningssteder i Oslo? Send en e-post til <a href="mailto:hei@kinoprogram.net">hei@kinoprogram.net</a></p>
+      </div>
+    </section>
 
-    <h2 class={styles.heading}>Kontakt</h2>
-    <p>
-      Har du spørsmål eller tips om andre visningssteder i Oslo? Si fra til <a href="mailto:hei@kinoprogram.net">hei@kinoprogram.net</a>
-    </p>
-
-    <h2 class={styles.heading}>Kreditering</h2>
-    <!-- TMDB's terms ask for their logo, unchanged and smaller than ours, and this notice -->
-    <p class={styles.credit}>
-      <a href="https://www.themoviedb.org" class={styles.tmdb} rel="noreferrer">
-        <img src="/tmdb.svg" width="85" height="11" alt="TMDB" />
-      </a>
-      Dette nettstedet bruker TMDB og TMDB-API-ene, men er ikke godkjent eller sertifisert av TMDB.
-    </p>
+    <section class={styles.section}>
+      <h2 class={styles.heading}>Kilder og kreditering</h2>
+      <p class={styles.small}>
+        Programmet hentes fra {sources.map((part) => (typeof part === 'string' ? part : <a href={part.homepage} rel="noreferrer">{part.name}</a>))}.
+      </p>
+      <p class={styles.small}>Kinoprogram.net har ingen tilknytning til kinoene, filmklubbene eller kildene programmet hentes fra.</p>
+      <!-- TMDB's terms ask for their logo, unchanged and smaller than ours, and this notice -->
+      <p class={styles.credit}>
+        <a href="https://www.themoviedb.org" class={styles.tmdb} rel="noreferrer">
+          <img src="/tmdb.svg" width="85" height="11" alt="TMDB" />
+        </a>
+        Dette nettstedet bruker TMDB og TMDB-API-ene, men er ikke godkjent eller sertifisert av TMDB.
+      </p>
+    </section>
   </article>
 
   <Footer />

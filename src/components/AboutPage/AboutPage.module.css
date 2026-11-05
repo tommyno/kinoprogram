@@ -15,10 +15,15 @@
 .about {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 65ch;
-  font-size: 15px;
-  line-height: 1.5;
+  gap: 40px;
+  max-width: 660px;
+  padding-bottom: 24px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .title {
@@ -26,20 +31,63 @@
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.1;
+  text-wrap: balance;
+}
+
+.lede {
+  font-size: 22px;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  text-wrap: pretty;
+}
+
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 17px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .heading {
-  margin-top: 16px;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
+  line-height: 1.25;
+}
+
+.names {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 17px;
+  line-height: 1.9;
+}
+
+.names a {
+  text-underline-offset: 3px;
+}
+
+/* Small print, as in the TMDB notice */
+.small {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
 }
 
 .credit {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px 8px;
-  font-size: 13px;
+  gap: 6px 10px;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--muted);
 }
 
